@@ -1,128 +1,192 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18081437614');
-</script>
-    <meta charset="UTF-8">
-    <meta name="google-adsense-account" content="ca-pub-7932735753046865">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Vault | TEQ VAULT Recruitment</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css"> 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
-
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-7932735753046865">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join the Vault | TEQ VAULT Recruitment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { background: #050810; color: #e2e8f0; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel { background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85); backdrop-filter: blur(18px); }
+    .gradient-text { background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  </style>
 </head>
-<body class="pt-32">
+<body class="pt-28 overflow-x-hidden">
 
-    <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
-                <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block">Teq Vault</span>
-            </div>
-            <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
-                <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
-                <a href="library.html" class="hover:text-white transition">IP Library</a>
-                <a href="strategy.html" class="hover:text-white transition">Strategy</a>
-                <a href="#" class="text-[var(--circuit-blue)] border-b border-[var(--circuit-blue)]">Careers</a>
-            </div>
+  <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
+        <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+      </div>
+      <div class="hidden md:flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
+        <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
+        <a href="library.html" class="hover:text-white transition">IP Library</a>
+        <a href="strategy.html" class="hover:text-white transition">Strategy</a>
+        <a href="join-the-vault.html" class="text-[var(--circuit-blue)] border-b border-[var(--circuit-blue)]">Careers</a>
+      </div>
+      <button id="mobile-menu-btn" class="block md:hidden text-white p-2">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-[#050810] border-b border-white/5 px-6 py-8 space-y-6 text-center">
+      <a href="vision.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">Vision</a>
+      <a href="library.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">IP Library</a>
+      <a href="strategy.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">Strategy</a>
+      <a href="join-the-vault.html" class="block text-sm font-bold uppercase tracking-widest text-[var(--circuit-blue)]">Careers</a>
+    </div>
+  </nav>
 
-            <button id="mobile-menu-btn" class="block md:hidden text-white p-2">
-                <span id="menu-icon-container"><i data-lucide="menu"></i></span>
-            </button>
+  <header class="max-w-5xl mx-auto text-center px-6 pt-20 pb-14 relative">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse,rgba(0,163,255,0.09),transparent_65%)]"></div>
+    </div>
+    <div class="reveal inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-8">
+      Operation: Quality Control
+    </div>
+    <h1 class="reveal text-5xl md:text-7xl font-space font-bold uppercase tracking-tighter mb-8 leading-[0.9]">
+      Help Us <span class="gradient-text">Refine the Future</span>
+    </h1>
+    <p class="reveal text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+      We are looking for detail-oriented minds to stress-test our digital worlds, polish our narrative lore, and push our software to its limits.
+    </p>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 pb-24">
+
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+
+      <!-- Game Tester -->
+      <div class="reveal glass-panel p-10 rounded-2xl border-t-2 border-[var(--circuit-blue)] card-hover flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <i data-lucide="gamepad-2" class="text-[var(--circuit-blue)] w-12 h-12"></i>
+          <span class="bg-[var(--circuit-blue)]/10 text-[var(--circuit-blue)] text-[10px] font-bold px-3 py-1 rounded">Beta Access</span>
         </div>
-
-        <div id="mobile-menu" class="hidden md:hidden bg-[#050810] border-b border-white/5 px-6 py-8 space-y-6 text-center">
-            <a href="vision.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">Vision</a>
-            <a href="library.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">IP Library</a>
-            <a href="strategy.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400">Strategy</a>
-            <a href="#" class="block text-sm font-bold uppercase tracking-widest text-[var(--circuit-blue)]">Careers</a>
-        </div>
-    </nav>
-
-    <header class="max-w-5xl mx-auto text-center px-6 py-16">
-        <div class="reveal inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-8">
-            Operation: Quality Control
-        </div>
-        <h1 class="reveal text-5xl md:text-7xl font-space font-bold uppercase tracking-tighter mb-8 leading-[0.9]">
-            Help Us <span class="gradient-text">Refine the Future</span>
-        </h1>
-        <p class="reveal delay-100 text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-            We are looking for detail-oriented minds to stress-test our digital worlds and polish our narrative lore. Join our elite pool of Game Testers and Proofreaders.
+        <h3 class="font-bold text-2xl mb-4 text-white font-space uppercase">Game Tester</h3>
+        <p class="text-slate-400 mb-6 text-sm leading-relaxed flex-grow">
+          Stress-test mobile builds of <span class="text-white">Quetiemals</span>, <span class="text-white">Forge & Ruin</span>, and future titles. Identify mechanics-level bugs, balance issues, and provide UI/UX feedback across Android builds.
         </p>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <div class="grid md:grid-cols-2 gap-8 mb-20">
-            <div class="reveal glass-panel p-10 rounded-2xl border-t-2 border-[var(--circuit-blue)] group">
-                <div class="flex justify-between items-start mb-6">
-                    <i data-lucide="gamepad-2" class="text-[var(--circuit-blue)] w-12 h-12"></i>
-                    <span class="bg-[var(--circuit-blue)]/10 text-[var(--circuit-blue)] text-[10px] font-bold px-3 py-1 rounded">BETA ACCESS</span>
-                </div>
-                <h3 class="font-bold text-3xl mb-4 text-white font-space uppercase">Game Tester</h3>
-                <p class="text-slate-400 mb-6 text-sm">Stress-test mobile builds of <span class="text-white">Quetiemals</span> and future console ports. Identify mechanics-level bugs and provide UI/UX feedback.</p>
-                <ul class="text-xs text-slate-500 space-y-3 mb-8">
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i> Detailed bug reporting</li>
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i> Stress-testing server stability</li>
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i> UX/UI feedback loops</li>
-                </ul>
-                <a href="application.html?role=tester" class="block text-center w-full py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest text-[10px] hover:bg-[var(--circuit-blue)] transition duration-300">Initialize Application</a>
-            </div>
-
-            <div class="reveal delay-100 glass-panel p-10 rounded-2xl border-t-2 border-[var(--voltage-orange)] group">
-                <div class="flex justify-between items-start mb-6">
-                    <i data-lucide="file-text" class="text-[var(--voltage-orange)] w-12 h-12"></i>
-                    <span class="bg-[var(--voltage-orange)]/10 text-[var(--voltage-orange)] text-[10px] font-bold px-3 py-1 rounded">LORE MASTER</span>
-                </div>
-                <h3 class="font-bold text-3xl mb-4 text-white font-space uppercase">IP Proofreader</h3>
-                <p class="text-slate-400 mb-6 text-sm">Review manuscripts for the <span class="text-white">Eyuforyia</span> mythos. Ensure grammatical perfection and maintain narrative consistency across our IP library.</p>
-                <ul class="text-xs text-slate-500 space-y-3 mb-8">
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i> Grammar & Syntax analysis</li>
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i> Lore consistency checks</li>
-                    <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i> Tone and Voice alignment</li>
-                </ul>
-                <a href="application.html?role=proofreader" class="block text-center w-full py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest text-[10px] hover:bg-[var(--voltage-orange)] transition duration-300">Submit Portfolio</a>
-            </div>
-        </div>
-
-        <section class="reveal glass-panel p-12 rounded-3xl text-center border border-white/5 max-w-4xl mx-auto">
-            <h2 class="text-2xl font-space font-bold text-white uppercase mb-4">The "Circuit-Level" Standard</h2>
-            <p class="text-slate-400 italic">"We don't just fix typos or find glitches; we optimize the infrastructure of immersion. If you have an engineering mindset for creativity, we want you in the Vault."</p>
-        </section>
-    </main>
-
-    <footer class="py-8 border-t border-white/5 bg-[#020617]">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
-      <p>© <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
-
-      <div class="flex items-center gap-6">
-        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Website">
-          <i data-lucide="globe" class="w-4 h-4"></i>
-        </a>
-        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Facebook">
-          <i data-lucide="facebook" class="w-4 h-4"></i>
-        </a>
-        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Discord">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
-          </svg>
-        </a>
-        <a href="mailto:support@teqvault.online" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Email Support">
-          <i data-lucide="mail" class="w-4 h-4"></i>
+        <ul class="text-xs text-slate-500 space-y-3 mb-8">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i>Detailed bug reporting with reproduction steps</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i>Gameplay balance and difficulty feedback</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i>UI/UX and accessibility feedback</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--circuit-blue)]"></i>Early access to unreleased builds</li>
+        </ul>
+        <a href="application.html?role=tester" class="block text-center w-full py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest text-[10px] hover:bg-[var(--circuit-blue)] hover:border-[var(--circuit-blue)] transition duration-300 mt-auto">
+          Initialize Application
         </a>
       </div>
 
+      <!-- IP Proofreader -->
+      <div class="reveal delay-100 glass-panel p-10 rounded-2xl border-t-2 border-[var(--voltage-orange)] card-hover flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <i data-lucide="file-text" class="text-[var(--voltage-orange)] w-12 h-12"></i>
+          <span class="bg-[var(--voltage-orange)]/10 text-[var(--voltage-orange)] text-[10px] font-bold px-3 py-1 rounded">Lore Master</span>
+        </div>
+        <h3 class="font-bold text-2xl mb-4 text-white font-space uppercase">IP Proofreader</h3>
+        <p class="text-slate-400 mb-6 text-sm leading-relaxed flex-grow">
+          Review manuscripts across the <span class="text-white">Eyuforyia</span> mythos and our standalone novels. Ensure grammatical precision and maintain narrative consistency across five finished books and expanding lore documents.
+        </p>
+        <ul class="text-xs text-slate-500 space-y-3 mb-8">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i>Grammar, syntax, and style analysis</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i>Cross-book lore consistency checks</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i>Tone and voice alignment per IP</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-[var(--voltage-orange)]"></i>Access to unpublished manuscript drafts</li>
+        </ul>
+        <a href="application.html?role=proofreader" class="block text-center w-full py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest text-[10px] hover:bg-[var(--voltage-orange)] hover:border-[var(--voltage-orange)] transition duration-300 mt-auto">
+          Submit Portfolio
+        </a>
+      </div>
+
+      <!-- Software Beta Tester -->
+      <div class="reveal delay-200 glass-panel p-10 rounded-2xl border-t-2 border-emerald-500 card-hover flex flex-col">
+        <div class="flex justify-between items-start mb-6">
+          <i data-lucide="monitor" class="text-emerald-400 w-12 h-12"></i>
+          <span class="bg-emerald-400/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded">New</span>
+        </div>
+        <h3 class="font-bold text-2xl mb-4 text-white font-space uppercase">Software Beta Tester</h3>
+        <p class="text-slate-400 mb-6 text-sm leading-relaxed flex-grow">
+          Put <span class="text-white">TeqXus AI</span> and <span class="text-white">TeqDocs</span> through their paces. Test AI response quality, PDF rendering, document workflows, and edge cases across browsers, devices, and operating systems.
+        </p>
+        <ul class="text-xs text-slate-500 space-y-3 mb-8">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>Cross-browser and cross-device testing</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>AI response quality and accuracy feedback</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>PDF, Markdown, and Word document edge cases</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>Free Pro access during testing period</li>
+        </ul>
+        <a href="application.html?role=software-tester" class="block text-center w-full py-4 bg-white/5 border border-white/10 rounded-lg text-white font-bold uppercase tracking-widest text-[10px] hover:bg-emerald-500 hover:border-emerald-500 transition duration-300 mt-auto">
+          Apply Now
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Philosophy -->
+    <section class="reveal glass-panel p-10 md:p-14 rounded-3xl text-center border border-white/5 max-w-4xl mx-auto">
+      <h2 class="text-2xl font-space font-bold text-white uppercase mb-4">The Circuit-Level Standard</h2>
+      <p class="text-slate-400 italic leading-relaxed max-w-2xl mx-auto">
+        "We don't just fix typos or find glitches — we optimize the infrastructure of immersion. If you have an engineering mindset for creativity and care deeply about quality, we want you in the Vault."
+      </p>
+      <div class="grid grid-cols-3 gap-6 mt-10 pt-10 border-t border-white/10 text-center">
+        <div>
+          <div class="text-2xl font-bold text-[var(--circuit-blue)] font-space">Remote</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">All Roles</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-[var(--voltage-orange)] font-space">Volunteer</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Current Stage</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-emerald-400 font-space">Credit</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">IP & Product Credit</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-8 border-t border-white/5 bg-[#020617]">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
+      <p>&copy; <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="globe" class="w-4 h-4"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        </a>
+        <a href="mailto:support@teqvault.online" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
+      </div>
       <p>Engineering worlds, not just games.</p>
     </div>
   </footer>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/script.js"></script>
+  <script>
+    lucide.createIcons();
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('active');
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileBtn) mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  </script>
+  <script src="../js/script.js"></script>
 </body>
 </html>

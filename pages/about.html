@@ -1,122 +1,212 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18081437614');
-</script>
-    <meta charset="UTF-8">
-    <meta name="google-adsense-account" content="ca-pub-7932735753046865">
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | TEQ VAULT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css"> 
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-7932735753046865">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | TEQ VAULT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { background: #050810; color: #e2e8f0; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel { background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85); backdrop-filter: blur(18px); }
+    .gradient-text { background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  </style>
 </head>
-<body class="pt-32 bg-[#050810] text-[#e2e8f0] font-space">
+<body class="pt-28 overflow-x-hidden">
 
-    <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
-                <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block">Teq Vault</span>
-            </div>
-            <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400 items-center">
-                <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
-                <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
-                <a href="articles.html" class="hover:text-white transition">Articles</a>
-                <a href="library.html" class="hover:text-white transition">IP Library</a>
-            </div>
+  <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
+        <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+      </div>
+      <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400 items-center">
+        <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
+        <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
+        <a href="articles.html" class="hover:text-white transition">Articles</a>
+        <a href="library.html" class="hover:text-white transition">IP Library</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="max-w-5xl mx-auto text-center px-6 pt-20 pb-14 relative">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse,rgba(0,163,255,0.08),transparent_65%)]"></div>
+    </div>
+    <div class="reveal inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-8">
+      Corporate Overview
+    </div>
+    <h1 class="reveal text-5xl md:text-6xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
+      About <span class="gradient-text">Teq Vault</span>
+    </h1>
+    <p class="reveal text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+      A multi-disciplinary innovation studio operating at the intersection of interactive software, digital storytelling, and engineering.
+    </p>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 pb-24 space-y-8">
+
+    <!-- FOUNDER -->
+    <div class="reveal glass-panel rounded-3xl p-8 md:p-12 border border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-space">The Founder</h2>
+      <div class="grid md:grid-cols-[auto_1fr] gap-8 items-start">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[var(--circuit-blue)] to-[var(--voltage-orange)] flex items-center justify-center flex-shrink-0">
+          <i data-lucide="user" class="w-8 h-8 text-white"></i>
         </div>
-    </nav>
-
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <header class="mb-12 text-center">
-            <div class="inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-6">
-                Corporate Overview
-            </div>
-            <h1 class="text-4xl md:text-6xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
-                About <span class="bg-clip-text text-transparent bg-gradient-to-r from-[var(--circuit-blue)] to-[var(--voltage-orange)]">Teq Vault</span>
-            </h1>
-            <p class="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
-                We are a multi-disciplinary innovation hub operating at the bleeding edge of interactive software, digital storytelling, and electronics R&amp;D.
-            </p>
-        </header>
-
-        <div class="glass-panel rounded-3xl p-8 md:p-14 space-y-10 border border-white/10">
-            
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-4 uppercase tracking-tight">Our Origin &amp; Mission</h2>
-                <div class="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4">
-                    <p>
-                        Founded in 2026 by Jude Mensah Nana Baffoe, Teq Vault LLC was established on a singular, uncompromising principle: <strong>Engineering Worlds, Not Just Games.</strong> 
-                    </p>
-                    <p>
-                        Historically, the entertainment and technology sectors have been siloed. Game developers build software, authors write books, and engineers design hardware. Teq Vault was built to shatter these boundaries. We realized that the most profound consumer experiences happen when these disciplines are vertically integrated from day one. Our mission is to bridge the gap between imagination and engineering by creating immersive digital worlds, compelling literature, and the physical technology that brings them to life.
-                    </p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-4 uppercase tracking-tight">The Teq Vault Methodology</h2>
-                <div class="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4">
-                    <p>
-                        Our approach to product development is highly systematic. Unlike traditional studios that begin with a game prototype and attempt to graft a story onto it retroactively, our pipeline begins in the <strong>Literary Publishing</strong> division. 
-                    </p>
-                    <p>
-                        We architect transmedia universes—like the rich, organic world of <em>Eyuforyia</em> or the sci-fi expanses of <em>Aeterna Divisa</em>—through full-length manuscripts and story bibles. These literary assets serve as immutable blueprints. Once the lore, physics, and character motivations are mathematically and narratively sound, we hand these blueprints over to our <strong>Interactive Entertainment</strong> division. 
-                    </p>
-                    <p>
-                        This ensures that when we build a mobile-first match-3 RPG like <em>Quetiemals</em>, the mechanics aren't arbitrary; they are deeply rooted in a canonized universe. This methodology dramatically increases player retention and lowers friction when porting our intellectual property across PC, console, and interactive web formats.
-                    </p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-bold text-white mb-4 uppercase tracking-tight">Looking to the Future</h2>
-                <div class="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4">
-                    <p>
-                        While software and intellectual property form the foundation of our current market strategy, our long-term roadmap extends into the physical realm. The final pillar of the Teq Vault ecosystem is our <strong>Electronics R&amp;D</strong> division. 
-                    </p>
-                    <p>
-                        We are actively researching and developing proprietary hardware—from embedded tactical simulators to specialized physical interfaces—designed specifically to interact with our proprietary software environments. By controlling the entire stack, from the narrative lore to the circuit boards rendering it, Teq Vault LLC aims to deliver an unparalleled tier of digital immersion.
-                    </p>
-                </div>
-            </section>
-
-            <div class="pt-8 border-t border-white/10 mt-8 text-center">
-                <p class="text-slate-400 text-sm mb-4 uppercase tracking-widest">Interested in joining the Vault?</p>
-                <a href="join-the-vault.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--circuit-blue)]/10 border border-[var(--circuit-blue)]/40 text-xs font-bold uppercase tracking-[0.2em] text-[var(--circuit-blue)] hover:bg-[var(--circuit-blue)]/20 transition">
-                    <i data-lucide="briefcase" class="w-4 h-4"></i> View Careers
-                </a>
-            </div>
-
+        <div class="space-y-4 text-slate-300 leading-relaxed">
+          <p>
+            <strong class="text-white">Jude Mensah Nana Baffoe</strong> founded Teq Vault LLC in 2026 in Bossier City, Louisiana. By trade, he is a licensed electrician — a background that instilled a deep, practical understanding of systems, circuits, and the consequences of imprecise engineering.
+          </p>
+          <p>
+            Alongside his electrical career, Jude pursued a Computer Science degree at Southern New Hampshire University, specializing in computational graphics and visualization. It was this combination — hands-on hardware knowledge and formal software training — that gave Teq Vault its defining edge: the ability to think from the circuit up.
+          </p>
+          <p>
+            Teq Vault began as a solo operation. Every game, every line of code, every manuscript was produced by one person building an ecosystem from scratch — before hiring, before funding, before infrastructure. The creative output that exists today is proof of that foundation.
+          </p>
         </div>
-    </main>
+      </div>
+    </div>
 
-    <footer class="py-8 border-t border-white/5 bg-[#020617] mt-12">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
-            <p>© <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
-            
-            <div class="flex items-center gap-6">
-                <a href="about.html" class="hover:text-white transition">About Us</a>
-                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
-                <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
-            </div>
+    <!-- ORIGIN & MISSION -->
+    <div class="reveal glass-panel rounded-3xl p-8 md:p-12 border border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-space">Origin & Mission</h2>
+      <div class="space-y-4 text-slate-300 leading-relaxed">
+        <p>
+          Teq Vault was established on a singular, uncompromising principle: <strong class="text-white">Engineering Worlds, Not Just Games.</strong>
+        </p>
+        <p>
+          Historically, the entertainment and technology sectors have been siloed. Game developers build software, authors write books, engineers design hardware. Teq Vault was built to shatter these boundaries. The most profound consumer experiences happen when these disciplines are vertically integrated from day one.
+        </p>
+        <p>
+          Our mission is to bridge the gap between imagination and engineering — creating immersive digital worlds, compelling literature, real-world software products, and the physical technology that brings them all to life.
+        </p>
+      </div>
+    </div>
 
-            <p>Engineering worlds, not just games.</p>
+    <!-- METHODOLOGY -->
+    <div class="reveal glass-panel rounded-3xl p-8 md:p-12 border border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-space">The Teq Vault Methodology</h2>
+      <div class="space-y-4 text-slate-300 leading-relaxed">
+        <p>
+          Our approach to product development is highly systematic. Unlike traditional studios that begin with a game prototype and graft a story onto it retroactively, our pipeline begins in the <strong class="text-white">Literary Division</strong>.
+        </p>
+        <p>
+          We architect transmedia universes — like the rich organic world of <em>Eyuforyia</em> or the theological expanses of <em>Aeterna Divisa</em> — through full-length manuscripts and story bibles first. These literary assets serve as immutable blueprints. Once the lore, physics, factions, and character motivations are narratively sound, we hand these blueprints to the <strong class="text-white">Interactive Entertainment Division</strong>.
+        </p>
+        <p>
+          This ensures that when we build a mobile-first match-3 RPG like <em>Quetiemals</em>, the mechanics aren't arbitrary — they are deeply rooted in a canonized universe. Running in parallel is our <strong class="text-white">Software Division</strong>, which builds utility platforms like TeqXus AI and TeqDocs that demonstrate engineering range and generate revenue that sustains the studio's creative work.
+        </p>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/10 text-center">
+        <div>
+          <div class="text-2xl font-bold text-[var(--circuit-blue)] font-space">5</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Finished Manuscripts</div>
         </div>
-    </footer>
+        <div>
+          <div class="text-2xl font-bold text-[var(--voltage-orange)] font-space">5</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Games in Pipeline</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-emerald-400 font-space">4</div>
+          <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1">Live Products</div>
+        </div>
+      </div>
+    </div>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        lucide.createIcons();
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+    <!-- WHAT WE'VE BUILT -->
+    <div class="reveal glass-panel rounded-3xl p-8 md:p-12 border border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-space">What We've Built</h2>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div class="glass-panel rounded-xl p-5 border border-[var(--voltage-orange)]/15 card-hover">
+          <div class="text-[10px] uppercase tracking-widest text-[var(--voltage-orange)] font-black mb-3">Games · Average Steve Games</div>
+          <ul class="text-sm text-slate-400 space-y-2">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>Quetiemals — Live on Google Play</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>Quetiemals: Connect 4 — Live on Google Play</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[var(--voltage-orange)] flex-shrink-0"></span>Forge & Ruin — Pro Ready</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-500 flex-shrink-0"></span>DailyDuel — In Development</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700 flex-shrink-0"></span>Defense of Eyuforyia — Concept</li>
+          </ul>
+        </div>
+        <div class="glass-panel rounded-xl p-5 border border-[var(--circuit-blue)]/15 card-hover">
+          <div class="text-[10px] uppercase tracking-widest text-[var(--circuit-blue)] font-black mb-3">Software · Teq Vault LLC</div>
+          <ul class="text-sm text-slate-400 space-y-2">
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>TeqXus AI — Live at teqxus.app</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>TeqDocs — Live at teqxus.app/teqdocs</li>
+            <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-500 flex-shrink-0"></span>TeqDocs Military — In Development</li>
+          </ul>
+        </div>
+        <div class="glass-panel rounded-xl p-5 border border-purple-500/15 card-hover md:col-span-2">
+          <div class="text-[10px] uppercase tracking-widest text-purple-400 font-black mb-3">Literary IP</div>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div class="text-xs text-slate-400 text-center bg-white/5 rounded-lg p-3">For Land and Kin</div>
+            <div class="text-xs text-slate-400 text-center bg-white/5 rounded-lg p-3">Forge & Ruin</div>
+            <div class="text-xs text-slate-400 text-center bg-white/5 rounded-lg p-3">Aeterna Divisa</div>
+            <div class="text-xs text-slate-400 text-center bg-white/5 rounded-lg p-3">The Death Road</div>
+            <div class="text-xs text-slate-400 text-center bg-white/5 rounded-lg p-3">Boot Camp</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUTURE -->
+    <div class="reveal glass-panel rounded-3xl p-8 md:p-12 border border-white/10">
+      <h2 class="text-2xl font-bold text-white mb-6 uppercase tracking-tight font-space">Looking to the Future</h2>
+      <div class="space-y-4 text-slate-300 leading-relaxed">
+        <p>
+          While software and intellectual property form the foundation of our current market position, our long-term roadmap extends into the physical realm. The final pillar of the Teq Vault ecosystem is our <strong class="text-white">Electronics R&D Division</strong>.
+        </p>
+        <p>
+          We are actively researching proprietary hardware — from embedded tactical simulators to specialized physical interfaces — designed to interact with our proprietary software environments. By controlling the entire stack, from narrative lore to the circuit boards rendering it, Teq Vault aims to deliver an unparalleled tier of digital immersion.
+        </p>
+        <p class="text-slate-500 italic border-l-2 border-slate-700 pl-4">
+          "Bringing circuit-level precision to every facet of the human experience."
+        </p>
+      </div>
+    </div>
+
+    <div class="reveal text-center pt-4">
+      <p class="text-slate-500 text-sm mb-5 uppercase tracking-widest">Interested in joining the Vault?</p>
+      <a href="join-the-vault.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--circuit-blue)]/10 border border-[var(--circuit-blue)]/40 text-xs font-bold uppercase tracking-[0.2em] text-[var(--circuit-blue)] hover:bg-[var(--circuit-blue)]/20 transition">
+        <i data-lucide="briefcase" class="w-4 h-4"></i> View Careers
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="py-8 border-t border-white/5 bg-[#020617]">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
+      <p>&copy; <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+      <p>Engineering worlds, not just games.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('active');
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

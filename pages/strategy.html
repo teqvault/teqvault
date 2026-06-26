@@ -1,109 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18081437614');
-</script>
-    <meta charset="UTF-8">
-    <meta name="google-adsense-account" content="ca-pub-7932735753046865">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategy | TEQ VAULT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css"> 
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
-
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-7932735753046865">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategy | TEQ VAULT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { background: #050810; color: #e2e8f0; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel { background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85); backdrop-filter: blur(18px); }
+    .gradient-text { background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .phase-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .phase-dot.active { background: #34d399; box-shadow: 0 0 12px rgba(52,211,153,0.5); }
+    .phase-dot.progress { background: var(--voltage-orange); box-shadow: 0 0 12px rgba(255,122,26,0.4); }
+    .phase-dot.future { background: #334155; }
+    .phase-connector { width: 1px; background: linear-gradient(to bottom, #334155, transparent); margin: 4px auto; flex-grow: 1; }
+  </style>
 </head>
-<body class="pt-32">
+<body class="pt-28 overflow-x-hidden">
 
-    <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
-                <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block">Teq Vault</span>
-            </div>
-            <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
-                <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
-                <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
-                <a href="strategy.html" class="text-white border-b border-white">Strategy</a>
-                <a href="#" class="text-[var(--circuit-blue)] border-b border-[var(--circuit-blue)]">Careers</a>
+  <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
+        <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+      </div>
+      <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
+        <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
+        <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
+        <a href="strategy.html" class="text-white border-b border-white">Strategy</a>
+        <a href="join-the-vault.html" class="text-[var(--circuit-blue)] border-b border-[var(--circuit-blue)]">Careers</a>
+      </div>
+    </div>
+  </nav>
 
-            </div>
-        </div>
-    </nav>
+  <!-- HERO -->
+  <header class="max-w-5xl mx-auto text-center px-6 pt-20 pb-16 relative">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse,rgba(255,122,26,0.08),transparent_65%)]"></div>
+    </div>
+    <div class="reveal inline-block px-4 py-1 rounded-full border border-[var(--voltage-orange)]/30 bg-[var(--voltage-orange)]/5 text-[var(--voltage-orange)] text-[10px] font-black uppercase tracking-[0.5em] mb-8">
+      Growth Strategy
+    </div>
+    <h1 class="reveal text-5xl md:text-6xl font-space font-bold uppercase tracking-tighter mb-6 leading-[0.9]">
+      Institutional <span class="gradient-text">Roadmap</span>
+    </h1>
+    <p class="reveal text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+      A systematic approach to multi-disciplinary market leadership — from mobile games to vertical integration, funded by software and built on story.
+    </p>
+  </header>
 
-    <section class="max-w-6xl mx-auto px-6 py-20">
-        <div class="reveal text-center mb-16">
-            <span class="text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] border-b border-[var(--circuit-blue)] pb-2">Growth Strategy</span>
-            <h1 class="text-4xl md:text-5xl font-bold mt-8 font-space uppercase tracking-tighter">Institutional <span class="gradient-text">Roadmap</span></h1>
-            <p class="text-slate-500 mt-4 max-w-2xl mx-auto text-lg">A systematic approach to multi-disciplinary market leadership and vertical integration.</p>
+  <main class="max-w-6xl mx-auto px-6 pb-24 space-y-20">
+
+    <!-- CURRENT STATUS BANNER -->
+    <div class="reveal glass-panel rounded-2xl border border-emerald-500/20 p-6">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.5em]">Current Position · Foundation Phase</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+        <div><div class="text-2xl font-bold text-white font-space">2</div><div class="text-[9px] uppercase tracking-widest text-slate-500 mt-1">Games Live</div></div>
+        <div><div class="text-2xl font-bold text-white font-space">3</div><div class="text-[9px] uppercase tracking-widest text-slate-500 mt-1">Games Pro Ready</div></div>
+        <div><div class="text-2xl font-bold text-white font-space">5</div><div class="text-[9px] uppercase tracking-widest text-slate-500 mt-1">Books Finished</div></div>
+        <div><div class="text-2xl font-bold text-white font-space">2</div><div class="text-[9px] uppercase tracking-widest text-slate-500 mt-1">Software Live</div></div>
+        <div><div class="text-2xl font-bold text-white font-space">70+</div><div class="text-[9px] uppercase tracking-widest text-slate-500 mt-1">IP Creatures</div></div>
+      </div>
+    </div>
+
+    <!-- PHASE ROADMAP TABLE -->
+    <div class="reveal">
+      <h2 class="text-2xl font-space font-bold text-white uppercase tracking-tight mb-8">Growth Phases</h2>
+      <div class="glass-panel overflow-hidden rounded-2xl border border-white/5">
+        <table class="w-full text-left">
+          <thead class="bg-white/5 border-b border-white/5">
+            <tr class="text-[9px] uppercase tracking-widest text-slate-500 font-black">
+              <th class="p-6">Status</th>
+              <th class="p-6">Phase</th>
+              <th class="p-6">Strategic Core</th>
+              <th class="p-6">Ecosystem Impact</th>
+            </tr>
+          </thead>
+          <tbody class="text-sm divide-y divide-white/5">
+            <tr class="hover:bg-emerald-500/5 transition">
+              <td class="p-6"><span class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>Active</span></td>
+              <td class="p-6 font-bold text-[var(--circuit-blue)] font-space text-base uppercase">Foundation</td>
+              <td class="p-6 text-white font-medium">Mobile Games & Software Distribution</td>
+              <td class="p-6 text-slate-400">Establish fanbase and market presence via Google Play. Software products fund ongoing development.</td>
+            </tr>
+            <tr class="hover:bg-[var(--voltage-orange)]/5 transition">
+              <td class="p-6"><span class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-[var(--voltage-orange)]"><span class="w-1.5 h-1.5 rounded-full bg-[var(--voltage-orange)]"></span>Next</span></td>
+              <td class="p-6 font-bold text-[var(--voltage-orange)] font-space text-base uppercase">Synergy</td>
+              <td class="p-6 text-white font-medium">Transmedia IP Expansion</td>
+              <td class="p-6 text-slate-400">Leverage the finished IP library across games, books, and media. Cross-pollinate assets and deepen the Eyuforyia canon.</td>
+            </tr>
+            <tr class="hover:bg-[var(--circuit-blue)]/5 transition opacity-70">
+              <td class="p-6"><span class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-500"><span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>Horizon</span></td>
+              <td class="p-6 font-bold text-[var(--circuit-blue)] font-space text-base uppercase">Scaling</td>
+              <td class="p-6 text-white font-medium">High-Fidelity PC & Console Porting</td>
+              <td class="p-6 text-slate-400">Transition proven mobile IPs to enthusiast PC and console markets with expanded scope.</td>
+            </tr>
+            <tr class="hover:bg-[var(--voltage-orange)]/5 transition opacity-50">
+              <td class="p-6"><span class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>Future</span></td>
+              <td class="p-6 font-bold text-[var(--voltage-orange)] font-space text-base uppercase">Integration</td>
+              <td class="p-6 text-white font-medium">Electronics Manufacturing & Hardware R&D</td>
+              <td class="p-6 text-slate-400">Achieve full vertical integration through proprietary physical technology and circuit-level engineering.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SOFTWARE AS REVENUE PILLAR -->
+    <div class="reveal grid md:grid-cols-2 gap-8">
+      <div class="glass-panel rounded-2xl border border-[var(--circuit-blue)]/20 p-8 card-hover">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-[var(--voltage-orange)]/15 flex items-center justify-center">
+            <i data-lucide="activity" class="w-5 h-5 text-[var(--voltage-orange)]"></i>
+          </div>
+          <div>
+            <div class="font-bold text-white font-space">TeqXus AI</div>
+            <div class="text-[9px] uppercase tracking-widest text-emerald-400">Live · teqxus.app</div>
+          </div>
         </div>
-        
-        <div class="reveal glass-panel overflow-hidden rounded-3xl border border-white/5">
-            <table class="w-full text-left strategy-table">
-                <thead class="bg-white/5 border-b border-white/5">
-                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 font-black">
-                        <th class="p-8">Growth Phase</th>
-                        <th class="p-8">Strategic Core</th>
-                        <th class="p-8">Ecosystem Impact</th>
-                    </tr>
-                </thead>
-                <tbody class="text-sm">
-                    <tr class="hover:bg-[var(--circuit-blue)]/5 transition">
-                        <td data-label="Phase" class="p-8 font-bold text-[var(--circuit-blue)] font-space text-lg uppercase">Foundation</td>
-                        <td data-label="Core" class="p-8 text-white font-medium">Mobile Games and Distribution</td>
-                        <td data-label="Impact" class="p-8 text-slate-400">Establish a solid fanbase and market presence via global app stores.</td>
-                    </tr>
-                    <tr class="hover:bg-[var(--voltage-orange)]/5 transition">
-                        <td data-label="Phase" class="p-8 font-bold text-[var(--voltage-orange)] font-space text-lg uppercase">Synergy</td>
-                        <td data-label="Core" class="p-8 text-white font-medium">Transmedia IP Development</td>
-                        <td data-label="Impact" class="p-8 text-slate-400">Build a deep intellectual property library for cross-platform adaptation.</td>
-                    </tr>
-                    <tr class="hover:bg-[var(--circuit-blue)]/5 transition">
-                        <td data-label="Phase" class="p-8 font-bold text-[var(--circuit-blue)] font-space text-lg uppercase">Scaling</td>
-                        <td data-label="Core" class="p-8 text-white font-medium">High-Fidelity Porting</td>
-                        <td data-label="Impact" class="p-8 text-slate-400">Transition mobile IPs to the enthusiast PC and console markets.</td>
-                    </tr>
-                    <tr class="hover:bg-[var(--voltage-orange)]/5 transition">
-                        <td data-label="Phase" class="p-8 font-bold text-[var(--voltage-orange)] font-space text-lg uppercase">Integration</td>
-                        <td data-label="Core" class="p-8 text-white font-medium">Electronics Manufacturing</td>
-                        <td data-label="Impact" class="p-8 text-slate-400">Achieve full vertical integration through proprietary physical technology.</td>
-                    </tr>
-                </tbody>
-            </table>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">AI health optimization platform. Claude-powered assistant, wearable integration, morning briefings, TeqXus Score algorithm. Multi-language across 7 African and global languages. Free and Pro tiers via invite code system.</p>
+        <div class="text-[9px] uppercase tracking-widest text-slate-600 font-bold">Strategic Role</div>
+        <p class="text-xs text-slate-500 mt-1">Revenue infrastructure + engineering credibility for publishers and investors.</p>
+      </div>
+
+      <div class="glass-panel rounded-2xl border border-[var(--circuit-blue)]/20 p-8 card-hover">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-[var(--circuit-blue)]/15 flex items-center justify-center">
+            <i data-lucide="book-open" class="w-5 h-5 text-[var(--circuit-blue)]"></i>
+          </div>
+          <div>
+            <div class="font-bold text-white font-space">TeqDocs</div>
+            <div class="text-[9px] uppercase tracking-widest text-emerald-400">Live · teqxus.app/teqdocs</div>
+          </div>
         </div>
-    </section>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">Offline document reader and AI study tool. PDF, Markdown, Word support. AI flashcard generation, text-to-speech, ambient music, pomodoro timer. Web PWA and Windows desktop. Free with Pro tier for power users.</p>
+        <div class="text-[9px] uppercase tracking-widest text-slate-600 font-bold">Strategic Role</div>
+        <p class="text-xs text-slate-500 mt-1">Utility product that builds brand trust and TeqXus Pro ecosystem adoption.</p>
+      </div>
+    </div>
+
+
+
+    <!-- GAME PIPELINE -->
+    <div class="reveal">
+      <h2 class="text-2xl font-space font-bold text-white uppercase tracking-tight mb-8">Game Pipeline Status</h2>
+      <div class="space-y-4">
+        <div class="glass-panel rounded-xl border border-emerald-500/20 p-5 flex items-center gap-5 card-hover">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0 animate-pulse"></span>
+          <div class="flex-1">
+            <div class="font-bold text-white font-space">Quetiemals</div>
+            <div class="text-xs text-slate-500 mt-0.5">Match-3 RPG · Eyuforyia · 70+ creatures · 4-tier evolution</div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">Live</span>
+        </div>
+        <div class="glass-panel rounded-xl border border-emerald-500/20 p-5 flex items-center gap-5 card-hover">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 flex-shrink-0 animate-pulse"></span>
+          <div class="flex-1">
+            <div class="font-bold text-white font-space">Quetiemals: Connect 4</div>
+            <div class="text-xs text-slate-500 mt-0.5">Classic Connect 4 · 7 Eyuforyia stages · Full GDD & marketing complete</div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full">Live</span>
+        </div>
+        <div class="glass-panel rounded-xl border border-[var(--voltage-orange)]/20 p-5 flex items-center gap-5 card-hover">
+          <span class="w-2.5 h-2.5 rounded-full bg-[var(--voltage-orange)] flex-shrink-0"></span>
+          <div class="flex-1">
+            <div class="font-bold text-white font-space">Forge & Ruin</div>
+            <div class="text-xs text-slate-500 mt-0.5">Narrative match-3 RPG · Avelmark siege · 24-chapter novel complete · Full GDD with 86 campaign beats</div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-[var(--voltage-orange)] bg-[var(--voltage-orange)]/10 px-3 py-1 rounded-full">Pro Ready</span>
+        </div>
+        <div class="glass-panel rounded-xl border border-slate-700/40 p-5 flex items-center gap-5 card-hover opacity-70">
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0"></span>
+          <div class="flex-1">
+            <div class="font-bold text-white font-space">DailyDuel</div>
+            <div class="text-xs text-slate-500 mt-0.5">Daily competitive mobile game · Fresh challenge every 24 hours</div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-slate-400 bg-slate-800 px-3 py-1 rounded-full">In Development</span>
+        </div>
+        <div class="glass-panel rounded-xl border border-slate-800/40 p-5 flex items-center gap-5 opacity-50">
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-600 flex-shrink-0"></span>
+          <div class="flex-1">
+            <div class="font-bold text-slate-400 font-space">Quetiemals: Defense of Eyuforyia</div>
+            <div class="text-xs text-slate-600 mt-0.5">Castle defense spinoff · Eyuforyia universe</div>
+          </div>
+          <span class="text-[9px] font-black uppercase tracking-widest text-slate-600 bg-slate-900 px-3 py-1 rounded-full">Concept</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
 
   <footer class="py-8 border-t border-white/5 bg-[#020617]">
     <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
-      <p>© <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
-
+      <p>&copy; <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
       <div class="flex items-center gap-6">
-        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Website">
-          <i data-lucide="globe" class="w-4 h-4"></i>
+        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="globe" class="w-4 h-4"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
         </a>
-        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Facebook">
-          <i data-lucide="facebook" class="w-4 h-4"></i>
-        </a>
-        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Discord">
-          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
-          </svg>
-        </a>
-        <a href="mailto:support@teqvault.online" class="hover:text-[var(--circuit-blue)] transition duration-300" aria-label="Email Support">
-          <i data-lucide="mail" class="w-4 h-4"></i>
-        </a>
+        <a href="mailto:support@teqvault.online" class="hover:text-[var(--circuit-blue)] transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
       </div>
-
       <p>Engineering worlds, not just games.</p>
     </div>
   </footer>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../js/script.js"></script>
+  <script>
+    lucide.createIcons();
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('active');
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

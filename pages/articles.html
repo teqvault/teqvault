@@ -1,148 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-18081437614');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articles & Devlogs | TEQ VAULT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css"> 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
-
-  <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865"
-         crossorigin="anonymous"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles & Devlogs | TEQ VAULT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { background: #050810; color: #e2e8f0; font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel { background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85); backdrop-filter: blur(18px); }
+    .gradient-text { background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .article-card { transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease; }
+    .article-card:hover { transform: translateY(-6px); }
+  </style>
 </head>
-<body class="pt-32 bg-[#050810] text-[#e2e8f0] font-space">
+<body class="pt-28 overflow-x-hidden">
 
-    <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
-                <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block">Teq Vault</span>
-            </div>
-            <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
-                <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
-                <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
-                <a href="strategy.html" class="hover:text-white transition">Strategy</a>
-                <a href="join-the-vault.html" class="hover:text-[var(--circuit-blue)] transition">Careers</a>
-            </div>
+  <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
+        <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+      </div>
+      <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
+        <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
+        <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
+        <a href="strategy.html" class="hover:text-white transition">Strategy</a>
+        <a href="join-the-vault.html" class="hover:text-[var(--circuit-blue)] transition">Careers</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="max-w-5xl mx-auto text-center px-6 pt-20 pb-14 relative">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse,rgba(0,163,255,0.08),transparent_65%)]"></div>
+    </div>
+    <div class="reveal inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-8">
+      Transmissions
+    </div>
+    <h1 class="reveal text-5xl md:text-6xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
+      Articles & <span class="gradient-text">Devlogs</span>
+    </h1>
+    <p class="reveal text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
+      Deep dives into our engineering processes, transmedia world-building, software development, and IP design philosophy.
+    </p>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 pb-24">
+
+    <div class="reveal glass-panel rounded-2xl p-6 border border-white/10 mb-14 max-w-3xl mx-auto text-center">
+      <p class="text-slate-400 text-sm leading-relaxed">
+        This is where the engineering gets documented and the lore gets dissected. Our devlog series pulls back the curtain on how our games and software are actually built — the pipeline decisions, the design choices we're proud of, and the ones we had to undo. New transmissions drop as the studio grows.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- Article 1 — TDD -->
+      <a href="devlog-tdd-pipeline.html" class="reveal glass-panel rounded-2xl p-8 border border-white/10 hover:border-[var(--circuit-blue)]/50 hover:shadow-[0_10px_30px_rgba(0,163,255,0.12)] article-card flex flex-col h-full group">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-[var(--circuit-blue)] text-[9px] font-black uppercase tracking-[0.2em] border border-[var(--circuit-blue)]/30 px-2 py-1 rounded">Engineering</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">5 Min Read</span>
         </div>
-    </nav>
-
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <header class="mb-16 text-center">
-            <div class="inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-6">
-                Transmissions
-            </div>
-            <h1 class="text-4xl md:text-6xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
-                Articles &amp; Devlogs
-            </h1>
-            <p class="text-slate-400 max-w-2xl mx-auto text-lg leading-relaxed">
-                Deep dives into our software engineering processes, transmedia world-building, and hardware R&amp;D.
-            </p>
-        </header>
-
-        <div class="glass-panel rounded-2xl p-6 md:p-8 border border-white/10 mb-12 max-w-3xl mx-auto text-center">
-            <p class="text-slate-400 text-sm leading-relaxed">
-                This is where the engineering gets documented and the lore gets dissected. Our devlog series pulls back the curtain on how QUETIEMALS is actually built — the pipeline decisions, the mechanical failures, the design choices we're proud of and the ones we had to undo. The IP deep-dives go further: they explain the philosophy behind the Eyuforyia universe, what it means to design a world without humans at the center, and why our narratives are built the way they are. New transmissions drop as the studio grows. Check back often.
-            </p>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase group-hover:text-[var(--circuit-blue)] transition-colors font-space leading-tight">
+          Engineering the Core: Why We Rely on Test-Driven Development
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          How we build bulletproof match-3 RPG mechanics for Quetiemals using strict TDD principles and continuous integration pipelines.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-[var(--circuit-blue)] uppercase tracking-widest mt-auto">
+          Read Transmission <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
         </div>
+      </a>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <a href="devlog-tdd-pipeline.html" class="glass-panel rounded-2xl p-8 border border-white/10 hover:-translate-y-2 hover:border-[var(--circuit-blue)]/50 hover:shadow-[0_10px_30px_rgba(0,163,255,0.15)] transition duration-300 flex flex-col h-full group">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-[var(--circuit-blue)] text-[9px] font-black uppercase tracking-[0.2em] border border-[var(--circuit-blue)]/30 px-2 py-1 rounded">Engineering</span>
-                    <span class="text-slate-500 text-[10px] uppercase tracking-widest">5 Min Read</span>
-                </div>
-                <h2 class="text-xl font-bold text-white mb-3 uppercase group-hover:text-[var(--circuit-blue)] transition-colors">
-                    Engineering the Core: Why We Rely on Test-Driven Development
-                </h2>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    Discover how we build bulletproof match-3 RPG mechanics for QUETIEMALS using strict TDD principles and continuous integration pipelines.
-                </p>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-[var(--circuit-blue)] uppercase tracking-widest mt-auto">
-                    Read Transmission <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
-                </div>
-            </a>
-
-            <a href="factions-lore.html" class="glass-panel rounded-2xl p-8 border border-white/10 hover:-translate-y-2 hover:border-[var(--voltage-orange)]/50 hover:shadow-[0_10px_30px_rgba(255,122,26,0.15)] transition duration-300 flex flex-col h-full group">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-[var(--voltage-orange)] text-[9px] font-black uppercase tracking-[0.2em] border border-[var(--voltage-orange)]/30 px-2 py-1 rounded">Lore &amp; IP</span>
-                    <span class="text-slate-500 text-[10px] uppercase tracking-widest">7 Min Read</span>
-                </div>
-                <h2 class="text-xl font-bold text-white mb-3 uppercase group-hover:text-[var(--voltage-orange)] transition-colors">
-                    The Factions of Eyuforyia: Designing Non-Humanoid Characters
-                </h2>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    We have removed the "Master/Pet" dynamic entirely. Discover why our animal avatars fight for their own land with total autonomy, forcing players to see the world through the lens of a hero, not a trainer.
-                </p>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-[var(--voltage-orange)] uppercase tracking-widest mt-auto">
-                    Read Transmission <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
-                </div>
-            </a>
-
-            <div class="glass-panel rounded-2xl p-8 border border-white/10 opacity-70 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-slate-300 text-[9px] font-black uppercase tracking-[0.2em] border border-white/20 px-2 py-1 rounded">R&amp;D</span>
-                    <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
-                </div>
-                <h2 class="text-xl font-bold text-white mb-3 uppercase">
-                    Prototyping Text-Driven UIs for Embedded Hardware
-                </h2>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    Our findings on designing accessible, text-driven user interfaces tailored specifically for low-resource flip-phone hardware limitations.
-                </p>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
-                    <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
-                </div>
-            </div>
-
-            <div class="glass-panel rounded-2xl p-8 border border-white/10 opacity-60 flex flex-col h-full">
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-slate-300 text-[9px] font-black uppercase tracking-[0.2em] border border-white/20 px-2 py-1 rounded">IP Design</span>
-                    <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
-                </div>
-                <h2 class="text-xl font-bold text-white mb-3 uppercase">
-                    Writing the Villain You Can't Hate: The Tech-Biomes of Eyuforyia
-                </h2>
-                <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
-                    They don't want to destroy Eyuforyia — they want to improve it. How we designed an invading force that operates on pure logic, making them more unsettling than any monster driven by malice.
-                </p>
-                <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
-                    <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
-                </div>
-            </div>
-
+      <!-- Article 2 — Factions -->
+      <a href="factions-lore.html" class="reveal glass-panel rounded-2xl p-8 border border-white/10 hover:border-[var(--voltage-orange)]/50 hover:shadow-[0_10px_30px_rgba(255,122,26,0.12)] article-card flex flex-col h-full group">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-[var(--voltage-orange)] text-[9px] font-black uppercase tracking-[0.2em] border border-[var(--voltage-orange)]/30 px-2 py-1 rounded">Lore & IP</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">7 Min Read</span>
         </div>
-    </main>
-
-    <footer class="py-8 border-t border-white/5 bg-[#020617] mt-12">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
-            <p>© <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
-            
-            <div class="flex items-center gap-6">
-                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
-                <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
-            </div>
-
-            <p>Engineering worlds, not just games.</p>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase group-hover:text-[var(--voltage-orange)] transition-colors font-space leading-tight">
+          The Factions of Eyuforyia: Designing Non-Humanoid Characters
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          We removed the Master/Pet dynamic entirely. Discover why our Quetiemals fight for their own land with total autonomy — forcing players to see the world through a hero, not a trainer.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-[var(--voltage-orange)] uppercase tracking-widest mt-auto">
+          Read Transmission <i data-lucide="arrow-right" class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>
         </div>
-    </footer>
+      </a>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        lucide.createIcons();
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+      <!-- Article 3 — TeqDocs/TeqXus -->
+      <div class="reveal glass-panel rounded-2xl p-8 border border-white/10 hover:border-emerald-500/40 hover:shadow-[0_10px_30px_rgba(52,211,153,0.08)] article-card flex flex-col h-full group opacity-80">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-emerald-400 text-[9px] font-black uppercase tracking-[0.2em] border border-emerald-400/30 px-2 py-1 rounded">Software</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase font-space leading-tight">
+          Building TeqXus & TeqDocs: How Game Dev Thinking Built Better Software
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          How the systems-thinking and rapid iteration of game development translated directly into building two live AI software products — and why the connection is stronger than it looks.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
+          <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
+        </div>
+      </div>
+
+      <!-- Article 4 — No humans -->
+      <div class="reveal glass-panel rounded-2xl p-8 border border-white/10 hover:border-purple-500/40 article-card flex flex-col h-full opacity-70">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-purple-400 text-[9px] font-black uppercase tracking-[0.2em] border border-purple-400/30 px-2 py-1 rounded">IP Design</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase font-space leading-tight">
+          Writing the Villain You Can't Hate: The Tech-Biomes of Eyuforyia
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          They don't want to destroy Eyuforyia — they want to improve it. How we designed an invading force that operates on pure logic, making them more unsettling than any monster driven by malice.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
+          <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
+        </div>
+      </div>
+
+      <!-- Article 5 — Hardware UI -->
+      <div class="reveal glass-panel rounded-2xl p-8 border border-white/10 article-card flex flex-col h-full opacity-60">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-slate-400 text-[9px] font-black uppercase tracking-[0.2em] border border-white/20 px-2 py-1 rounded">R&D</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase font-space leading-tight">
+          Prototyping Text-Driven UIs for Embedded Hardware
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          Our findings on designing accessible, text-driven user interfaces for low-resource hardware environments — and what electrician intuition brings to software UI thinking.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
+          <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
+        </div>
+      </div>
+
+      <!-- Article 6 — Transmedia Architecture -->
+      <div class="reveal glass-panel rounded-2xl p-8 border border-white/10 article-card flex flex-col h-full opacity-60">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="text-[var(--voltage-orange)] text-[9px] font-black uppercase tracking-[0.2em] border border-[var(--voltage-orange)]/30 px-2 py-1 rounded">Strategy</span>
+          <span class="text-slate-500 text-[10px] uppercase tracking-widest">Drafting</span>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-3 uppercase font-space leading-tight">
+          Transmedia Architecture: Why We Write the Novel Before We Build the Game
+        </h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+          A breakdown of the Teq Vault development pipeline — why literary foundations produce better game mechanics, deeper lore, and more coherent player experiences than any prototype-first approach.
+        </p>
+        <div class="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-auto">
+          <i data-lucide="lock" class="w-3 h-3"></i> Encrypting...
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="py-8 border-t border-white/5 bg-[#020617]">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
+      <p>&copy; <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
+      </div>
+      <p>Engineering worlds, not just games.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('active');
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
