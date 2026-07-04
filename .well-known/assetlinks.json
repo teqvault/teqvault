@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.teqvault.forgeandruin",
+      "sha256_cert_fingerprints": [
+        "0B:24:95:4E:E2:AA:E8:EE:CC:C7:FB:01:9B:CD:F8:55:A6:CF:B0:48:64:9C:96:06:8C:FA:34:FA:61:DC:DC:00"
+      ]
+    }
+  }
+]
