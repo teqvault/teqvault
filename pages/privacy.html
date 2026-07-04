@@ -51,7 +51,7 @@
             <section>
                 <h2 class="text-2xl font-bold text-white mb-3 uppercase">Introduction</h2>
                 <p class="text-slate-400 leading-relaxed">
-                    Welcome to Teq Vault LLC ("we," "our," or "us"). We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website (teqvault.online) and our associated platforms.
+                    Welcome to Teq Vault LLC ("we," "our," or "us"), publishing mobile games and software under the name <strong>Average Jude Games</strong>. We respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website (teqvault.online), use our mobile applications, and interact with our associated platforms.
                 </p>
             </section>
 
@@ -87,7 +87,7 @@
             <section>
                 <h2 class="text-2xl font-bold text-white mb-3 uppercase">Mobile Applications</h2>
                 <p class="text-slate-400 leading-relaxed mb-4">
-                    This Privacy Policy also applies to all mobile applications developed and published by Teq Vault LLC, including but not limited to <strong>QUETIEMALS</strong> and <strong>QUETIEMALS Connect 4</strong>. 
+                    This Privacy Policy applies to all mobile applications published under <strong>Average Jude Games</strong>, the publishing name used by <strong>Teq Vault LLC</strong> (Bossier City, Louisiana, USA) on Google Play, including but not limited to <strong>QUETIEMALS</strong>, <strong>QUETIEMALS Connect 4</strong>, and <strong>Forge & Ruin</strong>. Any reference to "we," "our," or "us" in this Policy refers to Teq Vault LLC / Average Jude Games.
                 </p>
                 <ul class="text-slate-400 leading-relaxed list-disc list-inside space-y-2">
                     <li><strong>Data Collection:</strong> Our mobile apps may collect device-specific information, including Device IDs (such as Advertising IDs), operating system version, device model, and IP address to support app functionality, analytics, and crash reporting.</li>
@@ -128,7 +128,11 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
-        lucide.createIcons();
+        window.addEventListener('load', function () {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
         document.getElementById('year').textContent = new Date().getFullYear();
     </script>
 </body>
