@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Confirmed | TEQ VAULT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body class="bg-[#050810] text-[#e2e8f0] font-space min-h-screen flex items-center justify-center px-6">
+
+    <main class="max-w-lg w-full text-center">
+        <div class="glass-panel rounded-3xl p-10 md:p-14 border border-white/10">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--circuit-blue)]/10 border border-[var(--circuit-blue)]/30 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[var(--circuit-blue)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-space font-bold uppercase tracking-tighter mb-4 text-white">
+                Email Confirmed
+            </h1>
+
+            <p class="text-slate-400 leading-relaxed mb-2">
+                Thank you for confirming your email address.
+            </p>
+            <p class="text-slate-400 leading-relaxed">
+                You can close this page now and sign in to <strong class="text-white">TeqMusic</strong> with your new account.
+            </p>
+        </div>
+
+        <p class="text-[11px] text-slate-500 mt-8">
+            © <span id="year"></span> Teq Vault LLC. All rights reserved.
+        </p>
+    </main>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
