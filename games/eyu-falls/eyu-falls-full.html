@@ -708,7 +708,7 @@
 
   <!-- CENTER -->
   <div class="col">
-    <div class="board-wrap">
+    <div class="board-wrap" id="boardWrap">
       <canvas id="board" width="286" height="416"></canvas>
       <div class="combo-banner" id="comboBanner"></div>
       <div class="overlay" id="overlay">
@@ -1677,27 +1677,37 @@ const GESTURE = {
   HARD_DROP_VELOCITY: 0.8, // px/ms — a fast short downward flick is also a hard drop
 };
 (function setupGestureControls(){
-  const board=document.getElementById("board");
-  if(!board) return;
+  const zone=document.getElementById("boardWrap");
+  if(!zone) return;
   let startX=0, startY=0, startT=0, tracking=false;
 
-  board.addEventListener("touchstart", (e)=>{
-    if(e.touches.length!==1) return; // ignore multi-touch (pinch-zoom etc.)
+  // Any of the win/lose, pause, or tutorial overlays live inside this
+  // same zone and cover it completely when shown. Without this check,
+  // tapping "Resume" or "Fight Again" would ALSO get picked up as a game
+  // gesture (bubbling up to this listener) and fire doRotate() alongside
+  // the button's own onclick — a real conflict, not just noise.
+  function overlayIsShowing(){
+    return !!zone.querySelector(".overlay.show");
+  }
+
+  zone.addEventListener("touchstart", (e)=>{
+    if(e.touches.length!==1 || overlayIsShowing()){ tracking=false; return; }
     const t=e.touches[0];
     startX=t.clientX; startY=t.clientY; startT=Date.now();
     tracking=true;
   }, {passive:true});
 
-  board.addEventListener("touchmove", (e)=>{
+  zone.addEventListener("touchmove", (e)=>{
     if(!tracking) return;
     // Prevent the page from scrolling/pull-to-refreshing while swiping on
     // the board specifically — doesn't affect scrolling anywhere else.
     e.preventDefault();
   }, {passive:false});
 
-  board.addEventListener("touchend", (e)=>{
+  zone.addEventListener("touchend", (e)=>{
     if(!tracking) return;
     tracking=false;
+    if(overlayIsShowing()) return; // an overlay could have appeared mid-touch (e.g. topping out)
     const t=e.changedTouches[0];
     const dx=t.clientX-startX, dy=t.clientY-startY;
     const dt=Math.max(1, Date.now()-startT);
