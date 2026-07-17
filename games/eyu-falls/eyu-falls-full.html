@@ -69,6 +69,16 @@
   body.portrait-mode .col.left .panel,
   body.portrait-mode .col.right .panel{ width:100%; }
   body.portrait-mode .abilities{ flex-wrap:wrap; justify-content:center; }
+  /* Button clusters live in the actual empty space at the bottom of the
+     left/right columns (below Controls, below Score) — normal in-flow
+     content now, not fixed-position overlays. This means they scale
+     naturally with everything else through the existing scale-to-fit
+     transform instead of needing independent viewport-based sizing. */
+  .touch-col{ display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+  .touch-row{ display:flex; gap:8px; }
+  .touch-row .tbtn{ flex:1; height:52px; }
+  .tbtn.wide{ width:100%; height:48px; }
+  body.portrait-mode .ab{ min-width:58px; min-height:58px; }
   /* Controls panel is keyboard-key hints — meaningless on a touch device
      that already has on-screen buttons. Hint text is redundant once
      you're actually playing. Both just ate vertical space that should
@@ -250,6 +260,7 @@
 
   /* touch controls */
   .touch{display:flex; gap:8px; justify-content:center; margin-top:10px;}
+  .touch-group{display:flex; gap:8px;}
   .tbtn{
     width:46px; height:42px; border-radius:9px;
     background:linear-gradient(180deg,var(--panel2),var(--panel));
@@ -485,6 +496,12 @@
     background:#1F1636cc; border:1px solid var(--edge); font-size:16px;
   }
   #sfxToggle.muted img{ opacity:.3; filter:grayscale(1); }
+  #pauseBtn{
+    position:fixed; top:16px; left:16px; z-index:100; cursor:pointer;
+    width:38px; height:38px; border-radius:9px; display:none; align-items:center; justify-content:center;
+    background:#1F1636cc; border:1px solid var(--edge); font-size:16px; color:var(--violet);
+  }
+  #pauseBtn.visible{ display:flex; }
   #toast{
     position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px);
     background:#1F1636ee; border:1px solid var(--edge); border-radius:9px;
@@ -528,6 +545,7 @@
 </head>
 <body>
 <div id="sfxToggle" onclick="toggleSfx()" title="Toggle sound"><img src="assets/Music.png" alt="Sound" style="width:22px;height:22px;object-fit:contain;"></div>
+<div id="pauseBtn" onclick="openPause()" title="Pause">⏸</div>
 <div id="toast"></div>
 
 <!-- ================= MAIN MENU ================= -->
@@ -703,6 +721,13 @@
         ← → move · ↑ / X rotate CW · Z rotate CCW<br>↓ soft drop · Space hard drop<br>C hold piece
       </div>
     </div>
+    <div class="touch-col" id="touchLeft">
+      <div class="touch-row">
+        <button class="tbtn" data-k="left"><img src="assets/Reverse_Button.png" alt="Left" style="width:50%;height:50%;object-fit:contain;"></button>
+        <button class="tbtn" data-k="right"><img src="assets/Forward_Button.png" alt="Right" style="width:50%;height:50%;object-fit:contain;"></button>
+      </div>
+      <button class="tbtn wide" data-k="down"><img src="assets/Soft_Land.png" alt="Soft drop" style="width:26px;height:26px;object-fit:contain;"></button>
+    </div>
   </div>
 
   <!-- CENTER -->
@@ -727,17 +752,16 @@
         </p>
         <button class="btn" style="align-self:center; margin-top:4px;" onclick="dismissFirstBattleTip()">Got it</button>
       </div>
+      <div class="overlay" id="pauseOverlay">
+        <h2 style="font-size:20px; letter-spacing:2px;">PAUSED</h2>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button class="btn" onclick="closePause()">Resume</button>
+          <button class="btn ghost" onclick="quitToMapFromPause()">Return to Map</button>
+        </div>
+      </div>
     </div>
     <div class="elems" id="elems"></div>
     <div class="abilities" id="abilities"></div>
-    <div class="touch">
-      <button class="tbtn" data-k="left"><img src="assets/Reverse_Button.png" alt="Left" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="rot"><img src="assets/Rotate_Button.png" alt="Rotate" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="right"><img src="assets/Forward_Button.png" alt="Right" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="down"><img src="assets/Soft_Land.png" alt="Soft drop" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="drop"><img src="assets/Hard_Land.png" alt="Hard drop" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" id="holdBtn" data-k="hold" style="font-size:11px; letter-spacing:1px;">HOLD</button>
-    </div>
     <div class="hint" id="gameplayHint">Clear lines → gain elements → spend them on Pack abilities.</div>
     <div class="hint" id="focusHint" style="color:var(--violet); font-weight:700;">Click anywhere on this game once to enable keyboard controls.</div>
   </div>
@@ -774,6 +798,13 @@
       <div class="stat"><span class="label dim" style="margin:0">Score</span><b id="score">0</b></div>
       <div class="stat"><span class="label dim" style="margin:0">Lines</span><b id="lines">0</b></div>
       <div class="stat"><span class="label dim" style="margin:0">Level</span><b id="level">1</b></div>
+    </div>
+    <div class="touch-col" id="touchRight">
+      <div class="touch-row">
+        <button class="tbtn" data-k="drop"><img src="assets/Hard_Land.png" alt="Hard drop" style="width:50%;height:50%;object-fit:contain;"></button>
+        <button class="tbtn" id="holdBtn" data-k="hold" style="font-size:12px; letter-spacing:1px;">HOLD</button>
+      </div>
+      <button class="tbtn wide" data-k="rot"><img src="assets/Rotate_Button.png" alt="Rotate" style="width:26px;height:26px;object-fit:contain;"></button>
     </div>
   </div>
 </div>
@@ -1198,6 +1229,7 @@ function resetGame(){
   cur=newPiece(); nextP=newPiece(); holdP=null; canHold=true;
   gameActive=true;
   document.getElementById("overlay").classList.remove("show");
+  document.getElementById("pauseOverlay").classList.remove("show");
   updateUI(); drawAll();
 }
 function lockPiece(){
@@ -1781,7 +1813,7 @@ const ASSETS = {
     enemy_harvester_node: null,
     enemy_sentry_turret: null,
     enemy_rescue_convoy: null,
-    enemy_cyber_wolf: null,
+    enemy_cyber_wolf: "assets/enemy_cyber_wolf.png",
     enemy_scout_swarm: null,
     enemy_ambush_ridge: null,
     bg_battle_collector_drone: null,
@@ -1792,14 +1824,14 @@ const ASSETS = {
     bg_battle_ambush_ridge: null,
     bg_battle_cyber_wolf: null,
     enemy_wind_ridge: null,
-    enemy_arch_solar_queen: null,
+    enemy_arch_solar_queen: "assets/enemy_arch_solar_queen.png",
     enemy_prism_walk: null,
     enemy_sunwatch_trial: null,
     bg_battle_prism_walk: null,
     bg_battle_sunwatch_trial: null,
     bg_battle_wind_ridge: null,
     bg_battle_arch_solar_queen: null,
-    portrait_nyaqueen: null,
+    portrait_nyaqueen: "assets/portrait_nyaqueen.png",
     portrait_volt: null,
   },
   audio: {
@@ -1990,6 +2022,7 @@ function showScreen(name){
   if(name==="map"){ currentRegionId = save.currentRegion || "azure_heights"; renderMap(); }
   if(name==="worldmap") renderWorldMap();
   if(name==="battle") gameActive=false; // paused until startMission() spins it up
+  document.getElementById("pauseBtn").classList.toggle("visible", name==="battle");
   if(name==="settings") refreshSettingsScreen();
   if(name==="chapter-complete"){
     const region=REGIONS[currentRegionId];
@@ -2288,6 +2321,34 @@ function dismissFirstBattleTip(){
   sfx("click");
   resetGame();
 }
+
+let wasPausedActive=false;
+function openPause(){
+  if(over) return; // match already finished — win/lose overlay owns the screen
+  if(document.getElementById("firstBattleTip").classList.contains("show")) return;
+  if(document.getElementById("pauseOverlay").classList.contains("show")) return;
+  wasPausedActive=gameActive;
+  gameActive=false;
+  document.getElementById("pauseOverlay").classList.add("show");
+  sfx("click");
+}
+function closePause(){
+  document.getElementById("pauseOverlay").classList.remove("show");
+  if(!over) gameActive=wasPausedActive;
+  sfx("click");
+}
+function quitToMapFromPause(){
+  document.getElementById("pauseOverlay").classList.remove("show");
+  sfx("click");
+  returnToMap();
+}
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && document.getElementById("screen-battle").classList.contains("active")){
+    if(document.getElementById("pauseOverlay").classList.contains("show")) closePause();
+    else openPause();
+  }
+});
+
 const MISSION_STORY_SCENES = {
   cyber_wolf: "cyber_wolf_rescue",
   arch_solar_queen: "volt_recruit",
@@ -2402,13 +2463,11 @@ function fitToWindow(){
   const natW=target.scrollWidth, natH=target.scrollHeight;
   const avW=window.innerWidth-pad, avH=window.innerHeight-pad;
   // Fits BOTH width and height — a mobile game should never need scrolling
-  // to see its own UI mid-play. The Controls/hint panels are hidden and
-  // everything else compacted in portrait specifically so there's less
-  // competing content for this to fit, which means a bigger resulting
-  // scale (and a bigger board) than before, without ever needing scroll.
+  // to see its own UI mid-play.
   const MAX_SCALE=1.6;
   const s=Math.min(MAX_SCALE, avW/natW, avH/natH);
   target.style.transform=`scale(${s})`;
+  target.style.transformOrigin="center center";
   document.body.style.overflowY="hidden";
   document.body.style.alignItems="center";
 }
