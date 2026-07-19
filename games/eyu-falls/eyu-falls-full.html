@@ -20,6 +20,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Eyu Falls">
 <link rel="apple-touch-icon" href="icon-192.png">
+<!-- Cloud save sync — see CLOUD_SAVE section in the script for setup
+     instructions. Loading this here is harmless even before it's
+     configured; every cloud call is wrapped to fail silently offline
+     or if the project isn't set up yet, so local saves always work
+     regardless of this. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root{
     --void:#0B0614; --panel:#171028; --panel2:#1F1636; --edge:#4A3D6B;
@@ -69,6 +75,7 @@
   body.portrait-mode .col.left .panel,
   body.portrait-mode .col.right .panel{ width:100%; }
   body.portrait-mode .abilities{ flex-wrap:wrap; justify-content:center; }
+  body.portrait-mode .ab{ min-width:58px; min-height:58px; }
   /* Controls panel is keyboard-key hints — meaningless on a touch device
      that already has on-screen buttons. Hint text is redundant once
      you're actually playing. Both just ate vertical space that should
@@ -76,16 +83,30 @@
   body.portrait-mode #controlsPanel,
   body.portrait-mode #gameplayHint{ display:none; }
   /* Compact remaining panels — smaller padding/font so more of the
-     screen goes to the board itself instead of panel chrome. */
-  body.portrait-mode .panel{ padding:8px 10px; }
-  body.portrait-mode .label{ font-size:9px; margin-bottom:3px; }
-  body.portrait-mode .body-txt{ font-size:11px; line-height:1.3; }
-  body.portrait-mode .bar{ height:10px; }
-  body.portrait-mode .bar-num{ font-size:9px; margin-top:2px; }
-  body.portrait-mode .song-wrap{ gap:6px; }
-  body.portrait-mode .ring{ width:44px; height:44px; }
-  body.portrait-mode .ring svg{ width:44px; height:44px; }
-  body.portrait-mode .ring .pct{ font-size:11px; }
+     screen goes to the board itself instead of panel chrome. A real
+     phone's usable viewport is smaller than a resized desktop browser
+     (Safari's address bar and toolbar eat into it), so the same "fit
+     everything, no scroll" math shrinks harder there — freeing space
+     from non-essential text is what lets the board/chips scale back up. */
+  body.portrait-mode .panel{ padding:6px 9px; }
+  body.portrait-mode .label{ font-size:8.5px; margin-bottom:2px; }
+  body.portrait-mode .body-txt{ font-size:10.5px; line-height:1.25; }
+  body.portrait-mode .bar{ height:9px; }
+  body.portrait-mode .bar-num{ font-size:8.5px; margin-top:1px; }
+  body.portrait-mode .song-wrap{ gap:5px; }
+  body.portrait-mode .ring{ width:38px; height:38px; }
+  body.portrait-mode .ring svg{ width:38px; height:38px; }
+  body.portrait-mode .ring .pct{ font-size:10px; }
+  /* Pure flavor text — useful once, not on every single mission replay. */
+  body.portrait-mode #songDesc{ display:none; }
+  /* Mission text is still important (tells you the actual objective) so
+     it stays, but at 2 lines max instead of wrapping freely. */
+  body.portrait-mode #missionDesc{
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  body.portrait-mode .col{ gap:7px; }
+  body.portrait-mode .previews .mini{ width:56px; height:56px; }
+  body.portrait-mode .pname{ font-size:9px; }
   /* The canvas has fixed width/height attributes (its internal drawing
      resolution — all the game's cell math depends on that staying put).
      .board-wrap was sizing to that fixed 286px regardless of how wide the
@@ -250,13 +271,7 @@
 
   /* touch controls */
   .touch{display:flex; gap:8px; justify-content:center; margin-top:10px;}
-  .tbtn{
-    width:46px; height:42px; border-radius:9px;
-    background:linear-gradient(180deg,var(--panel2),var(--panel));
-    border:1px solid var(--edge); color:var(--violet);
-    font-size:17px; cursor:pointer;
-  }
-  .tbtn.used{ opacity:.35; filter:grayscale(.6); cursor:default; }
+  .touch-group{display:flex; gap:8px;}
   .pv.used-hold{ opacity:.5; }
   .pv.used-hold .pname::after{ content:" (used)"; opacity:.7; }
 
@@ -270,7 +285,6 @@
     background:#fff; transition:left .15s;
   }
   .settings-toggle.on .settings-toggle-knob{ left:24px; }
-  .tbtn:active{background:var(--violet-dim); color:#fff;}
   .hint{font-size:10.5px; color:var(--dim); text-align:center; margin-top:8px; letter-spacing:.4px;}
 
   .flash{animation:dmgflash .3s ease;}
@@ -485,6 +499,12 @@
     background:#1F1636cc; border:1px solid var(--edge); font-size:16px;
   }
   #sfxToggle.muted img{ opacity:.3; filter:grayscale(1); }
+  #pauseBtn{
+    position:fixed; top:16px; left:16px; z-index:100; cursor:pointer;
+    width:38px; height:38px; border-radius:9px; display:none; align-items:center; justify-content:center;
+    background:#1F1636cc; border:1px solid var(--edge); font-size:16px; color:var(--violet);
+  }
+  #pauseBtn.visible{ display:flex; }
   #toast{
     position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px);
     background:#1F1636ee; border:1px solid var(--edge); border-radius:9px;
@@ -528,6 +548,7 @@
 </head>
 <body>
 <div id="sfxToggle" onclick="toggleSfx()" title="Toggle sound"><img src="assets/Music.png" alt="Sound" style="width:22px;height:22px;object-fit:contain;"></div>
+<div id="pauseBtn" onclick="openPause()" title="Pause">⏸</div>
 <div id="toast"></div>
 
 <!-- ================= MAIN MENU ================= -->
@@ -586,6 +607,22 @@
           <span id="settingsSaveInfo">No progress yet.</span>
         </div>
         <div class="menu-btn" id="btnResetSave" style="position:static; width:100%; background:linear-gradient(180deg,#5A2A3A,#3A1620); border-color:#7A3A4A;">Reset Save Data</div>
+      </div>
+
+      <div class="panel">
+        <div class="label" style="margin-bottom:6px;">Cloud Save</div>
+        <div class="body-txt" style="color:var(--dim); font-size:11px; margin-bottom:10px;">
+          This code links your progress to this device. Enter it on another device to continue there.
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+          <div id="recoveryCodeDisplay" style="flex:1; font-family:monospace; font-size:15px; letter-spacing:3px; text-align:center; padding:8px; background:#0007; border-radius:6px; border:1px solid var(--edge); color:var(--violet); font-weight:700;">— — — — — — — —</div>
+          <div class="menu-btn" id="btnCopyCode" style="position:static; width:auto; padding:8px 14px; font-size:10px;">Copy</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <input id="restoreCodeInput" type="text" maxlength="8" placeholder="ENTER CODE" style="flex:1; font-family:monospace; letter-spacing:2px; text-transform:uppercase; padding:8px; background:#0007; border-radius:6px; border:1px solid var(--edge); color:var(--text); font-size:12px;">
+          <div class="menu-btn" id="btnRestoreCode" style="position:static; width:auto; padding:8px 14px; font-size:10px;">Restore</div>
+        </div>
+        <div class="body-txt" id="cloudSyncStatus" style="color:var(--dim); font-size:10px; margin-top:8px;"></div>
       </div>
 
       <div class="panel">
@@ -689,7 +726,7 @@
           </svg>
           <div class="pct" id="songPct">0%</div>
         </div>
-        <div class="body-txt" style="color:var(--dim); font-size:11.5px;">Every line restores the world's song.</div>
+        <div class="body-txt" id="songDesc" style="color:var(--dim); font-size:11.5px;">Every line restores the world's song.</div>
       </div>
     </div>
     <div class="panel">
@@ -707,7 +744,7 @@
 
   <!-- CENTER -->
   <div class="col">
-    <div class="board-wrap">
+    <div class="board-wrap" id="boardWrap">
       <canvas id="board" width="286" height="416"></canvas>
       <div class="combo-banner" id="comboBanner"></div>
       <div class="overlay" id="overlay">
@@ -721,23 +758,23 @@
       <div class="overlay" id="firstBattleTip" style="text-align:left; align-items:flex-start; padding:22px;">
         <h2 style="font-size:16px; letter-spacing:2px; align-self:center;">HOW THIS WORKS</h2>
         <p style="font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--yellow)">On the board:</b> tap to rotate · swipe left/right to move · swipe down to drop (a short swipe soft-drops, a long fast swipe hard-drops) · swipe up to hold.<br><br>
           <b style="color:var(--blue)">Clear lines</b> to fill your elemental pools (top row) — the color of the blocks you clear decides which pool fills.<br><br>
           Once you've banked enough of a color, its matching <b style="color:var(--violet)">Pack ability</b> (bottom row) lights up. Tap it to spend the pool and trigger the effect.<br><br>
           Different missions can change what each ability does — check the tooltip on any ability for its current effect.
         </p>
         <button class="btn" style="align-self:center; margin-top:4px;" onclick="dismissFirstBattleTip()">Got it</button>
       </div>
+      <div class="overlay" id="pauseOverlay">
+        <h2 style="font-size:20px; letter-spacing:2px;">PAUSED</h2>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button class="btn" onclick="closePause()">Resume</button>
+          <button class="btn ghost" onclick="quitToMapFromPause()">Return to Map</button>
+        </div>
+      </div>
     </div>
     <div class="elems" id="elems"></div>
     <div class="abilities" id="abilities"></div>
-    <div class="touch">
-      <button class="tbtn" data-k="left"><img src="assets/Reverse_Button.png" alt="Left" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="rot"><img src="assets/Rotate_Button.png" alt="Rotate" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="right"><img src="assets/Forward_Button.png" alt="Right" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="down"><img src="assets/Soft_Land.png" alt="Soft drop" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" data-k="drop"><img src="assets/Hard_Land.png" alt="Hard drop" style="width:24px;height:24px;object-fit:contain;"></button>
-      <button class="tbtn" id="holdBtn" data-k="hold" style="font-size:11px; letter-spacing:1px;">HOLD</button>
-    </div>
     <div class="hint" id="gameplayHint">Clear lines → gain elements → spend them on Pack abilities.</div>
     <div class="hint" id="focusHint" style="color:var(--violet); font-weight:700;">Click anywhere on this game once to enable keyboard controls.</div>
   </div>
@@ -1198,6 +1235,7 @@ function resetGame(){
   cur=newPiece(); nextP=newPiece(); holdP=null; canHold=true;
   gameActive=true;
   document.getElementById("overlay").classList.remove("show");
+  document.getElementById("pauseOverlay").classList.remove("show");
   updateUI(); drawAll();
 }
 function lockPiece(){
@@ -1660,14 +1698,114 @@ document.addEventListener("keydown",e=>{
   else if(e.key===" ") hardDrop();
   else if(e.key==="c"||e.key==="C") doHold();
 });
-document.querySelectorAll(".tbtn").forEach(b=>{
-  b.addEventListener("click",()=>{
-    const k=b.dataset.k;
-    if(k==="left")move(-1); else if(k==="right")move(1);
-    else if(k==="down")softDrop(); else if(k==="rot")doRotate();
-    else if(k==="drop")hardDrop(); else if(k==="hold")doHold();
-  });
-});
+// ---------- touch gestures (replaces on-screen buttons entirely) ----------
+// Tap (minimal movement, short duration) = rotate.
+// Swipe left/right (horizontal, exceeds distance threshold) = move one column.
+// Swipe down = soft drop; swipe down fast OR far = hard drop instead.
+// Swipe up = hold. All gestures are evaluated on release (touchend), not
+// as a live drag-to-follow — simpler and more predictable than trying to
+// track a piece continuously under a moving finger.
+const GESTURE = {
+  TAP_MAX_DIST: 12,          // px — under this with a quick release, it's a tap not a swipe
+  TAP_MAX_MS: 300,
+  MOVE_STEP_DIST: 26,        // px of live drag before triggering another column move
+  SOFT_DROP_STEP_DIST: 22,   // px of live downward drag before another soft-drop step
+  HARD_DROP_DIST: 130,       // px — crossing this total downward distance mid-drag hard-drops immediately
+  HARD_DROP_VELOCITY: 0.8,   // px/ms — a fast short downward flick at release also hard-drops
+  HOLD_SWIPE_DIST: 28,       // px of upward drag at release to trigger hold
+};
+(function setupGestureControls(){
+  // Scoped to the whole battle screen now instead of just the board —
+  // #scaleWrap only ever exists inside #screen-battle, so this is
+  // automatically battle-only with no extra active-screen check needed.
+  const zone=document.getElementById("scaleWrap");
+  if(!zone) return;
+  let startX=0, startY=0, startT=0, lastX=0, lastY=0, tracking=false, movedDuringDrag=false, hardDropped=false;
+
+  function overlayIsShowing(){
+    return !!document.querySelector(".overlay.show");
+  }
+  // The zone now covers ability buttons, chips, and anything else in the
+  // battle UI — touches that start ON an actual interactive element need
+  // to just be normal taps for that element, not get reinterpreted as a
+  // game gesture. Without this, tapping Phoenix Flare would ALSO fire
+  // doRotate() from the same touch, the same class of bug already fixed
+  // for the overlay buttons.
+  function startedOnInteractive(target){
+    return !!(target.closest && target.closest("button, .ab"));
+  }
+
+  zone.addEventListener("touchstart", (e)=>{
+    if(e.touches.length!==1 || overlayIsShowing() || startedOnInteractive(e.target)){ tracking=false; return; }
+    const t=e.touches[0];
+    startX=lastX=t.clientX; startY=lastY=t.clientY; startT=Date.now();
+    tracking=true; movedDuringDrag=false; hardDropped=false;
+  }, {passive:true});
+
+  zone.addEventListener("touchmove", (e)=>{
+    if(!tracking) return;
+    // Prevent the page from scrolling/pull-to-refreshing while swiping —
+    // doesn't affect scrolling anywhere else, only while actively
+    // tracking a gesture that started in this zone.
+    e.preventDefault();
+    if(hardDropped) return;
+    const t=e.touches[0];
+    const dxFromStart=t.clientX-startX, dyFromStart=t.clientY-startY;
+    const dxSinceStep=t.clientX-lastX, dySinceStep=t.clientY-lastY;
+    const horizontal=Math.abs(dxFromStart)>Math.abs(dyFromStart);
+
+    // Live horizontal movement — fires immediately as you drag, and
+    // fires AGAIN every time you cross another step distance, so a long
+    // drag slides the piece multiple columns instead of just one.
+    if(horizontal && Math.abs(dxSinceStep)>=GESTURE.MOVE_STEP_DIST){
+      move(dxSinceStep>0 ? 1 : -1);
+      lastX=t.clientX; lastY=t.clientY;
+      movedDuringDrag=true;
+      return;
+    }
+    // Live soft drop, same progressive idea.
+    if(!horizontal && dySinceStep>=GESTURE.SOFT_DROP_STEP_DIST){
+      softDrop();
+      lastX=t.clientX; lastY=t.clientY;
+      movedDuringDrag=true;
+    }
+    // Crossing the hard-drop distance mid-drag fires it immediately,
+    // rather than waiting for release — the piece is locked at this
+    // point, so stop tracking the rest of this touch.
+    if(!horizontal && dyFromStart>=GESTURE.HARD_DROP_DIST){
+      hardDrop();
+      hardDropped=true; movedDuringDrag=true;
+    }
+  }, {passive:false});
+
+  zone.addEventListener("touchend", (e)=>{
+    if(!tracking) return;
+    tracking=false;
+    if(overlayIsShowing() || hardDropped) return; // an overlay could appear mid-touch (e.g. topping out)
+    const t=e.changedTouches[0];
+    const dx=t.clientX-startX, dy=t.clientY-startY;
+    const dt=Math.max(1, Date.now()-startT);
+    const absX=Math.abs(dx), absY=Math.abs(dy);
+
+    // A tap only counts if nothing moved during the drag at all — this
+    // stops a drag that ends up back near its start point (a wobble)
+    // from being misread as a tap-to-rotate after already moving the piece.
+    if(!movedDuringDrag && absX<GESTURE.TAP_MAX_DIST && absY<GESTURE.TAP_MAX_DIST && dt<GESTURE.TAP_MAX_MS){
+      doRotate("cw");
+      return;
+    }
+    if(!movedDuringDrag && dy<0 && absY>absX && absY>=GESTURE.HOLD_SWIPE_DIST){
+      doHold();
+      return;
+    }
+    // A fast short downward flick that never crossed the live step
+    // distance (so nothing fired during the drag) still hard-drops.
+    if(!movedDuringDrag && dy>0 && absY>absX){
+      const velocity=absY/dt;
+      if(velocity>=GESTURE.HARD_DROP_VELOCITY) hardDrop();
+    }
+  }, {passive:true});
+})();
 
 // ---------- loop ----------
 let gameActive=false;
@@ -1781,7 +1919,7 @@ const ASSETS = {
     enemy_harvester_node: null,
     enemy_sentry_turret: null,
     enemy_rescue_convoy: null,
-    enemy_cyber_wolf: null,
+    enemy_cyber_wolf: "assets/enemy_cyber_wolf.png",
     enemy_scout_swarm: null,
     enemy_ambush_ridge: null,
     bg_battle_collector_drone: null,
@@ -1792,14 +1930,14 @@ const ASSETS = {
     bg_battle_ambush_ridge: null,
     bg_battle_cyber_wolf: null,
     enemy_wind_ridge: null,
-    enemy_arch_solar_queen: null,
+    enemy_arch_solar_queen: "assets/enemy_arch_solar_queen.png",
     enemy_prism_walk: null,
     enemy_sunwatch_trial: null,
     bg_battle_prism_walk: null,
     bg_battle_sunwatch_trial: null,
     bg_battle_wind_ridge: null,
     bg_battle_arch_solar_queen: null,
-    portrait_nyaqueen: null,
+    portrait_nyaqueen: "assets/portrait_nyaqueen.png",
     portrait_volt: null,
   },
   audio: {
@@ -1974,11 +2112,103 @@ function loadSave(){
 }
 function writeSave(save){
   try{ localStorage.setItem(SAVE_KEY, JSON.stringify(save)); }catch(e){ /* storage unavailable */ }
+  pushSaveToCloud(save); // fire-and-forget — never blocks or breaks local play
 }
 let save=loadSave();
 function markMissionCleared(id){
   if(!save.cleared.includes(id)) save.cleared.push(id);
   writeSave(save);
+}
+
+// ---------- cloud save (Supabase) ----------
+// TWO THINGS YOU NEED TO DO IN THE SUPABASE DASHBOARD before this does
+// anything — until then it fails silently and the game just uses
+// localStorage like before, so nothing breaks by leaving this unconfigured:
+//
+// 1. Create a table called "saves". Keep Supabase's default "id" and
+//    "created_at" columns, then add two more:
+//      code        text   — check "Is Unique" when adding this column
+//      save_data   jsonb
+//
+// 2. Enable Row Level Security on that table, then add a policy allowing
+//    anyone to SELECT and to INSERT/UPDATE (upsert) — this is intentional,
+//    not a mistake: the recovery code itself IS the access control here,
+//    the same way an unlisted share link works. There's no sensitive data
+//    in a puzzle game save, so this is a proportionate amount of security
+//    for what's actually at stake.
+//
+// Then paste your project's URL and anon/public API key below (Settings
+// → API in the Supabase dashboard — NOT the service_role key, that one
+// should never appear in client-side code).
+const CLOUD_SAVE_CONFIG = {
+  url: "https://hpfjtczivxqpxnwrnidc.supabase.co",
+  anonKey: "sb_publishable_bRGdEabVo0aT5HUjTPnTCA_-jvJtTw6",
+};
+let cloudClient=null;
+if(CLOUD_SAVE_CONFIG.url && CLOUD_SAVE_CONFIG.anonKey && window.supabase){
+  try{ cloudClient = window.supabase.createClient(CLOUD_SAVE_CONFIG.url, CLOUD_SAVE_CONFIG.anonKey); }
+  catch(e){ cloudClient=null; }
+}
+
+const RECOVERY_CODE_KEY="eyuFallsRecoveryCode";
+function getOrCreateRecoveryCode(){
+  try{
+    let code=localStorage.getItem(RECOVERY_CODE_KEY);
+    if(code) return code;
+    const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O/1/I — easy to read aloud/type
+    code="";
+    for(let i=0;i<8;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+    localStorage.setItem(RECOVERY_CODE_KEY, code);
+    return code;
+  }catch(e){ return null; }
+}
+
+async function pushSaveToCloud(saveData){
+  if(!cloudClient) return; // not configured — offline localStorage still just worked above
+  const code=getOrCreateRecoveryCode();
+  if(!code) return;
+  try{
+    await cloudClient.from("saves").upsert(
+      { code, save_data: saveData },
+      { onConflict: "code" } // without this, Supabase assumes the primary
+                              // key (id) is the conflict target, which
+                              // would insert a new row every time instead
+                              // of updating the existing one for this code
+    );
+  }catch(e){ /* offline or unreachable — local save already succeeded, nothing lost */ }
+}
+
+// Pulls a save by code. Used both for the automatic "did I make more
+// progress on another device" check on load, and for the manual restore
+// flow in Settings.
+async function pullSaveFromCloud(code){
+  if(!cloudClient || !code) return null;
+  try{
+    const { data, error } = await cloudClient.from("saves").select("save_data").eq("code", code).maybeSingle();
+    if(error || !data) return null;
+    return data.save_data;
+  }catch(e){ return null; }
+}
+
+// On load: compare the local save against the cloud copy under THIS
+// device's own code. If the cloud version has more cleared missions
+// (played further on another device, then came back here), adopt it —
+// otherwise push local up so the cloud stays current. Never silently
+// loses progress in either direction; the merge always prefers whichever
+// side has done more.
+async function syncSaveOnLoad(){
+  if(!cloudClient) return;
+  const code=getOrCreateRecoveryCode();
+  const cloudSave=await pullSaveFromCloud(code);
+  if(!cloudSave) { pushSaveToCloud(save); return; }
+  const localCount=(save.cleared||[]).length, cloudCount=(cloudSave.cleared||[]).length;
+  if(cloudCount>localCount){
+    save=cloudSave;
+    writeSave(save); // also re-persists locally, keeping both sides in sync
+    if(document.getElementById("screen-menu").classList.contains("active")) refreshMenu();
+  } else if(localCount>cloudCount){
+    pushSaveToCloud(save);
+  }
 }
 
 // ---------- screen router ----------
@@ -1990,6 +2220,7 @@ function showScreen(name){
   if(name==="map"){ currentRegionId = save.currentRegion || "azure_heights"; renderMap(); }
   if(name==="worldmap") renderWorldMap();
   if(name==="battle") gameActive=false; // paused until startMission() spins it up
+  document.getElementById("pauseBtn").classList.toggle("visible", name==="battle");
   if(name==="settings") refreshSettingsScreen();
   if(name==="chapter-complete"){
     const region=REGIONS[currentRegionId];
@@ -2288,6 +2519,34 @@ function dismissFirstBattleTip(){
   sfx("click");
   resetGame();
 }
+
+let wasPausedActive=false;
+function openPause(){
+  if(over) return; // match already finished — win/lose overlay owns the screen
+  if(document.getElementById("firstBattleTip").classList.contains("show")) return;
+  if(document.getElementById("pauseOverlay").classList.contains("show")) return;
+  wasPausedActive=gameActive;
+  gameActive=false;
+  document.getElementById("pauseOverlay").classList.add("show");
+  sfx("click");
+}
+function closePause(){
+  document.getElementById("pauseOverlay").classList.remove("show");
+  if(!over) gameActive=wasPausedActive;
+  sfx("click");
+}
+function quitToMapFromPause(){
+  document.getElementById("pauseOverlay").classList.remove("show");
+  sfx("click");
+  returnToMap();
+}
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape" && document.getElementById("screen-battle").classList.contains("active")){
+    if(document.getElementById("pauseOverlay").classList.contains("show")) closePause();
+    else openPause();
+  }
+});
+
 const MISSION_STORY_SCENES = {
   cyber_wolf: "cyber_wolf_rescue",
   arch_solar_queen: "volt_recruit",
@@ -2310,6 +2569,11 @@ function refreshSettingsScreen(){
   } else {
     info.textContent = "No progress yet.";
   }
+  const code=getOrCreateRecoveryCode();
+  const codeDisplay=document.getElementById("recoveryCodeDisplay");
+  if(codeDisplay) codeDisplay.textContent = code ? code.split("").join(" ") : "UNAVAILABLE";
+  const status=document.getElementById("cloudSyncStatus");
+  if(status) status.textContent = cloudClient ? "" : "Cloud save isn't set up yet — progress is saved on this device only.";
 }
 document.getElementById("settingsSfxToggle").addEventListener("click",()=>{
   toggleSfx();
@@ -2331,6 +2595,40 @@ document.getElementById("btnResetSave").addEventListener("click",()=>{
       showToast("Save data reset");
     },
     "Reset"
+  );
+});
+
+document.getElementById("btnCopyCode").addEventListener("click",()=>{
+  sfx("click");
+  const code=getOrCreateRecoveryCode();
+  if(!code) return;
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(()=>showToast("Code copied")).catch(()=>showToast(code));
+  } else {
+    showToast(code); // clipboard API unavailable — at least show it clearly
+  }
+});
+
+document.getElementById("btnRestoreCode").addEventListener("click",()=>{
+  sfx("click");
+  const input=document.getElementById("restoreCodeInput");
+  const code=(input.value||"").trim().toUpperCase();
+  if(code.length!==8){ showToast("Enter the full 8-character code"); return; }
+  if(!cloudClient){ showToast("Cloud save isn't set up yet"); return; }
+  openConfirmDialog(
+    "Restore Progress",
+    `This replaces your current progress on this device with whatever's saved under ${code}. This cannot be undone.`,
+    async ()=>{
+      const cloudSave=await pullSaveFromCloud(code);
+      if(!cloudSave){ showToast("No save found for that code"); return; }
+      save=cloudSave;
+      try{ localStorage.setItem(RECOVERY_CODE_KEY, code); }catch(e){}
+      writeSave(save);
+      refreshSettingsScreen();
+      refreshMenu();
+      showToast("Progress restored");
+    },
+    "Restore"
   );
 });
 
@@ -2378,6 +2676,7 @@ function applyMenuBackground(){
   shell.style.backgroundRepeat="no-repeat";
 }
 buildUI(); requestAnimationFrame(loop); refreshMenu(); applyMenuBackground(); playMusic("menu");
+syncSaveOnLoad();
 document.getElementById("sfxToggle").classList.toggle("muted", !sfxOn);
 
 // ---------- scale-to-fit ----------
@@ -2402,13 +2701,11 @@ function fitToWindow(){
   const natW=target.scrollWidth, natH=target.scrollHeight;
   const avW=window.innerWidth-pad, avH=window.innerHeight-pad;
   // Fits BOTH width and height — a mobile game should never need scrolling
-  // to see its own UI mid-play. The Controls/hint panels are hidden and
-  // everything else compacted in portrait specifically so there's less
-  // competing content for this to fit, which means a bigger resulting
-  // scale (and a bigger board) than before, without ever needing scroll.
+  // to see its own UI mid-play.
   const MAX_SCALE=1.6;
   const s=Math.min(MAX_SCALE, avW/natW, avH/natH);
   target.style.transform=`scale(${s})`;
+  target.style.transformOrigin="center center";
   document.body.style.overflowY="hidden";
   document.body.style.alignItems="center";
 }
