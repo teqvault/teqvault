@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Lantern Post</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=IBM+Plex+Mono:wght@400;500;600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12131c; --panel:#1b1d2a; --panel-2:#222436;
+    --ink:#e8eaf2; --dim:#9aa0b4; --line:#2e3346;
+    --amber:#f5b83d; --amber-dim:#8a6a2a; --blue:#5ec8f2; --red:#e57373; --green:#81c784;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:'IBM Plex Mono',monospace;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:18px 12px 30px; user-select:none;
+  }
+  h1{font-family:'Bungee',cursive; font-size:clamp(24px,4vw,34px); color:var(--amber); line-height:1}
+  .sub{font-size:11px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin:6px 0 14px}
+
+  .hud{
+    width:min(96vw,720px);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:10px 14px; margin-bottom:10px; flex-wrap:wrap;
+  }
+  .hud .lvl{font-size:12px; color:var(--dim)}
+  .hud .lvl b{color:var(--ink); font-weight:600}
+  .oil{display:flex; align-items:center; gap:8px; font-size:13px}
+  .oil .flame{font-size:16px}
+  .oil b{color:var(--amber); font-size:18px; min-width:2ch; text-align:right; transition:color .15s}
+  .oil.deny b{color:var(--red)}
+  .oilbar{width:110px; height:8px; background:var(--panel-2); border:1px solid var(--line); border-radius:99px; overflow:hidden}
+  .oilbar i{display:block; height:100%; background:linear-gradient(90deg,var(--amber-dim),var(--amber)); width:100%; transition:width .25s}
+
+  .mapwrap{position:relative; width:min(96vw,720px)}
+  #map{width:100%; display:block; background:#0e0f18; border:1px solid var(--line); border-radius:10px; cursor:pointer}
+
+  .controls{width:min(96vw,720px); display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+  button{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;
+    border-radius:8px; padding:11px 18px; cursor:pointer; letter-spacing:.05em;
+    border:1px solid var(--line); background:var(--panel-2); color:var(--ink);
+  }
+  button:active{transform:translateY(1px)}
+  button.primary{background:var(--amber); border-color:var(--amber); color:#151006}
+  button:disabled{opacity:.35; cursor:default}
+  .spacer{flex:1}
+
+  .hint{width:min(96vw,720px); font-size:11.5px; color:var(--dim); margin-top:10px; line-height:1.6}
+
+  /* letter overlay */
+  .veil{
+    position:fixed; inset:0; background:rgba(10,11,18,.82);
+    display:none; align-items:center; justify-content:center; padding:18px; z-index:20;
+  }
+  .veil.show{display:flex}
+  .paper{
+    background:#efe6cf; color:#2c2418; max-width:460px; width:100%;
+    border-radius:4px; padding:30px 30px 24px;
+    box-shadow:0 20px 60px rgba(0,0,0,.6);
+    font-family:'IM Fell English',serif; font-size:17px; line-height:1.65;
+    position:relative;
+  }
+  .paper .from{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a7a5a; font-family:'IBM Plex Mono',monospace; margin-bottom:12px}
+  .paper .sig{margin-top:14px; font-style:italic; text-align:right}
+  .paper .meta{margin-top:18px; padding-top:12px; border-top:1px dashed #c9bb98; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8a7a5a; display:flex; justify-content:space-between; align-items:center}
+  .paper .star{color:#b08a2a}
+  .paper button{margin-top:16px; width:100%; background:#2c2418; color:#efe6cf; border-color:#2c2418}
+
+  /* archive */
+  .arch{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    max-width:520px; width:100%; max-height:80vh; overflow:auto; padding:20px;
+  }
+  .arch h2{font-family:'Bungee',cursive; font-size:16px; color:var(--amber); margin-bottom:12px}
+  .arch .entry{border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px; background:var(--panel-2)}
+  .arch .entry .t{font-size:12px; color:var(--amber); margin-bottom:6px}
+  .arch .entry .b{font-family:'IM Fell English',serif; font-size:15px; line-height:1.55; color:var(--ink)}
+  .arch .locked{color:var(--dim); font-size:12px; font-style:italic}
+  .toast{
+    position:fixed; top:14px; left:50%; transform:translateX(-50%);
+    background:var(--panel-2); border:1px solid var(--amber); color:var(--amber);
+    font-size:12px; padding:7px 16px; border-radius:999px; opacity:0;
+    transition:opacity .3s; pointer-events:none; z-index:30;
+  }
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<h1>LANTERN POST</h1>
+<div class="sub">Plan the route · mind the oil · deliver the letter</div>
+
+<div class="hud">
+  <span class="lvl">DELIVERY <b id="lvlNum">1</b>/8 — <b id="lvlName">…</b></span>
+  <div class="oil" id="oilBox">
+    <span class="flame">🏮</span>
+    <div class="oilbar"><i id="oilFill"></i></div>
+    <b id="oilVal">0</b>
+  </div>
+</div>
+
+<div class="mapwrap"><canvas id="map" width="720" height="430"></canvas></div>
+
+<div class="controls">
+  <button id="resetBtn">RESET ROUTE</button>
+  <button id="archBtn">LETTERS</button>
+  <span class="spacer"></span>
+  <button id="departBtn" class="primary" disabled>DEPART</button>
+</div>
+
+<div class="hint">
+  Tap a connected station to extend your route from the lantern. Tap an earlier stop to backtrack.
+  Numbers on roads are oil costs. Blue waystations refill oil once. Reach the ✉ before your light runs out.
+</div>
+
+<div class="veil" id="letterVeil">
+  <div class="paper">
+    <div class="from" id="pFrom"></div>
+    <div id="pBody"></div>
+    <div class="sig" id="pSig"></div>
+    <div class="meta"><span id="pMeta"></span><span class="star" id="pStar"></span></div>
+    <button id="contBtn">CONTINUE</button>
+  </div>
+</div>
+
+<div class="veil" id="archVeil">
+  <div class="arch">
+    <h2>THE LETTERS</h2>
+    <div id="archList"></div>
+    <button id="archClose" style="width:100%">CLOSE</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   LANTERN POST — node-graph courier puzzles, letters as reward
+   ============================================================ */
+
+const cv = document.getElementById('map');
+const ctx = cv.getContext('2d');
+
+/* ---------- levels ----------
+   node: {id, x, y, type:'start'|'dest'|'way'|'node', refill}
+   edge: {a, b, cost, blocked}
+*/
+const LEVELS = [
+{ name:'The First Mile', oil:8, par:2,
+  nodes:[
+    {id:'S',x:80, y:215,type:'start'},
+    {id:'A',x:350,y:120},
+    {id:'B',x:350,y:310},
+    {id:'D',x:620,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:3},{a:'A',b:'D',cost:3},{a:'S',b:'B',cost:5},{a:'B',b:'D',cost:5} ] },
+
+{ name:'The Waystation', oil:9, par:1,
+  nodes:[
+    {id:'S',x:70, y:215,type:'start'},
+    {id:'A',x:250,y:110},
+    {id:'B',x:250,y:320},
+    {id:'W',x:430,y:110,type:'way',refill:3},
+    {id:'D',x:630,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:4},{a:'S',b:'B',cost:4},{a:'A',b:'W',cost:2},{a:'W',b:'D',cost:5},{a:'B',b:'D',cost:6} ] },
+
+{ name:'Crossroads', oil:12, par:2,
+  nodes:[
+    {id:'S', x:70, y:215,type:'start'},
+    {id:'A', x:220,y:100},
+    {id:'B', x:220,y:330},
+    {id:'C', x:400,y:215},
+    {id:'W1',x:400,y:80, type:'way',refill:4},
+    {id:'W2',x:400,y:350,type:'way',refill:2},
+    {id:'D', x:640,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:3},{a:'S',b:'B',cost:3},{a:'A',b:'C',cost:4},{a:'B',b:'C',cost:4},
+          {a:'A',b:'W1',cost:3},{a:'W1',b:'D',cost:8},{a:'C',b:'D',cost:6},
+          {a:'W2',b:'D',cost:5},{a:'B',b:'W2',cost:4} ] },
+
+{ name:'The Long Dark', oil:10, par:0,
+  nodes:[
+    {id:'S', x:60, y:215,type:'start'},
+    {id:'A', x:190,y:110},
+    {id:'B', x:190,y:320},
+    {id:'C', x:330,y:215},
+    {id:'W1',x:330,y:70, type:'way',refill:3},
+    {id:'W2',x:480,y:215,type:'way',refill:2},
+    {id:'E', x:480,y:110},
+    {id:'F', x:480,y:320},
+    {id:'D', x:650,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:2},{a:'S',b:'B',cost:2},{a:'A',b:'C',cost:3},{a:'B',b:'C',cost:3},
+          {a:'A',b:'W1',cost:4},{a:'W1',b:'E',cost:3},{a:'C',b:'W2',cost:3},
+          {a:'W2',b:'E',cost:2},{a:'W2',b:'F',cost:2},{a:'E',b:'D',cost:4},{a:'F',b:'D',cost:4} ] },
+
+{ name:'Toll of the Marsh', oil:14, par:4,
+  nodes:[
+    {id:'S', x:60, y:215,type:'start'},
+    {id:'A', x:200,y:120},
+    {id:'B', x:200,y:310},
+    {id:'C', x:340,y:120},
+    {id:'W1',x:340,y:310,type:'way',refill:4},
+    {id:'E', x:480,y:120},
+    {id:'W2',x:480,y:310,type:'way',refill:3},
+    {id:'D', x:650,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:3},{a:'S',b:'B',cost:3},{a:'A',b:'C',cost:4},{a:'B',b:'W1',cost:4},
+          {a:'C',b:'E',cost:4},{a:'W1',b:'C',cost:3},{a:'W1',b:'W2',cost:5},
+          {a:'E',b:'D',cost:5},{a:'W2',b:'D',cost:4} ] },
+
+{ name:'The Broken Bridge', oil:11, par:3,
+  nodes:[
+    {id:'S',x:60, y:215,type:'start'},
+    {id:'A',x:230,y:100},
+    {id:'B',x:230,y:330},
+    {id:'C',x:420,y:100},
+    {id:'E',x:420,y:330},
+    {id:'W',x:420,y:215,type:'way',refill:3},
+    {id:'D',x:660,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:3},{a:'S',b:'B',cost:4},{a:'A',b:'C',cost:4},
+          {a:'C',b:'D',cost:0,blocked:true},
+          {a:'B',b:'E',cost:4},{a:'E',b:'D',cost:5},
+          {a:'A',b:'W',cost:5},{a:'W',b:'D',cost:4},{a:'B',b:'W',cost:3} ] },
+
+{ name:'Night of the Storm', oil:13, par:2,
+  nodes:[
+    {id:'S', x:60, y:215,type:'start'},
+    {id:'A', x:180,y:110},
+    {id:'B', x:180,y:320},
+    {id:'C', x:320,y:60},
+    {id:'M', x:320,y:215},
+    {id:'E', x:320,y:370},
+    {id:'F', x:470,y:110},
+    {id:'W', x:470,y:290,type:'way',refill:5},
+    {id:'D', x:660,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:3},{a:'S',b:'B',cost:3},{a:'A',b:'C',cost:4},{a:'A',b:'M',cost:4},
+          {a:'B',b:'M',cost:4},{a:'B',b:'E',cost:3},{a:'C',b:'F',cost:4},{a:'M',b:'F',cost:5},
+          {a:'M',b:'W',cost:4},{a:'E',b:'W',cost:4},{a:'F',b:'D',cost:5},{a:'W',b:'D',cost:6} ] },
+
+{ name:'The Last Lantern', oil:12, par:0,
+  nodes:[
+    {id:'S', x:60, y:215,type:'start'},
+    {id:'A', x:190,y:100},
+    {id:'B', x:190,y:330},
+    {id:'C', x:330,y:170},
+    {id:'E', x:330,y:300},
+    {id:'W1',x:470,y:90, type:'way',refill:3},
+    {id:'W2',x:470,y:330,type:'way',refill:4},
+    {id:'D', x:660,y:215,type:'dest'} ],
+  edges:[ {a:'S',b:'A',cost:2},{a:'S',b:'B',cost:4},{a:'A',b:'C',cost:3},{a:'B',b:'E',cost:3},
+          {a:'C',b:'E',cost:2},{a:'C',b:'W1',cost:4},{a:'E',b:'W2',cost:4},
+          {a:'W1',b:'D',cost:6},{a:'W2',b:'D',cost:5} ] },
+];
+
+/* ---------- the letters ---------- */
+const LETTERS = [
+{from:'EDDA, AT HOLLOW LIGHT — TO TOMAS', sig:'— your sister, Edda',
+ body:'The night is forty days old now, and still no dawn. The elders say the beacons went out one by one, like someone walking down a hall snuffing candles. I keep the post lamp lit for you. Whatever you find out there, brother — write. A letter is a small light, but it carries.'},
+{from:'TOMAS, ON THE COAST ROAD — TO EDDA', sig:'— T.',
+ body:'The roads are darker than we feared, but not empty. I fell in with the couriers — lantern-men who walk the old routes trading oil for news. They say the far beacons still burn. Edda, someone is keeping them lit. I mean to find out who. Tell mother I am eating well. It is mostly true.'},
+{from:'EDDA, AT HOLLOW LIGHT — TO TOMAS', sig:'— Edda',
+ body:'The village voted to ration the oil. Old Brann said lighting the post lamp for one absent boy is a luxury. I told him the lamp is not for you — it is for anyone out there in the dark, and you simply happen to be one of them. He had no answer. The lamp stays lit. Come home.'},
+{from:'TOMAS, AT THE COLD LIGHTHOUSE — TO EDDA', sig:'— T.',
+ body:'I reached the great lighthouse today. Cold. Empty for years, I think. But in the keeper\'s desk I found a chart, hand-drawn, marking a place inland called the First Flame — the fire they lit all the others from, in the beginning. If it still burns, Edda, we could carry it back. We could relight everything.'},
+{from:'EDDA, AT HOLLOW LIGHT — TO TOMAS', sig:'— Edda',
+ body:'Mother is ill. The doctor says it is the dark — people were not made for a night this long. In the evenings I read her your letters. All of them, in order, like a story. She always stops me at the same part: the couriers, trading oil for news. "Imagine that," she says. "Kindness, running on schedule."'},
+{from:'TOMAS, IN THE HIGH PASS — TO EDDA', sig:'— T.',
+ body:'A storm took my lantern on the pass. Three hours in dark so complete I forgot which way was down. Then a light — a stranger, a shepherd, who walked me to her hut and relit my lamp from hers without a word. I asked what I owed. She said, "Pass it on. That is the whole economy up here."'},
+{from:'EDDA, AT HOLLOW LIGHT — TO TOMAS', sig:'— Edda',
+ body:'Mother died on the seventh of the month, quietly, with your letters on the blanket. I thought I would be alone with it. But that night the whole village came — every one of them carrying a lamp, Brann included, until the square was so bright it threw shadows. The dark is long, Tomas. It is not winning.'},
+{from:'TOMAS, ON THE HOME ROAD — TO EDDA', sig:'— your brother, coming home',
+ body:'Edda. I found it. The First Flame — smaller than you\'d think, an ember in a firepot no bigger than a kettle, tended by three old keepers who wept when I told them people still looked for it. They gave me a portion to carry. I am two weeks out, walking beacon to beacon, lighting them as I go. Keep the lamp in the window. I\'ll follow it home.'},
+];
+const EPILOGUE = 'All eight letters delivered. Behind you, one by one, the beacons are burning again.';
+
+/* ---------- state ---------- */
+let lvlIdx = 0;
+let level = null;
+let path = [];                 // array of node ids, starts with start node
+let departing = false;
+let departAnim = null;         // {seg, t, oil, usedRefills}
+let stars = new Array(LEVELS.length).fill(false);
+let unlocked = 0;              // letters unlocked = levels completed
+let storageOK = true;
+let hoverNode = null;
+
+const $ = id => document.getElementById(id);
+
+/* ---------- persistence ---------- */
+async function loadSave(){
+  try{
+    const res = await window.storage.get('lanternpost:save');
+    if(res && res.value){
+      const s = JSON.parse(res.value);
+      if(typeof s.unlocked === 'number') unlocked = Math.min(s.unlocked, LEVELS.length);
+      if(Array.isArray(s.stars)) stars = LEVELS.map((_,i)=>!!s.stars[i]);
+    }
+  }catch(e){ if(!window.storage) storageOK = false; }
+  lvlIdx = Math.min(unlocked, LEVELS.length-1);
+  loadLevel(lvlIdx);
+}
+async function save(){
+  if(!storageOK) return;
+  try{ await window.storage.set('lanternpost:save', JSON.stringify({unlocked, stars})); }
+  catch(e){ storageOK = false; }
+}
+
+/* ---------- level setup ---------- */
+function loadLevel(i){
+  lvlIdx = i;
+  level = LEVELS[i];
+  path = [ level.nodes.find(n=>n.type==='start').id ];
+  departing = false; departAnim = null;
+  $('lvlNum').textContent = i+1;
+  $('lvlName').textContent = level.name;
+  updateOilHUD();
+  draw();
+}
+
+function nodeById(id){ return level.nodes.find(n=>n.id===id); }
+function edgeBetween(a,b){
+  return level.edges.find(e => !e.blocked && ((e.a===a&&e.b===b)||(e.a===b&&e.b===a)));
+}
+
+/* simulate oil along a path; returns {oil, ok} — refills fire on first visit only */
+function simulate(p){
+  let oil = level.oil;
+  const refilled = new Set();
+  for(let i=1;i<p.length;i++){
+    const e = edgeBetween(p[i-1], p[i]);
+    if(!e) return {oil:-1, ok:false};
+    oil -= e.cost;
+    if(oil < 0) return {oil, ok:false};
+    const n = nodeById(p[i]);
+    if(n.type==='way' && !refilled.has(n.id)){ oil += n.refill; refilled.add(n.id); }
+  }
+  return {oil, ok:true};
+}
+
+/* ---------- interaction ---------- */
+cv.addEventListener('click', e=>{
+  if(departing) return;
+  const r = cv.getBoundingClientRect();
+  const x = (e.clientX-r.left) * (cv.width/r.width);
+  const y = (e.clientY-r.top) * (cv.height/r.height);
+  const hit = level.nodes.find(n => (n.x-x)**2 + (n.y-y)**2 < 26**2);
+  if(!hit) return;
+
+  const idxInPath = path.indexOf(hit.id);
+  if(idxInPath >= 0){
+    // backtrack to this node
+    path = path.slice(0, idxInPath+1);
+  } else {
+    const head = path[path.length-1];
+    if(!edgeBetween(head, hit.id)) return denyFlash();
+    const trial = [...path, hit.id];
+    const sim = simulate(trial);
+    if(!sim.ok) return denyFlash();
+    path = trial;
+  }
+  updateOilHUD();
+  draw();
+});
+
+function denyFlash(){
+  const box = $('oilBox');
+  box.classList.add('deny');
+  setTimeout(()=>box.classList.remove('deny'), 350);
+}
+
+$('resetBtn').addEventListener('click', ()=>{
+  if(departing) return;
+  path = [ level.nodes.find(n=>n.type==='start').id ];
+  updateOilHUD(); draw();
+});
+
+$('departBtn').addEventListener('click', ()=>{
+  if(departing) return;
+  const destId = level.nodes.find(n=>n.type==='dest').id;
+  if(path[path.length-1] !== destId) return;
+  departing = true;
+  $('departBtn').disabled = true;
+  departAnim = {seg:0, t:0, oil:level.oil, refilled:new Set()};
+  requestAnimationFrame(stepDepart);
+});
+
+/* ---------- depart animation ---------- */
+function stepDepart(){
+  const a = departAnim;
+  a.t += 0.028;
+  if(a.t >= 1){
+    a.t = 0;
+    a.seg++;
+    // arrive at node path[a.seg]
+    const e = edgeBetween(path[a.seg-1], path[a.seg]);
+    a.oil -= e.cost;
+    const n = nodeById(path[a.seg]);
+    if(n.type==='way' && !a.refilled.has(n.id)){ a.oil += n.refill; a.refilled.add(n.id); toast('+'+n.refill+' oil'); }
+    $('oilVal').textContent = a.oil;
+    $('oilFill').style.width = Math.max(0, a.oil/level.oil*100) + '%';
+    if(a.seg >= path.length-1){
+      draw();
+      setTimeout(()=>deliver(a.oil), 500);
+      return;
+    }
+  }
+  draw();
+  requestAnimationFrame(stepDepart);
+}
+
+function deliver(remaining){
+  const gotStar = remaining >= level.par;
+  if(lvlIdx === unlocked){
+    unlocked++;
+    if(gotStar) stars[lvlIdx] = true;
+    save();
+  } else if(gotStar && !stars[lvlIdx]){
+    stars[lvlIdx] = true; save();
+  }
+  const L = LETTERS[lvlIdx];
+  $('pFrom').textContent = L.from;
+  $('pBody').textContent = L.body;
+  $('pSig').textContent = L.sig;
+  $('pMeta').textContent = 'Delivered with ' + remaining + ' oil to spare';
+  $('pStar').textContent = gotStar ? '✦ perfect delivery' : '';
+  $('contBtn').textContent = (lvlIdx < LEVELS.length-1) ? 'NEXT DELIVERY' : 'FINISH';
+  $('letterVeil').classList.add('show');
+}
+
+$('contBtn').addEventListener('click', ()=>{
+  $('letterVeil').classList.remove('show');
+  if(lvlIdx < LEVELS.length-1){
+    loadLevel(lvlIdx+1);
+  } else {
+    toast(EPILOGUE, 5000);
+    loadLevel(0);
+  }
+});
+
+/* ---------- archive ---------- */
+$('archBtn').addEventListener('click', ()=>{
+  const list = $('archList');
+  list.innerHTML = '';
+  LETTERS.forEach((L,i)=>{
+    const d = document.createElement('div');
+    d.className = 'entry';
+    if(i < unlocked){
+      d.innerHTML = '<div class="t">'+(i+1)+'. '+L.from+(stars[i]?' <span style="color:var(--amber)">✦</span>':'')+'</div>'
+                  + '<div class="b">'+L.body+'</div>';
+    } else {
+      d.innerHTML = '<div class="locked">Letter '+(i+1)+' — not yet delivered</div>';
+    }
+    list.appendChild(d);
+  });
+  $('archVeil').classList.add('show');
+});
+$('archClose').addEventListener('click', ()=> $('archVeil').classList.remove('show'));
+
+/* ---------- toast ---------- */
+let toastTimer = null;
+function toast(msg, ms=2200){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), ms);
+}
+
+/* ---------- HUD ---------- */
+function updateOilHUD(){
+  const sim = simulate(path);
+  $('oilVal').textContent = sim.oil;
+  $('oilFill').style.width = Math.max(0, sim.oil/level.oil*100) + '%';
+  const destId = level.nodes.find(n=>n.type==='dest').id;
+  $('departBtn').disabled = !(path[path.length-1] === destId && sim.ok);
+}
+
+/* ---------- drawing ---------- */
+function draw(){
+  const W = cv.width, H = cv.height;
+  // night sky
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#0c0d16'); g.addColorStop(1,'#141626');
+  ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = 'rgba(232,234,242,.35)';
+  for(let i=0;i<50;i++) ctx.fillRect((i*137)%W, (i*61)%H, 1.4, 1.4);
+
+  // edges
+  for(const e of level.edges){
+    const a = nodeById(e.a), b = nodeById(e.b);
+    const inPath = pathHasEdge(e.a, e.b);
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+    if(e.blocked){
+      ctx.setLineDash([5,6]);
+      ctx.strokeStyle = 'rgba(229,115,115,.5)';
+      ctx.lineWidth = 2;
+    } else {
+      ctx.setLineDash([]);
+      ctx.strokeStyle = inPath ? 'rgba(245,184,61,.9)' : 'rgba(94,100,130,.45)';
+      ctx.lineWidth = inPath ? 3.5 : 2;
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // cost label
+    const mx = (a.x+b.x)/2, my = (a.y+b.y)/2;
+    if(e.blocked){
+      ctx.fillStyle = 'rgba(229,115,115,.9)';
+      ctx.font = '12px "IBM Plex Mono"'; ctx.textAlign='center';
+      ctx.fillText('✕', mx, my-6);
+    } else {
+      ctx.fillStyle = '#12131c';
+      ctx.beginPath(); ctx.arc(mx,my,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = inPath ? 'var' : '';
+      ctx.fillStyle = inPath ? '#f5b83d' : '#9aa0b4';
+      ctx.font = '11px "IBM Plex Mono"'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(e.cost, mx, my+0.5);
+    }
+  }
+
+  // nodes
+  for(const n of level.nodes){
+    const inPath = path.includes(n.id);
+    const isHead = path[path.length-1] === n.id;
+    // glow for lantern positions
+    if(inPath){
+      const gl = ctx.createRadialGradient(n.x,n.y,2,n.x,n.y,isHead?42:26);
+      gl.addColorStop(0,'rgba(245,184,61,'+(isHead?0.30:0.14)+')');
+      gl.addColorStop(1,'rgba(245,184,61,0)');
+      ctx.fillStyle = gl;
+      ctx.beginPath(); ctx.arc(n.x,n.y,isHead?42:26,0,Math.PI*2); ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(n.x,n.y,15,0,Math.PI*2);
+    ctx.fillStyle = n.type==='way' ? '#173040' : '#1c1f2b';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = inPath ? '#f5b83d'
+                    : n.type==='way' ? '#5ec8f2'
+                    : n.type==='dest' ? '#c9a1f0'
+                    : '#3a4056';
+    ctx.stroke();
+
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font = '13px "IBM Plex Mono"';
+    if(n.type==='start'){ ctx.fillStyle='#f5b83d'; ctx.fillText('⌂', n.x, n.y+1); }
+    else if(n.type==='dest'){ ctx.fillStyle='#c9a1f0'; ctx.fillText('✉', n.x, n.y+1); }
+    else if(n.type==='way'){ ctx.fillStyle='#5ec8f2'; ctx.font='10px "IBM Plex Mono"'; ctx.fillText('+'+n.refill, n.x, n.y+1); }
+    else { ctx.fillStyle='#5a6078'; ctx.beginPath(); ctx.arc(n.x,n.y,3,0,Math.PI*2); ctx.fill(); }
+  }
+
+  // traveling lantern
+  if(departing && departAnim && departAnim.seg < path.length-1){
+    const a = nodeById(path[departAnim.seg]);
+    const b = nodeById(path[departAnim.seg+1]);
+    const t = departAnim.t;
+    const x = a.x+(b.x-a.x)*t, y = a.y+(b.y-a.y)*t;
+    const gl = ctx.createRadialGradient(x,y,2,x,y,50);
+    gl.addColorStop(0,'rgba(245,184,61,.5)'); gl.addColorStop(1,'rgba(245,184,61,0)');
+    ctx.fillStyle = gl;
+    ctx.beginPath(); ctx.arc(x,y,50,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#f5b83d';
+    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+  }
+}
+
+function pathHasEdge(a,b){
+  for(let i=1;i<path.length;i++){
+    if((path[i-1]===a&&path[i]===b)||(path[i-1]===b&&path[i]===a)) return true;
+  }
+  return false;
+}
+
+/* ---------- boot ---------- */
+level = LEVELS[0];
+path = ['S'];
+loadSave();   // async; loads progress then calls loadLevel + draw
+draw();
+</script>
+</body>
+</html>
