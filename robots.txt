@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow thin utility endpoints from being treated as primary content
+Disallow: /pages/email-confirmed.html
+Disallow: /pages/datadeletion.html
+Disallow: /google717c058fd874084e.html
+
+Sitemap: https://teqvault.online/sitemap.xml

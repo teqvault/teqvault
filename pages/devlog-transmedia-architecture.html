@@ -9,20 +9,17 @@
   </script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
-
   <meta charset="UTF-8">
   <meta name="google-adsense-account" content="ca-pub-7932735753046865">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boot Camp | TEQ VAULT</title>
-  <meta name="description" content="Teq Vault LLC — multi-disciplinary innovation hub. Engineering worlds, not just games.">
-
+  <title>Transmedia Architecture: Why We Write the Novel Before We Build the Game | TEQ VAULT</title>
+  <meta name="description" content="Why Teq Vault finishes manuscripts and lore bibles before locking game systems — and how that pipeline produces coherent worlds.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../styles/style.css">
-
   <style>
     :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
     body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #050810; color: #e2e8f0; }
@@ -35,23 +32,13 @@
       background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
-    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.6); border-color: rgba(148,163,184,0.35); }
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
     .reveal.active { opacity: 1; transform: translateY(0); }
-    .card-outline {
-      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.15), 0 20px 40px rgba(0,0,0,0.35);
-      transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
-    }
-    .card-outline:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 0 1px rgba(0,163,255,0.3), 0 24px 60px rgba(0,0,0,0.55);
-    }
+    .prose-tv p { margin-bottom: 1.25rem; }
+    .prose-tv h2 { margin-top: 2rem; margin-bottom: 0.75rem; }
   </style>
-
 </head>
 <body class="antialiased overflow-x-hidden">
-
 <!-- ══ NAV ══ -->
 <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
   <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -64,7 +51,7 @@
       <a href="../index.html#software" class="hover:text-[var(--circuit-blue)] transition">Software</a>
       <a href="ecosystem.html" class="hover:text-white transition">Ecosystem</a>
       <a href="library.html" class="hover:text-white transition">IP Library</a>
-      <a href="articles.html" class="hover:text-white transition">Articles</a>
+      <a href="articles.html" class="text-white transition">Articles</a>
       <a href="about.html" class="hover:text-white transition">About</a>
       <a href="join-the-vault.html" class="text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/30 px-3 py-1.5 rounded hover:bg-[var(--circuit-blue)]/10 transition">Careers</a>
       <a href="../index.html#contact" class="text-white border border-white/20 px-3 py-1.5 rounded hover:bg-white/5 transition">Contact</a>
@@ -78,133 +65,50 @@
     <a href="../index.html#software" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--circuit-blue)] mobile-link">Software</a>
     <a href="ecosystem.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Ecosystem</a>
     <a href="library.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">IP Library</a>
-    <a href="articles.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Articles</a>
+    <a href="articles.html" class="block text-sm font-bold uppercase tracking-widest text-white mobile-link">Articles</a>
     <a href="about.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">About</a>
     <a href="join-the-vault.html" class="block text-sm font-bold uppercase tracking-widest text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/20 py-3 rounded-lg mobile-link">Careers</a>
     <a href="../index.html#contact" class="block text-sm font-bold uppercase tracking-widest text-white border border-white/20 py-3 rounded-lg mobile-link">Contact</a>
   </div>
 </nav>
-
-
-<!-- HEADER -->
-  <header class="relative max-w-5xl mx-auto text-center px-6  pt-32 pb-20 overflow-hidden">
-    <div class="pointer-events-none absolute inset-0 -z-10">
-      <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[420px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.20),transparent_65%)]"></div>
-      <div class="absolute -bottom-60 right-1/3 w-[520px] h-[320px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(15,23,42,0.9),transparent_65%)]"></div>
-    </div>
-
-    <div class="reveal inline-flex items-center gap-2 px-4 py-1 rounded-full border border-slate-500/40 bg-slate-500/15 text-slate-300 text-[10px] font-black uppercase tracking-[0.5em] mb-8">
-      <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse"></span>
-      <span>Asset ID: BC‑772 • Tactical Line</span>
-    </div>
-
-    <h1 class="reveal text-5xl md:text-7xl font-space font-bold uppercase tracking-tighter mb-8 leading-[0.9]">
-      Boot<br><span class="gradient-text">Camp</span>
-    </h1>
-
-    <p class="reveal delay-100 text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed italic">
-      "They were no longer recruits. They were survivors of a war they never asked for."
-    </p>
+<article class="max-w-3xl mx-auto px-6 pt-32 pb-20">
+  <header class="mb-12 reveal">
+    <div class="inline-block px-3 py-1 rounded-full border border-[var(--voltage-orange)]/30 bg-[var(--voltage-orange)]/10 text-[var(--voltage-orange)] text-[10px] font-black uppercase tracking-[0.4em] mb-6">Strategy</div>
+    <h1 class="text-4xl md:text-5xl font-space font-bold uppercase tracking-tighter text-white mb-4 leading-tight">Transmedia Architecture: Why We Write the Novel Before We Build the Game</h1>
+    <p class="text-slate-500 text-sm">Teq Vault · Engineering Worlds, Not Just Games</p>
   </header>
+  <div class="reveal prose-tv text-slate-300 leading-relaxed text-[15px] md:text-base">
 
-  <!-- MAIN -->
-  <main class="max-w-6xl mx-auto px-6 pb-24">
+    <p>Most studios prototype a loop first and invent a story later. Teq Vault inverts that order on purpose. We call the pipeline <strong class="text-white">Transmedia Architecture</strong>: write the world until its rules are stable, then hand those rules to interactive systems as constraints — not as decoration.</p>
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">Why novels before builds</h2>
+    <p>A match-3 combat system can be tuned forever. A faction’s motive cannot. If the invading force in Eyuforyia is allowed to “just be evil,” every later system — dialogue, quest structure, even UI tone — drifts. By finishing manuscripts and lore bibles first, we fix the physics of the fiction: what characters want, what the world allows, and what costs are non-negotiable.</p>
+    <p>That work is not optional flavor. It becomes the test suite for design. When a proposed mechanic would force a hero to treat autonomous creatures as inventory, the lore rejects it before code is written. When a tech-biome “improves” a forest by paving it, the story already knows why that feels wrong — so the game does not have to explain it in a tutorial dump.</p>
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">What “architecture” means here</h2>
+    <p>Architecture implies load-bearing structure. In our case the structure is shared across media:</p>
+    <ul class="list-disc list-inside space-y-2 mb-5 text-slate-400">
+      <li>Literary assets define immutable character and faction logic.</li>
+      <li>Games implement that logic as systems players can push against.</li>
+      <li>Software tools (and later hardware research) reuse the same engineering discipline: constraints first, polish second.</li>
+    </ul>
+    <p>The payoff is economic as well as creative. One universe can support multiple entry points — a mobile title, a novel, a soundtrack app — without restarting acquisition from zero each time. That is the long bet behind Phase II of our roadmap: deepen the IP library so every new product inherits meaning instead of inventing it under deadline pressure.</p>
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">What we refuse</h2>
+    <p>We refuse the habit of grafting a story bible onto a finished prototype and calling it transmedia. That produces disconnected skins, not a coherent world. We also refuse to ship lore that cannot survive contact with systems. If a rule only works in prose and collapses in play, it was never a rule — it was marketing copy.</p>
+    <p>Transmedia Architecture is slower at the start and faster later. The manuscript is the expensive part. Once it exists, every subsequent product is negotiating with a known universe instead of improvising one in a sprint.</p>
 
-    <!-- Hero visual -->
-    <div class="reveal glass-panel rounded-3xl overflow-hidden aspect-video mb-16 relative group border border-white/10">
-      <div class="absolute inset-0 bg-slate-900 flex items-center justify-center">
-        <img src="../imgs/boot-camp-portrait.png"
-             class="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition duration-700"
-             alt="Boot Camp Tactical Landscape">
-        <i data-lucide="shield-alert" class="w-24 h-24 text-white absolute opacity-20"></i>
-      </div>
-      <div class="absolute bottom-4 left-6">
-        <span class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-200">
-          Vanguard‑01 • Grounded Military Fiction
-        </span>
-      </div>
-    </div>
 
-    <div class="grid md:grid-cols-2 gap-12 items-start">
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">A concrete example</h2>
+    <p>Take Quetiemals. A prototype-first approach would optimize match-3 feel, then invent creatures to fill slots. Our approach fixed faction logic and land-kin stakes in prose first. That decision killed several “cute collector” mechanics early because they contradicted autonomy. The loop that survived is narrower — and more honest about what the world is fighting for.</p>
+    <p>The same pattern appears in Forge &amp; Ruin: the siege of Avelmark is not a skin on a generic tower defense. The manuscript defined alliances, scarcity, and the cost of each ending. Systems then had somewhere to point. Players can sense when a world was reverse-engineered from a fun loop; they can also sense when a loop was forced to respect a world.</p>
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">How software fits</h2>
+    <p>Transmedia Architecture is not only for games and books. TeqMusic’s curated catalog and lore unlocks only make sense if the soundtrack is continuous with the same canon. TeqDocs and TeqXus do not carry Eyuforyia plot, but they carry the same production ethic: constraints documented, offline paths respected, accounts only where state must travel.</p>
+    <p>If you are evaluating the studio from the outside, this is the through-line. We are not collecting random apps. We are building a stack where story, systems, and tools share a standard of coherence.</p>
 
-      <!-- Left column: narrative -->
-      <section class="reveal space-y-6">
-        <h2 class="text-3xl font-space font-bold text-white uppercase tracking-tight">
-          The 48‑Hour Inspection
-        </h2>
-        <p class="text-slate-300 leading-relaxed">
-          What begins as a routine training cycle collapses into a contained warzone. When command integrity fails,
-          a specialized maintenance flight is forced to pivot from wrench‑turners to frontline defenders, leveraging
-          procedure, checklist discipline, and raw improvisation just to see sunrise.
-        </p>
-        <p class="text-slate-400 text-sm leading-relaxed">
-          The story is engineered as a tense, single‑location thriller: one base, one night, eighteen maintainers, and
-          a professional adversary who underestimates the lethality of "support" troops who know every inch of the infrastructure.
-        </p>
-        <div class="p-6 glass-panel rounded-2xl border-l-4 border-slate-500/80 border border-white/10">
-          <h4 class="text-[10px] uppercase tracking-widest text-slate-300 font-black mb-2">
-            Mechanical Ingenuity Under Fire
-          </h4>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            From resurrecting failing water units to sustain the squad, to weaponizing high‑pressure fuel systems and
-            repurposing diagnostic gear as early‑warning devices, every set‑piece leans on plausible technical problem‑solving.
-          </p>
-        </div>
-      </section>
-
-      <!-- Right column: operational sheet -->
-      <section class="reveal delay-100 glass-panel card-outline p-8 rounded-3xl border border-white/10 space-y-6">
-        <h3 class="text-xl font-space font-bold text-white uppercase flex items-center gap-2 tracking-tight">
-          <i data-lucide="crosshair" class="text-[var(--voltage-orange)]"></i>
-          Operational Data
-        </h3>
-        <p class="text-sm text-slate-300">
-          Tactical breakdown of the Flight 221 survival incident — structured so scenes can translate into level design,
-          training sims, or scenario‑driven interactive fiction.
-        </p>
-
-        <div class="space-y-4">
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10">
-            <span class="text-[9px] font-bold text-[var(--circuit-blue)] uppercase tracking-[0.25em]">
-              Personnel: The 18 Maintainers
-            </span>
-            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
-              Cross‑functional maintainers with just enough weapons training to be dangerous when cornered — avionics,
-              propulsion, water &amp; fuels, power production, and a crew chief who refuses to surrender the flightline.
-            </p>
-          </div>
-
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10">
-            <span class="text-[9px] font-bold text-[var(--voltage-orange)] uppercase tracking-[0.25em]">
-              Objective: The Water Tower
-            </span>
-            <p class="text-xs text-slate-300 mt-1 leading-relaxed">
-              Control of a fortified vantage point overlooking the dormitories. The tower becomes the pivot: either a
-              killbox controlled by the attackers or a makeshift stronghold controlled by the maintainers.
-            </p>
-          </div>
-
-          <div class="p-4 bg-white/5 rounded-xl border border-white/10">
-            <span class="text-[9px] font-bold text-slate-300 uppercase tracking-[0.25em]">
-              Narrative Hooks
-            </span>
-            <ul class="mt-1 text-xs text-slate-300 space-y-1 leading-relaxed">
-              <li>• Chain of command collapse under information blackout.</li>
-              <li>• Ethics of escalation when "training" turns terminal.</li>
-              <li>• Tension between regulation, survival, and future accountability.</li>
-            </ul>
-          </div>
-        </div>
-
-        <p class="text-[11px] text-slate-400 uppercase tracking-[0.3em]">
-          Deployment lanes: Linear Prose • Tactics Sim • Scenario‑Based Training
-        </p>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- FOOTER -->
+  </div>
+  <div class="reveal mt-14 pt-8 border-t border-white/10 flex flex-wrap gap-4">
+    <a href="articles.html" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--circuit-blue)] hover:underline"><i data-lucide="arrow-left" class="w-4 h-4"></i> All Articles</a>
+    <a href="ecosystem.html" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-white">Ecosystem</a>
+  </div>
+</article>
 
 <footer class="border-t border-white/5 py-10 bg-[#020617]">
   <div class="max-w-7xl mx-auto px-6">

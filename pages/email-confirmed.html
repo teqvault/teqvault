@@ -1,41 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Confirmed | TEQ VAULT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css">
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-7932735753046865">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Email Confirmed | TEQ VAULT</title>
+  <meta name="description" content="Your email has been confirmed. Welcome to the Teq Vault ecosystem.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #050810; color: #e2e8f0; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel {
+      background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85);
+      backdrop-filter: blur(18px);
+    }
+    .gradient-text {
+      background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+  </style>
 </head>
-<body class="bg-[#050810] text-[#e2e8f0] font-space min-h-screen flex items-center justify-center px-6">
+<body class="antialiased overflow-x-hidden min-h-screen flex flex-col">
 
-    <main class="max-w-lg w-full text-center">
-        <div class="glass-panel rounded-3xl p-10 md:p-14 border border-white/10">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--circuit-blue)]/10 border border-[var(--circuit-blue)]/30 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[var(--circuit-blue)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
+<!-- ══ NAV ══ -->
+<nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="../index.html" class="flex items-center gap-3">
+      <img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Teq Vault Logo">
+      <span class="font-bold tracking-tighter text-sm uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+    </a>
+    <div class="hidden md:flex gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 items-center">
+      <a href="../index.html#games" class="hover:text-[var(--voltage-orange)] transition">Games</a>
+      <a href="../index.html#software" class="hover:text-[var(--circuit-blue)] transition">Software</a>
+      <a href="ecosystem.html" class="hover:text-white transition">Ecosystem</a>
+      <a href="library.html" class="hover:text-white transition">IP Library</a>
+      <a href="articles.html" class="hover:text-white transition">Articles</a>
+      <a href="about.html" class="hover:text-white transition">About</a>
+      <a href="join-the-vault.html" class="text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/30 px-3 py-1.5 rounded hover:bg-[var(--circuit-blue)]/10 transition">Careers</a>
+      <a href="../index.html#contact" class="text-white border border-white/20 px-3 py-1.5 rounded hover:bg-white/5 transition">Contact</a>
+    </div>
+    <button id="mobile-menu-btn" class="block md:hidden text-white p-2" aria-label="Toggle menu">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#050810] border-b border-white/5 px-6 py-8 space-y-5 text-center shadow-2xl">
+    <a href="../index.html#games" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--voltage-orange)] mobile-link">Games</a>
+    <a href="../index.html#software" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--circuit-blue)] mobile-link">Software</a>
+    <a href="ecosystem.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Ecosystem</a>
+    <a href="library.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">IP Library</a>
+    <a href="articles.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Articles</a>
+    <a href="about.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">About</a>
+    <a href="join-the-vault.html" class="block text-sm font-bold uppercase tracking-widest text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/20 py-3 rounded-lg mobile-link">Careers</a>
+    <a href="../index.html#contact" class="block text-sm font-bold uppercase tracking-widest text-white border border-white/20 py-3 rounded-lg mobile-link">Contact</a>
+  </div>
+</nav>
 
-            <h1 class="text-3xl md:text-4xl font-space font-bold uppercase tracking-tighter mb-4 text-white">
-                Email Confirmed
-            </h1>
+<main class="flex-1 flex items-center justify-center px-6 pt-32 pb-20">
+  <div class="glass-panel rounded-3xl p-10 md:p-14 max-w-lg w-full text-center border border-white/10">
+    <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+      <i data-lucide="check-circle" class="w-8 h-8 text-emerald-400"></i>
+    </div>
+    <h1 class="text-3xl font-space font-bold uppercase tracking-tighter text-white mb-4">Email Confirmed</h1>
+    <p class="text-slate-400 leading-relaxed mb-8">
+      Your email has been successfully verified. You’re now part of the Teq Vault network.
+    </p>
+    <a href="../index.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--circuit-blue)]/10 border border-[var(--circuit-blue)]/40 text-xs font-bold uppercase tracking-[0.2em] text-[var(--circuit-blue)] hover:bg-[var(--circuit-blue)]/20 transition">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i> Return to Teq Vault
+    </a>
+  </div>
+</main>
 
-            <p class="text-slate-400 leading-relaxed mb-2">
-                Thank you for confirming your email address.
-            </p>
-            <p class="text-slate-400 leading-relaxed">
-                You can close this page now and sign in to <strong class="text-white">TeqMusic</strong> with your new account.
-            </p>
-        </div>
+<footer class="border-t border-white/5 py-10 bg-[#020617]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row flex-wrap justify-between items-center gap-8 text-slate-500 text-xs font-space">
+      <div class="flex items-center gap-3">
+        <img src="../imgs/tvault.png" class="h-6 w-auto opacity-60" alt="Teq Vault">
+        <span>© <span id="year"></span> Teq Vault LLC. All rights reserved.</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-6">
+        <span class="text-[10px] uppercase tracking-widest text-slate-600 font-bold">Ecosystem</span>
+        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Teq Vault</a>
+        <a href="https://teqxus.app" target="_blank" rel="noopener" class="hover:text-[var(--voltage-orange)] transition flex items-center gap-1.5"><i data-lucide="activity" class="w-3 h-3"></i> TeqXus</a>
+        <a href="https://teqxus.app/teqdocs" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="book-open" class="w-3 h-3"></i> TeqDocs</a>
+        <a href="teqmusic.html" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3"></i> TeqMusic</a>
+        <a href="https://eyuforyia.com" target="_blank" rel="noopener" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Eyuforyia</a>
+        <a href="https://quetiemals.online" target="_blank" rel="noopener" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Quetiemals</a>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[#1877F2] transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[#5865F2] transition">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        </a>
+        <a href="mailto:support@teqvault.online" class="hover:text-white transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+    <div class="flex justify-center gap-6 mt-8 text-[11px] text-slate-600">
+      <a href="terms.html" class="hover:text-slate-400 transition">Terms of Service</a>
+      <a href="about.html" class="hover:text-slate-400 transition">About Us</a>
+      <a href="join-the-vault.html" class="hover:text-slate-400 transition">Careers</a>
+      <a href="privacy.html" class="hover:text-slate-400 transition">Privacy</a>
+    </div>
+  </div>
+</footer>
 
-        <p class="text-[11px] text-slate-500 mt-8">
-            © <span id="year"></span> Teq Vault LLC. All rights reserved.
-        </p>
-    </main>
-
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+<script>
+  if (window.lucide) lucide.createIcons();
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>

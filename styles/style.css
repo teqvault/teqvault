@@ -5,8 +5,8 @@
 :root {
     --bg-deep: #050810;
     --bg-elevated: #0f172a;
-    --circuit-blue: #00A3FF;   /* From logo left glow */
-    --voltage-orange: #FF8A00; /* From logo right glow */
+    --circuit-blue: #00a3ff;   /* From logo left glow */
+    --voltage-orange: #ff7a1a; /* From logo right glow */
     --steel-silver: #94A3B8;   /* From chiseled metal */
     --glass-border: rgba(148, 163, 184, 0.1);
     --text-main: #e2e8f0;
@@ -25,7 +25,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
     background-color: var(--bg-deep);
     color: var(--text-main);
     line-height: 1.6;
@@ -38,36 +38,23 @@ h1, h2, h3, .font-space {
 
 /* --- Typography & Gradient Text --- */
 .gradient-text {
-    background: linear-gradient(
-        to right, 
-        var(--circuit-blue), 
-        #6366f1, 
-        var(--voltage-orange), 
-        var(--circuit-blue)
-    );
-    background-size: 200% auto;
+    background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    -webkit-text-fill-color: transparent;
-    animation: shine 5s linear infinite;
-}
-
-@keyframes shine {
-    to { background-position: 200% center; }
 }
 
 /* --- Layout Components --- */
 .glass-panel {
-    background: rgba(15, 23, 42, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border: 1px solid var(--glass-border);
     transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .glass-panel:hover {
-    border-color: var(--circuit-blue);
+    border-color: rgba(0, 163, 255, 0.4);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     transform: translateY(-4px);
 }
@@ -83,6 +70,15 @@ h1, h2, h3, .font-space {
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+.card-outline {
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.15), 0 20px 40px rgba(0,0,0,0.35);
+    transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
+}
+.card-outline:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 1px rgba(0,163,255,0.3), 0 24px 60px rgba(0,0,0,0.55);
 }
 
 .delay-100 { transition-delay: 0.1s; }

@@ -1,150 +1,278 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18081437614');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7932735753046865" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
 
-  gtag('config', 'AW-18081437614');
-</script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TeqMusic — your local library and the Eyuforyia soundtrack, in one player.">
-    <title>TeqMusic | TEQ VAULT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../styles/style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18081437614"></script>
+  <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-7932735753046865">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeqMusic | TEQ VAULT</title>
+  <meta name="description" content="TeqMusic — local library + official Eyuforyia soundtrack. Offline downloads, real lyrics, and lore unlocks. Android music player by Teq Vault. Coming soon to Google Play.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../styles/style.css">
+
+  <style>
+    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
+    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #050810; color: #e2e8f0; }
+    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
+    .glass-panel {
+      background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85);
+      backdrop-filter: blur(18px);
+    }
+    .gradient-text {
+      background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.6); border-color: rgba(148,163,184,0.35); }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
 
 </head>
-<body class="bg-[#050810] text-[#e2e8f0] font-space">
+<body class="antialiased overflow-x-hidden">
 
-    <nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <a href="../index.html"><img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Logo"></a>
-                <span class="font-bold tracking-tighter text-lg uppercase font-space hidden sm:block">Teq Vault</span>
-            </div>
-            <div class="flex gap-8 text-[10px] font-bold tracking-[0.3em] uppercase text-slate-400">
-                <a href="vision.html" class="hover:text-[var(--circuit-blue)] transition">Vision</a>
-                <a href="ecosystem.html" class="hover:text-[var(--voltage-orange)] transition">Ecosystem</a>
-                <a href="strategy.html" class="hover:text-white transition">Strategy</a>
-                <a href="join-the-vault.html" class="hover:text-[var(--circuit-blue)] transition">Careers</a>
-            </div>
+<!-- ══ NAV ══ -->
+<nav class="fixed top-0 w-full z-50 bg-[#050810]/90 backdrop-blur-md border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="../index.html" class="flex items-center gap-3">
+      <img src="../imgs/tvault.png" class="h-8 w-auto filter brightness-110" alt="Teq Vault Logo">
+      <span class="font-bold tracking-tighter text-sm uppercase font-space hidden sm:block text-slate-300">Teq Vault</span>
+    </a>
+    <div class="hidden md:flex gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 items-center">
+      <a href="../index.html#games" class="hover:text-[var(--voltage-orange)] transition">Games</a>
+      <a href="../index.html#software" class="hover:text-[var(--circuit-blue)] transition">Software</a>
+      <a href="ecosystem.html" class="hover:text-white transition">Ecosystem</a>
+      <a href="library.html" class="hover:text-white transition">IP Library</a>
+      <a href="articles.html" class="hover:text-white transition">Articles</a>
+      <a href="about.html" class="hover:text-white transition">About</a>
+      <a href="join-the-vault.html" class="text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/30 px-3 py-1.5 rounded hover:bg-[var(--circuit-blue)]/10 transition">Careers</a>
+      <a href="../index.html#contact" class="text-white border border-white/20 px-3 py-1.5 rounded hover:bg-white/5 transition">Contact</a>
+    </div>
+    <button id="mobile-menu-btn" class="block md:hidden text-white p-2" aria-label="Toggle menu">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-[#050810] border-b border-white/5 px-6 py-8 space-y-5 text-center shadow-2xl">
+    <a href="../index.html#games" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--voltage-orange)] mobile-link">Games</a>
+    <a href="../index.html#software" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--circuit-blue)] mobile-link">Software</a>
+    <a href="ecosystem.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Ecosystem</a>
+    <a href="library.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">IP Library</a>
+    <a href="articles.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">Articles</a>
+    <a href="about.html" class="block text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-white mobile-link">About</a>
+    <a href="join-the-vault.html" class="block text-sm font-bold uppercase tracking-widest text-[var(--circuit-blue)] border border-[var(--circuit-blue)]/20 py-3 rounded-lg mobile-link">Careers</a>
+    <a href="../index.html#contact" class="block text-sm font-bold uppercase tracking-widest text-white border border-white/20 py-3 rounded-lg mobile-link">Contact</a>
+  </div>
+</nav>
+
+
+<!-- Hero -->
+<header class="pt-36 pb-16 px-6 relative overflow-hidden">
+  <div class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[radial-gradient(ellipse,rgba(168,85,247,0.12),transparent_65%)]"></div>
+  </div>
+  <div class="max-w-4xl mx-auto text-center">
+    <img src="../imgs/teqmusic-icon.png" alt="TeqMusic" class="w-28 h-28 md:w-36 md:h-36 mx-auto rounded-3xl shadow-2xl mb-8" style="box-shadow: 0 0 60px rgba(168, 85, 247, 0.4);">
+
+    <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-purple-500/40 bg-purple-500/10 text-purple-300 text-[10px] font-black uppercase tracking-[0.5em] mb-6">
+      <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+      In Testing · Android
+    </div>
+
+    <h1 class="text-5xl md:text-7xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
+      Teq<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">Music</span>
+    </h1>
+    <p class="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-8">
+      One player. Two libraries.<br class="hidden sm:block">
+      Your local music — and the official Eyuforyia soundtrack — with offline downloads, real lyrics, and story fragments that unlock as you listen.
+    </p>
+
+    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl border border-purple-500/30 bg-purple-500/10 text-sm text-purple-200">
+      <i data-lucide="smartphone" class="w-4 h-4 text-purple-400"></i>
+      Coming soon to Google Play
+    </div>
+  </div>
+</header>
+
+<!-- Dual library + rights -->
+<section class="px-6 pb-16">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
+    <div class="reveal glass-panel rounded-2xl p-8 border border-white/10">
+      <div class="w-11 h-11 rounded-xl bg-slate-500/15 border border-slate-500/20 flex items-center justify-center mb-5">
+        <i data-lucide="hard-drive" class="w-5 h-5 text-slate-300"></i>
+      </div>
+      <h2 class="text-xl font-space font-bold text-white mb-3">Your Library</h2>
+      <p class="text-slate-400 text-sm leading-relaxed mb-4">
+        Plays audio already on your device. Nothing is uploaded. TeqMusic claims no ownership of those files — you remain responsible for having the rights to play them.
+      </p>
+      <p class="text-xs text-slate-500">Local only · Never leaves your phone</p>
+    </div>
+    <div class="reveal delay-100 glass-panel rounded-2xl p-8 border border-purple-500/25 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-40 h-40 bg-[radial-gradient(circle,rgba(168,85,247,0.12),transparent_70%)]"></div>
+      <div class="relative z-10">
+        <div class="w-11 h-11 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center mb-5">
+          <i data-lucide="disc-3" class="w-5 h-5 text-purple-400"></i>
         </div>
-    </nav>
+        <h2 class="text-xl font-space font-bold text-white mb-3">Eyuforyia Catalog</h2>
+        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+          Curated soundtrack and world music from Teq Vault. Stream or download for personal use inside the app. Download does not transfer ownership; redistribution outside the app is not permitted.
+        </p>
+        <p class="text-xs text-slate-500">Teq Vault IP · <a href="terms.html" class="text-purple-400 hover:underline">Full license terms</a></p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Hero -->
-    <header class="pt-40 pb-20 px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <img src="../imgs/teqmusic-icon.png" alt="TeqMusic" class="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-3xl shadow-2xl mb-8" style="box-shadow: 0 0 60px rgba(168, 85, 247, 0.35);">
+<!-- Features -->
+<section class="py-16 px-6 border-t border-white/5">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <span class="text-[10px] font-black uppercase tracking-[0.5em] text-purple-400">Capabilities</span>
+      <h2 class="text-3xl md:text-4xl font-space font-bold uppercase tracking-tighter mt-4 text-white">Listening <span class="text-purple-400">and</span> discovery</h2>
+    </div>
 
-            <div class="inline-block px-4 py-1 rounded-full border border-[var(--circuit-blue)]/30 bg-[var(--circuit-blue)]/5 text-[var(--circuit-blue)] text-[10px] font-black uppercase tracking-[0.5em] mb-6">
-                Now In Testing
-            </div>
-
-            <h1 class="text-5xl md:text-7xl font-space font-bold uppercase tracking-tighter mb-6 text-white">
-                TeqMusic
-            </h1>
-            <p class="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-10">
-                Your own local library, and the official Eyuforyia soundtrack — in one player.
-                Downloads for offline listening, real lyrics, and lore unlocked as you listen.
-            </p>
-
-            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-xl border border-white/10 bg-white/5 text-sm text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--voltage-orange)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Coming soon to Google Play
-            </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="reveal glass-panel rounded-2xl p-6 border border-white/10 card-hover">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+          <i data-lucide="download" class="w-5 h-5 text-purple-400"></i>
         </div>
-    </header>
+        <h3 class="font-bold text-white mb-2">Offline Downloads</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Save curated tracks to your device and listen with no connection.</p>
+      </div>
 
-    <!-- Features -->
-    <section class="py-20 px-6 border-t border-white/5">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="glass-panel rounded-2xl p-6 border border-white/10">
-                    <div class="w-10 h-10 rounded-lg bg-[var(--circuit-blue)]/10 flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--circuit-blue)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">Your Own Library</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Play whatever's already on your device, organized and ready.</p>
-                </div>
-
-                <div class="glass-panel rounded-2xl p-6 border border-white/10">
-                    <div class="w-10 h-10 rounded-lg bg-[var(--voltage-orange)]/10 flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--voltage-orange)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">Offline Downloads</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Save Eyuforyia tracks to your device and listen anywhere, no connection needed.</p>
-                </div>
-
-                <div class="glass-panel rounded-2xl p-6 border border-white/10">
-                    <div class="w-10 h-10 rounded-lg bg-[var(--circuit-blue)]/10 flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--circuit-blue)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">Real Lyrics</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Follow along with the official lyrics for every Eyuforyia track.</p>
-                </div>
-
-                <div class="glass-panel rounded-2xl p-6 border border-white/10">
-                    <div class="w-10 h-10 rounded-lg bg-[var(--voltage-orange)]/10 flex items-center justify-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[var(--voltage-orange)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-white mb-2">Lore Unlocks</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">Listen deep enough into a track, and a piece of the world's story unlocks.</p>
-                </div>
-            </div>
+      <div class="reveal delay-100 glass-panel rounded-2xl p-6 border border-white/10 card-hover">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+          <i data-lucide="mic-2" class="w-5 h-5 text-purple-400"></i>
         </div>
-    </section>
+        <h3 class="font-bold text-white mb-2">Real Lyrics</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Official lyrics for every curated track, ready to follow along.</p>
+      </div>
 
-    <!-- Art showcase -->
-    <section class="py-20 px-6 border-t border-white/5">
-        <div class="max-w-3xl mx-auto text-center">
-            <img src="../imgs/teqmusic-art.png" alt="Eyuforyia" class="w-full max-w-md mx-auto rounded-2xl mb-8" style="box-shadow: 0 0 80px rgba(168, 85, 247, 0.2);">
-            <h2 class="text-2xl md:text-3xl font-space font-bold uppercase tracking-tight text-white mb-4">
-                Part of the Eyuforyia Universe
-            </h2>
-            <p class="text-slate-400 leading-relaxed">
-                TeqMusic carries the same world as the games and novels — every curated track ties back
-                into the Eyuforyia story.
-            </p>
+      <div class="reveal delay-100 glass-panel rounded-2xl p-6 border border-white/10 card-hover">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+          <i data-lucide="book-open" class="w-5 h-5 text-purple-400"></i>
         </div>
-    </section>
+        <h3 class="font-bold text-white mb-2">Lore Unlocks</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Listening progress reveals story fragments from Eyuforyia.</p>
+      </div>
 
-    <footer class="py-8 border-t border-white/5 bg-[#020617] mt-12">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[11px] text-slate-500">
-            <p>© <span id="year"></span> Teq Vault LLC. All rights reserved.</p>
-
-            <div class="flex items-center gap-6">
-                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
-                <a href="terms.html" class="hover:text-white transition">Terms of Service</a>
-                <a href="datadeletion.html" class="hover:text-white transition">Data Deletion</a>
-            </div>
-
-            <p>Engineering worlds, not just games.</p>
+      <div class="reveal delay-200 glass-panel rounded-2xl p-6 border border-white/10 card-hover">
+        <div class="w-10 h-10 rounded-lg bg-purple-500/15 flex items-center justify-center mb-4">
+          <i data-lucide="list-music" class="w-5 h-5 text-purple-400"></i>
         </div>
-    </footer>
+        <h3 class="font-bold text-white mb-2">Playlists &amp; History</h3>
+        <p class="text-sm text-slate-400 leading-relaxed">Playlists, favorites, and most-played — synced to your account.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        window.addEventListener('load', function () {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        });
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+<!-- How lore works -->
+<section class="py-20 px-6 border-t border-white/5">
+  <div class="max-w-5xl mx-auto">
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+      <div class="reveal">
+        <span class="text-[10px] font-black uppercase tracking-[0.5em] text-purple-400">Transmedia Layer</span>
+        <h2 class="text-3xl md:text-4xl font-space font-bold uppercase tracking-tighter mt-4 text-white mb-6">
+          Music that opens the world
+        </h2>
+        <p class="text-slate-400 leading-relaxed mb-5">
+          TeqMusic is a delivery channel for the same IP that powers the games and novels — not a separate soundtrack app.
+        </p>
+        <p class="text-slate-400 leading-relaxed mb-6">
+          As you listen to curated tracks, progress is tracked. Reach a threshold and a piece of lore unlocks: history, character notes, or a glimpse of Eyuforyia’s nature-versus-machine conflict. Unlocks apply only to the curated catalog and sync with your account.
+        </p>
+        <p class="text-xs text-slate-500">
+          Accounts powered by Supabase · No third-party ad SDK · <a href="privacy.html" class="text-purple-400 hover:underline">Privacy details</a>
+        </p>
+      </div>
+      <div class="reveal delay-100">
+        <img src="../imgs/teqmusic-art.png" alt="Eyuforyia world art" class="w-full rounded-2xl border border-purple-500/20" style="box-shadow: 0 0 80px rgba(168, 85, 247, 0.18);">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 px-6 border-t border-white/5">
+  <div class="max-w-3xl mx-auto text-center reveal">
+    <h2 class="text-3xl md:text-4xl font-space font-bold uppercase tracking-tighter text-white mb-4">
+      Enter the soundtrack
+    </h2>
+    <p class="text-slate-400 mb-8 leading-relaxed">
+      TeqMusic is in testing. When it launches on Google Play, it will be the easiest way to carry both your own library and the living sound of Eyuforyia.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="../index.html#software" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold uppercase tracking-[0.2em] hover:bg-purple-500/30 transition">
+        <i data-lucide="layout-grid" class="w-4 h-4"></i> View Software Suite
+      </a>
+      <a href="ecosystem.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white/15 text-slate-300 text-xs font-bold uppercase tracking-[0.2em] hover:bg-white/5 transition">
+        <i data-lucide="git-branch" class="w-4 h-4"></i> Full Ecosystem
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-white/5 py-10 bg-[#020617]">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row flex-wrap justify-between items-center gap-8 text-slate-500 text-xs font-space">
+      <div class="flex items-center gap-3">
+        <img src="../imgs/tvault.png" class="h-6 w-auto opacity-60" alt="Teq Vault">
+        <span>© <span id="year"></span> Teq Vault LLC. All rights reserved.</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-6">
+        <span class="text-[10px] uppercase tracking-widest text-slate-600 font-bold">Ecosystem</span>
+        <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Teq Vault</a>
+        <a href="https://teqxus.app" target="_blank" rel="noopener" class="hover:text-[var(--voltage-orange)] transition flex items-center gap-1.5"><i data-lucide="activity" class="w-3 h-3"></i> TeqXus</a>
+        <a href="https://teqxus.app/teqdocs" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="book-open" class="w-3 h-3"></i> TeqDocs</a>
+        <a href="teqmusic.html" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3"></i> TeqMusic</a>
+        <a href="https://eyuforyia.com" target="_blank" rel="noopener" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Eyuforyia</a>
+        <a href="https://quetiemals.online" target="_blank" rel="noopener" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Quetiemals</a>
+      </div>
+      <div class="flex items-center gap-5">
+        <a href="https://www.facebook.com/profile.php?id=61577353297986" target="_blank" rel="noopener" class="hover:text-[#1877F2] transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+        <a href="https://discord.gg/4CAYz2ZCqC" target="_blank" rel="noopener" class="hover:text-[#5865F2] transition">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+        </a>
+        <a href="mailto:support@teqvault.online" class="hover:text-white transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+    <div class="flex justify-center gap-6 mt-8 text-[11px] text-slate-600">
+      <a href="terms.html" class="hover:text-slate-400 transition">Terms of Service</a>
+      <a href="about.html" class="hover:text-slate-400 transition">About Us</a>
+      <a href="join-the-vault.html" class="hover:text-slate-400 transition">Careers</a>
+      <a href="privacy.html" class="hover:text-slate-400 transition">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+  const mobileBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+  }
+  const obs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('active');
+  }), { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
