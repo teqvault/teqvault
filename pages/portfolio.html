@@ -202,7 +202,7 @@ footer a{color:var(--amber)}
   <div class="wrap">
     <p class="eyebrow">Software · Games · Web · Mobile · Bossier City, LA · <b>Teq Vault LLC</b></p>
     <h1>Jude Nana<span>Baffoe</span></h1>
-    <p class="thesis">One person, <b>ten shipped products</b> — three mobile titles live on Google Play, a suite of web and desktop tools, and a self-hosted backend stack. I work <b>AI-first</b>: models write most of the code, I own the architecture, the review, and everything that has to be right before it goes to a store.</p>
+    <p class="thesis">One person, <b>ten shipped products</b> — four titles live on Google Play, a suite of web and desktop tools, and browser games running without an engine. I write code, direct AI tooling hard against specs I write, and own the architecture, the review, and the whole build-and-release chain that gets it to a store.</p>
     <nav class="contact">
       <!-- EDIT: mailbox name, GitHub handle, Play developer ID -->
       <a href="mailto:jude.nana.baffoe@gmail.com">Email</a>
@@ -277,8 +277,8 @@ footer a{color:var(--amber)}
 
       <article class="row reveal">
         <div class="title">TeqStream<em>React Native · Expo</em></div>
-        <p class="what">Video player for local and remote sources — scrubbing, fullscreen, picture-in-picture, background playback.</p>
-        <span class="status testing">In testing</span>
+        <p class="what">Video player for local and remote sources — scrubbing, fullscreen, picture-in-picture, background playback. Built and ready to launch.</p>
+        <span class="status testing">Ready to launch</span>
       </article>
 
       <article class="row reveal">
@@ -307,22 +307,22 @@ footer a{color:var(--amber)}
   <div class="wrap">
     <div class="head">
       <h2>How This Gets Built</h2>
-      <p>AI writes most of the code. That is the uninteresting part.</p>
+      <p>Where the leverage comes from, and where it stops.</p>
     </div>
     <div class="split">
-      <p class="lede">A solo developer shipping ten products is only possible one way, and I'd rather say it plainly than have you wonder. I drive AI coding tools hard and they produce the bulk of the implementation. What that buys me is throughput. What it costs me is that <b>nothing arrives trustworthy by default</b> — so the job becomes specification, architecture, and review, done well enough that generated code survives contact with real users.</p>
+      <p class="lede">Ten products from one person needs leverage, and I'd rather name it than have you wonder. AI tooling drafts a lot of implementation from specifications I write, and I write plenty of code directly — the systems work, the parts with real constraints, and anything I'd rather understand than inherit. What the tooling buys is throughput. What it costs is that <b>nothing arrives trustworthy by default</b>, so architecture, review, and the entire build chain stay mine.</p>
       <div class="method">
         <div class="m reveal">
-          <span class="k">I decide</span>
-          <p>Data model, module boundaries, what the economy math should be, where state is authoritative, what ships and what waits. The model doesn't get to make these calls, because it can't see the consequences three releases out.</p>
+          <span class="k">Architecture is mine</span>
+          <p>Data model, module boundaries, economy math, where state is authoritative, what ships and what waits. A model doesn't get these calls, because it can't see the consequences three releases out.</p>
         </div>
         <div class="m reveal">
-          <span class="k">The model drafts</span>
-          <p>Implementation against a spec I write. Tight scope, one concern at a time. Vague prompts produce plausible code that quietly does the wrong thing — the specification is the actual engineering work.</p>
+          <span class="k">Drafting is shared</span>
+          <p>I write the code that carries real constraints and hand off the rest against tight, single-concern specs. Vague prompts produce plausible code that quietly does the wrong thing, so the specification is itself the engineering work.</p>
         </div>
         <div class="m reveal">
-          <span class="k">I verify</span>
-          <p>Line by line, and then on a device. The security audit below is what this catches: XOR passed off as encryption, probability math that looked right and wasn't, cooldowns trusting a clock the user controls. All generated, all shipped, all found and fixed by reading.</p>
+          <span class="k">Shipping is mine</span>
+          <p>Every line read, then run on a device, then built and signed and submitted by hand — npm and Expo toolchains, Gradle, keystores, Play Console. The audit below is what the reading catches: XOR passed off as encryption, probability math that looked right and wasn't, cooldowns trusting a clock the user controls.</p>
         </div>
       </div>
     </div>
@@ -346,7 +346,7 @@ footer a{color:var(--amber)}
       <div class="dive reveal">
         <span class="tag">Infrastructure</span>
         <h3>Choosing the boring stack</h3>
-        <p>BaaS pricing scales against you and the exit cost grows the longer you wait. TeqBase is deliberately unexciting — Postgres, Node LTS, a thin Fastify layer, argon2 auth I own, files on disk, restic backups. Nothing novel, nothing I can't debug at 2 a.m., no vendor with a say in my margins.</p>
+        <p>BaaS pricing scales against you and the exit cost grows the longer you wait, so I specced TeqBase to replace it: Postgres, Node LTS, a thin Fastify layer, argon2 auth I own, files on disk, restic backups. Nothing novel, nothing I can't debug at 2 a.m., no vendor with a say in my margins. Currently building it.</p>
       </div>
 
       <div class="dive reveal">
@@ -358,7 +358,7 @@ footer a{color:var(--amber)}
       <div class="dive reveal">
         <span class="tag">Field tooling</span>
         <h3>Software for a place with no signal</h3>
-        <p>Electrical fault isolation on base meant paper schematics and guesswork. I built a PWA pairing the one-line diagram with an interactive map for pin placement, cached through a service worker so it works with no connectivity — which is exactly when you need it.</p>
+        <p>Electrical fault isolation on base means paper schematics and guesswork. I'm building a PWA that pairs the one-line diagram with an interactive map for pin placement, cached through a service worker so it works with no connectivity — which is exactly when you need it. In progress, and the constraint drives the design.</p>
       </div>
 
     </div>
@@ -428,7 +428,7 @@ footer a{color:var(--amber)}
     <div class="fit">
       <div class="f reveal">
         <span class="k">Software engineering</span>
-        <p>The parts nobody sees: a Postgres schema and Fastify API I designed and run, argon2 auth I own rather than rent, a Python file-recovery tool doing sector-aligned raw device reads, and a security audit that caught three real vulnerabilities in shipped code.</p>
+        <p>The parts nobody sees: sector-aligned raw device reads in Python, a WebRTC signaling server, server-side entitlement checks and receipt reconciliation, a backend platform I'm building to replace rented infrastructure, and a security audit that caught three real vulnerabilities in shipped code.</p>
       </div>
       <div class="f reveal">
         <span class="k">Game development</span>
