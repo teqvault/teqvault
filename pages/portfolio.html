@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Unlisted page: not linked from the site nav, and kept out of search.
+     Delete the next line if you ever want it indexed. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Jude Nana Baffoe — Software, Games, Web &amp; Mobile</title>
+<meta name="description" content="Solo developer and designer. Three mobile titles live on Google Play, a suite of web and desktop tools, and a self-hosted backend stack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#10131C;
+  --panel:#161A26;
+  --line:#262C3B;
+  --line-soft:#1E2331;
+  --text:#E6E9F2;
+  --muted:#8892AB;
+  --amber:#E0A22B;
+  --cyan:#4FD1D9;
+  --green:#4FCE7E;
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --wrap:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ---------- masthead ---------- */
+.masthead{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+}
+.eyebrow b{color:var(--amber);font-weight:500}
+h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(46px,9vw,92px);line-height:.92;
+  letter-spacing:-.035em;text-transform:uppercase;
+  margin:18px 0 20px;
+}
+h1 span{display:block;color:var(--muted)}
+.thesis{max-width:56ch;font-size:clamp(17px,2vw,20px);color:#C6CCDD}
+.thesis b{color:var(--text);font-weight:600}
+.contact{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:32px;
+  font-family:var(--mono);font-size:13px;
+}
+.contact a{
+  text-decoration:none;padding:9px 15px;
+  border:1px solid var(--line);border-radius:2px;
+  color:var(--text);transition:border-color .18s,color .18s,background .18s;
+}
+.contact a:hover{border-color:var(--amber);color:var(--amber);background:rgba(224,162,43,.06)}
+
+/* ---------- sections ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;flex-wrap:wrap}
+h2{
+  font-family:var(--display);font-weight:800;font-size:15px;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.head p{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* ---------- ledger (signature) ---------- */
+.ledger{border-top:1px solid var(--line-soft)}
+.row{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,1.5fr) 128px;
+  gap:20px;align-items:start;
+  padding:20px 20px 20px 22px;
+  border-bottom:1px solid var(--line-soft);
+  position:relative;
+  transition:background .2s;
+}
+.row::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--line);transition:background .2s,width .2s;
+}
+.row:hover{background:var(--panel)}
+.row:hover::before{background:var(--amber);width:3px}
+.title{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.01em}
+.title em{
+  display:block;font-style:normal;font-family:var(--mono);
+  font-size:11.5px;color:var(--muted);letter-spacing:.06em;margin-top:5px;
+}
+.what{font-size:14.5px;color:#BFC6D8}
+.what code{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
+.status{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;justify-self:start;
+  padding:4px 9px;border-radius:2px;white-space:nowrap;
+  border:1px solid currentColor;
+}
+.live{color:var(--green)}
+.testing{color:var(--amber)}
+.build{color:var(--muted)}
+
+/* ---------- method ---------- */
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:48px}
+.lede{font-size:clamp(16px,1.7vw,18.5px);color:#C6CCDD;max-width:44ch}
+.lede b{color:var(--text);font-weight:600}
+.method{display:grid;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.m{background:var(--ink);padding:22px 24px}
+.m .k{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--amber);display:block;margin-bottom:9px;
+}
+.m p{font-size:14.5px;color:#BFC6D8}
+@media (max-width:820px){.split{grid-template-columns:1fr;gap:28px}}
+
+/* ---------- fit ---------- */
+.fit{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.f{background:var(--ink);padding:24px 24px 26px}
+.f .k{
+  font-family:var(--display);font-weight:600;font-size:16px;
+  display:block;margin-bottom:10px;letter-spacing:-.01em;
+}
+.f .k::before{content:"";display:inline-block;width:16px;height:2px;background:var(--cyan);vertical-align:middle;margin-right:9px}
+.f p{font-size:14.5px;color:#BFC6D8}
+
+.go{
+  display:inline-block;margin-top:9px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);
+  text-decoration:none;border-bottom:1px solid rgba(79,209,217,.35);padding-bottom:2px;
+}
+.go:hover{color:var(--amber);border-color:var(--amber)}
+
+/* ---------- deep dives ---------- */
+.dives{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line-soft)}
+.dive{background:var(--ink);padding:28px 26px}
+.dive h3{
+  font-family:var(--display);font-weight:600;font-size:17px;
+  margin-bottom:12px;letter-spacing:-.01em;
+}
+.dive p{font-size:14.5px;color:#BFC6D8}
+.dive .tag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:14px;
+}
+
+/* ---------- stack ---------- */
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:30px}
+.stack h3{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--amber);
+  font-weight:500;margin-bottom:12px;
+}
+.stack ul{list-style:none;font-size:14.5px;color:#BFC6D8}
+.stack li{padding:5px 0;border-bottom:1px solid var(--line-soft)}
+
+/* ---------- background ---------- */
+.bg-item{display:flex;gap:24px;padding:18px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.bg-item .when{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:110px}
+.bg-item h3{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:4px}
+.bg-item p{font-size:14.5px;color:#BFC6D8;max-width:62ch}
+
+/* ---------- footer ---------- */
+footer{padding:60px 0 80px}
+footer p{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+footer .big{
+  font-family:var(--display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(26px,4vw,40px);letter-spacing:-.02em;color:var(--text);
+  margin-bottom:18px;line-height:1.05;
+}
+footer a{color:var(--amber)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:720px){
+  .row{grid-template-columns:1fr;gap:10px;padding:18px 16px}
+  .masthead{padding:52px 0 40px}
+  section{padding:48px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Software · Games · Web · Mobile · Bossier City, LA · <b>Teq Vault LLC</b></p>
+    <h1>Jude Nana<span>Baffoe</span></h1>
+    <p class="thesis">One person, <b>ten shipped products</b> — three mobile titles live on Google Play, a suite of web and desktop tools, and a self-hosted backend stack. I work <b>AI-first</b>: models write most of the code, I own the architecture, the review, and everything that has to be right before it goes to a store.</p>
+    <nav class="contact">
+      <!-- EDIT: mailbox name, GitHub handle, Play developer ID -->
+      <a href="mailto:jude.nana.baffoe@gmail.com">Email</a>
+      <a href="https://github.com/teqvault">GitHub</a>
+      <a href="https://teqvault.study">teqvault.study</a>
+      <a href="/Jude_Nana_Baffoe_Resume.pdf">Résumé (PDF)</a>
+    </nav>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <h2>Shipped</h2>
+      <p>Status is current, not aspirational.</p>
+    </div>
+    <div class="ledger">
+
+      <article class="row reveal">
+        <div class="title">Quetiemals<em>Unity · C#</em></div>
+        <p class="what">Match-3 RPG and the origin point of the Eyuforyia universe. <code>ScriptableObject</code>-driven content pipeline, gacha economy, encrypted saves.<br><a class="go" href="https://play.google.com/store/apps/details?id=com.teqvault.quetiemals">Google Play &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">Quetiemals Connect 4<em>Unity · C# · Play Games v2</em></div>
+        <p class="what">Real-time multiplayer over Relay/Lobby, leaderboards, seasonal trophy ladder, non-consumable IAP with server-side receipt reconciliation. Also submitted to Amazon Appstore.<br><a class="go" href="https://play.google.com/store/apps/details?id=com.teqvault.quetiemalsconnect4">Google Play &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">Forge &amp; Ruin<em>Unity · C#</em></div>
+        <p class="what">Narrative match-3 built on the same content architecture, with a story layer that shares canon with the novels and the planned series.<br><a class="go" href="https://play.google.com/store/apps/details?id=com.teqvault.forgeandruin">Google Play &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">teqvault.study<em>Web platform</em></div>
+        <p class="what">Course platform I write and maintain: Java, Python, Git, Unity, embedded systems, PLC programming, cybersecurity fundamentals.<br><a class="go" href="https://teqvault.study">Open teqvault.study &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqXus AI<em>Next.js · Supabase</em></div>
+        <p class="what">Multi-provider AI platform with server-side entitlement verification and model gating. Frontend and backend deployed separately.</p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">Eyu Falls<em>HTML · JS · CSS · PWA</em></div>
+        <p class="what">Puzzle-adventure falling-block RPG written without an engine — full audio system, offline PWA infrastructure, then wrapped for Android and ported to Fire tablets.<br><a class="go" href="https://teqvault.online/games/eyu-falls/eyu-falls-full.html">Play in browser &rarr;</a></p>
+        <span class="status live">Playable</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqMusic<em>React Native · Expo SDK 57</em></div>
+        <p class="what">Music app with background playback and a Supabase-backed supporter tier, shipped to Google Play as a signed AAB.<br><a class="go" href="https://play.google.com/store/apps/details?id=com.teqvault.teqmusic">Google Play &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqDocs<em>Electron · Web</em></div>
+        <p class="what">Document reader and editor in parallel Electron, web, and student-desktop builds — docx rendering, Windows file association, native context menu.<br><a class="go" href="https://teqxus.app/teqdocs/">Open TeqDocs &rarr;</a></p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">Siegecraft Pocket<em>Canvas · JS · Web Audio</em></div>
+        <p class="what">Canvas tower defense with a deck-building layer — towers are cards drawn from an unlockable pool, with meta-progression persisted between runs. Every map is declared as a list of entry lanes converging on one exit, so single-, dual-, and triple-lane boards all run through one geometry path, and projectiles carry real travel time with a fallback impact point when their target dies mid-flight.<br><a class="go" href="https://teqvault.online/games/teqgames/siegecraft-pocket.html">Play in browser &rarr;</a></p>
+        <span class="status live">Playable</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqStream<em>React Native · Expo</em></div>
+        <p class="what">Video player for local and remote sources — scrubbing, fullscreen, picture-in-picture, background playback.</p>
+        <span class="status testing">In testing</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqBase<em>Postgres 16 · Node · Fastify · Docker</em></div>
+        <p class="what">My own backend platform, replacing third-party BaaS across every product. Own-table auth with <code>argon2</code>, files on disk, Caddy in front, restic backups, self-hosted.</p>
+        <span class="status build">Building</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">Teq Vault Tools<em>PWA + Electron</em></div>
+        <p class="what">Offline-first developer tools sharing one design system — sprite slicer with magic-wand and flood-fill masking, atlas packer, palette and font utilities.</p>
+        <span class="status live">Live</span>
+      </article>
+
+      <article class="row reveal">
+        <div class="title">TeqCarve &amp; TeqLink<em>Python · Node · Electron · WebRTC</em></div>
+        <p class="what">File-recovery tool with sector-aligned Windows raw device access; and a remote-desktop app with a custom signaling server and Windows agent.</p>
+        <span class="status build">Ongoing</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <h2>How This Gets Built</h2>
+      <p>AI writes most of the code. That is the uninteresting part.</p>
+    </div>
+    <div class="split">
+      <p class="lede">A solo developer shipping ten products is only possible one way, and I'd rather say it plainly than have you wonder. I drive AI coding tools hard and they produce the bulk of the implementation. What that buys me is throughput. What it costs me is that <b>nothing arrives trustworthy by default</b> — so the job becomes specification, architecture, and review, done well enough that generated code survives contact with real users.</p>
+      <div class="method">
+        <div class="m reveal">
+          <span class="k">I decide</span>
+          <p>Data model, module boundaries, what the economy math should be, where state is authoritative, what ships and what waits. The model doesn't get to make these calls, because it can't see the consequences three releases out.</p>
+        </div>
+        <div class="m reveal">
+          <span class="k">The model drafts</span>
+          <p>Implementation against a spec I write. Tight scope, one concern at a time. Vague prompts produce plausible code that quietly does the wrong thing — the specification is the actual engineering work.</p>
+        </div>
+        <div class="m reveal">
+          <span class="k">I verify</span>
+          <p>Line by line, and then on a device. The security audit below is what this catches: XOR passed off as encryption, probability math that looked right and wasn't, cooldowns trusting a clock the user controls. All generated, all shipped, all found and fixed by reading.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <h2>Work I'd Defend In A Review</h2>
+      <p>Four decisions, and why they went that way.</p>
+    </div>
+    <div class="dives">
+
+      <div class="dive reveal">
+        <span class="tag">Security</span>
+        <h3>Auditing my own live codebase</h3>
+        <p>I went back through a shipped match-3 RPG assuming it was wrong somewhere. Save data was XOR'd and labelled encryption — replaced with AES. The soft-pity gacha math was subtly incorrect and under-rewarding players. Cooldowns trusted the device clock, so a settings change skipped them. Three real vulnerabilities in code that ran fine and looked fine. Fixed in the live build.</p>
+      </div>
+
+      <div class="dive reveal">
+        <span class="tag">Infrastructure</span>
+        <h3>Choosing the boring stack</h3>
+        <p>BaaS pricing scales against you and the exit cost grows the longer you wait. TeqBase is deliberately unexciting — Postgres, Node LTS, a thin Fastify layer, argon2 auth I own, files on disk, restic backups. Nothing novel, nothing I can't debug at 2 a.m., no vendor with a say in my margins.</p>
+      </div>
+
+      <div class="dive reveal">
+        <span class="tag">Game AI</span>
+        <h3>An opponent worth losing to</h3>
+        <p>The Connect 4 CPU was beatable in a way that felt cheap. Rewrote the evaluation with depth-adjusted scoring so near-term threats outweigh distant ones, and added center-first move ordering to prune harder. Better play at the same search cost.</p>
+      </div>
+
+      <div class="dive reveal">
+        <span class="tag">Field tooling</span>
+        <h3>Software for a place with no signal</h3>
+        <p>Electrical fault isolation on base meant paper schematics and guesswork. I built a PWA pairing the one-line diagram with an interactive map for pin placement, cached through a service worker so it works with no connectivity — which is exactly when you need it.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Stack</h2><p>Things I've shipped with, not things I've read about.</p></div>
+    <div class="stack">
+      <div class="reveal">
+        <h3>Languages</h3>
+        <ul><li>C#</li><li>JavaScript / TypeScript</li><li>Python</li><li>Java</li><li>SQL</li><li>HTML / CSS</li></ul>
+      </div>
+      <div class="reveal">
+        <h3>Frameworks</h3>
+        <ul><li>Unity</li><li>React Native / Expo</li><li>Next.js / React</li><li>Node.js / Fastify</li><li>Electron</li><li>Progressive Web Apps</li></ul>
+      </div>
+      <div class="reveal">
+        <h3>Backend &amp; Infra</h3>
+        <ul><li>PostgreSQL</li><li>Supabase</li><li>Docker</li><li>Caddy</li><li>restic</li><li>Self-hosted Linux</li></ul>
+      </div>
+      <div class="reveal">
+        <h3>Ship &amp; Operate</h3>
+        <ul><li>Android Studio</li><li>Signed APK / AAB pipelines</li><li>Google Play Console</li><li>Amazon Appstore</li><li>Unity IAP · AdMob</li><li>Git</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Background</h2><p>Where the discipline came from.</p></div>
+
+    <div class="bg-item reveal">
+      <span class="when">[Year] – Present</span>
+      <div>
+        <h3>Founder &amp; Engineer — Teq Vault LLC</h3>
+        <p>Every line of product code, every store submission, every backend decision. Publishing games under the Average Jude Games label.</p>
+      </div>
+    </div>
+
+    <div class="bg-item reveal">
+      <span class="when">Jan 2023 – Present</span>
+      <div>
+        <h3>Electrical Systems Journeyman (3E051) — U.S. Air Force</h3>
+        <p>Airfield and facility electrical systems. Wrote a full airfield lighting training course for incoming airmen from official technical references.</p>
+      </div>
+    </div>
+
+    <div class="bg-item reveal">
+      <span class="when">Expected Dec 2026</span>
+      <div>
+        <h3>B.S. Computer Science — Southern New Hampshire University</h3>
+        <p>Software Engineering concentration. 4.00 GPA, President’s List. Computer graphics with OpenGL, embedded systems on Raspberry Pi, data structures and algorithms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head">
+      <h2>Where I Fit</h2>
+      <p>Four doors into the same body of work.</p>
+    </div>
+    <div class="fit">
+      <div class="f reveal">
+        <span class="k">Software engineering</span>
+        <p>The parts nobody sees: a Postgres schema and Fastify API I designed and run, argon2 auth I own rather than rent, a Python file-recovery tool doing sector-aligned raw device reads, and a security audit that caught three real vulnerabilities in shipped code.</p>
+      </div>
+      <div class="f reveal">
+        <span class="k">Game development</span>
+        <p>Three Unity titles live, plus one built engine-free in plain JavaScript. Gameplay systems, content architecture, economy math, opponent AI, IAP and store release.</p>
+      </div>
+      <div class="f reveal">
+        <span class="k">Mobile development</span>
+        <p>Unity and React Native / Expo, both shipped as signed AABs through Play Console. Comfortable with the unglamorous half — signing, tracks, testing rollout, store policy.</p>
+      </div>
+      <div class="f reveal">
+        <span class="k">Web development</span>
+        <p>Next.js and React front ends, Fastify and Postgres behind them, offline-first PWAs, and a self-hosted deployment I run myself rather than rent.</p>
+      </div>
+      <div class="f reveal">
+        <span class="k">Product &amp; interface design</span>
+        <p>One design system across the whole Teq Vault tool suite, and interfaces built for real constraints — a sprite slicer that has to feel precise, a fault-isolation map used with no signal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="big">Open to software, game, web, and mobile roles.</p>
+    <p>Reach me at <a href="mailto:jude.nana.baffoe@gmail.com">Email</a> — or just go play something I built.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
