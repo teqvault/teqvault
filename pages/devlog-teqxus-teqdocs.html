@@ -83,8 +83,8 @@
     <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">What game development trains</h2>
     <p>Game teams learn to think in systems under pressure. A combat loop has inputs, state, feedback, and failure modes. If any of those are muddy, players feel it immediately. That urgency translates cleanly to utility software. A document reader that loses your place, or an AI assistant that cannot stream a response, is the same class of problem as a combos system that lies about its rules.</p>
     <p>We also inherited a bias toward offline and local-first behavior where it matters. TeqDocs is useful without an account for core reading and study flows. TeqMusic keeps personal audio on-device. Accounts exist when sync and progress genuinely need them — not as a growth hack bolted onto every screen.</p>
-    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">TeqXus: health tooling with an engineering spine</h2>
-    <p>TeqXus is an AI health optimization product aimed at real multi-language use, not demo videos. The hard parts are not the chat skin. They are reliable streaming, wearable integration where available, scoring that can be explained, and a Pro tier that does not pretend unlimited compute is free. Those are production problems. Treating them like game systems — measurable, testable, fail-visible — kept scope honest.</p>
+    <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">TeqXus: an AI assistant with an engineering spine</h2>
+    <p>TeqXus is a general-purpose AI assistant — research, finding reliable information, coding help, writing, document analysis — aimed at real multi-language use, not demo videos. The hard parts are not the chat skin. They are reliable streaming, routing across multiple model providers, entitlement checks that cannot be spoofed from the client, and a Pro tier that does not pretend unlimited compute is free. Those are production problems. Treating them like game systems — measurable, testable, fail-visible — kept scope honest.</p>
     <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">TeqDocs: documents as a battlefield</h2>
     <p>PDFs, Markdown, annotations, flashcards, and TTS sound like a feature list. In practice they are edge-case mines: broken outlines, huge files, form fields, offline paths, desktop packaging. Game-dev iteration helped: ship a vertical slice, watch where users actually break, fix the pipeline, repeat. The Windows build exists because “works in one browser” is not a product.</p>
     <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">Why this belongs in the same studio</h2>
@@ -93,8 +93,8 @@
 
 
     <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">Failure modes we actually chased</h2>
-    <p>On TeqDocs: huge PDFs, missing TOCs, form fields, offline reopen, desktop installers that fight OS permissions. On TeqXus: streaming interruptions, language switching mid-session, wearable sync gaps, and Pro limits that must be understandable instead of punitive. None of those are glamorous. All of them decide whether someone returns the next morning.</p>
-    <p>Game development taught us to prefer visible failure over silent corruption. If a document cannot open, say so. If an AI turn dies mid-stream, recover cleanly. If a score changes, the user should be able to ask why. That is the same instinct as showing accurate damage numbers in combat.</p>
+    <p>On TeqDocs: huge PDFs, missing TOCs, form fields, offline reopen, desktop installers that fight OS permissions. On TeqXus: streaming interruptions, language switching mid-session, provider failover, and Pro limits that must be understandable instead of punitive. None of those are glamorous. All of them decide whether someone returns the next morning.</p>
+    <p>Game development taught us to prefer visible failure over silent corruption. If a document cannot open, say so. If an AI turn dies mid-stream, recover cleanly. If a limit is hit, the user should be able to see why. That is the same instinct as showing accurate damage numbers in combat.</p>
     <h2 class="text-xl font-space font-bold text-white uppercase tracking-tight">Studio economics without apology</h2>
     <p>Utility products are part of how a small studio funds slower IP work without pretending every title must print money on week one. They are also a proving ground for engineering standards we then bring back to games. The relationship is reciprocal, not a demotion of either side.</p>
 
@@ -115,9 +115,12 @@
       <div class="flex flex-wrap items-center gap-6">
         <span class="text-[10px] uppercase tracking-widest text-slate-600 font-bold">Ecosystem</span>
         <a href="https://teqvault.online" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Teq Vault</a>
-        <a href="https://teqxus.app" target="_blank" rel="noopener" class="hover:text-[var(--voltage-orange)] transition flex items-center gap-1.5"><i data-lucide="activity" class="w-3 h-3"></i> TeqXus</a>
+        <a href="https://teqxus.app" target="_blank" rel="noopener" class="hover:text-[var(--voltage-orange)] transition flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3 h-3"></i> TeqXus</a>
         <a href="https://teqxus.app/teqdocs" target="_blank" rel="noopener" class="hover:text-[var(--circuit-blue)] transition flex items-center gap-1.5"><i data-lucide="book-open" class="w-3 h-3"></i> TeqDocs</a>
         <a href="teqmusic.html" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3"></i> TeqMusic</a>
+        <a href="teqstream.html" class="hover:text-amber-400 transition flex items-center gap-1.5"><i data-lucide="play-circle" class="w-3 h-3"></i> TeqStream</a>
+        <a href="listen.html" class="hover:text-rose-400 transition flex items-center gap-1.5"><i data-lucide="headphones" class="w-3 h-3"></i> Listen Free</a>
+        <a href="https://teqvault.study" target="_blank" rel="noopener" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i data-lucide="graduation-cap" class="w-3 h-3"></i> Study</a>
         <a href="https://eyuforyia.com" target="_blank" rel="noopener" class="hover:text-purple-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Eyuforyia</a>
         <a href="https://quetiemals.online" target="_blank" rel="noopener" class="hover:text-emerald-400 transition flex items-center gap-1.5"><i data-lucide="globe" class="w-3 h-3"></i> Quetiemals</a>
       </div>
@@ -129,11 +132,16 @@
         <a href="mailto:support@teqvault.online" class="hover:text-white transition"><i data-lucide="mail" class="w-4 h-4"></i></a>
       </div>
     </div>
-    <div class="flex justify-center gap-6 mt-8 text-[11px] text-slate-600">
-      <a href="terms.html" class="hover:text-slate-400 transition">Terms of Service</a>
+    <div class="flex flex-wrap justify-center gap-x-6 gap-y-3 mt-8 text-[11px] text-slate-600">
       <a href="about.html" class="hover:text-slate-400 transition">About Us</a>
+      <a href="vision.html" class="hover:text-slate-400 transition">Vision</a>
+      <a href="strategy.html" class="hover:text-slate-400 transition">Roadmap</a>
+      <a href="library.html" class="hover:text-slate-400 transition">IP Library</a>
+      <a href="articles.html" class="hover:text-slate-400 transition">Articles</a>
       <a href="join-the-vault.html" class="hover:text-slate-400 transition">Careers</a>
+      <a href="terms.html" class="hover:text-slate-400 transition">Terms of Service</a>
       <a href="privacy.html" class="hover:text-slate-400 transition">Privacy</a>
+      <a href="datadeletion.html" class="hover:text-slate-400 transition">Data Deletion</a>
     </div>
   </div>
 </footer>
