@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "updated": "2026-08-03",
+  "items": [
+    {
+      "id": "forge-and-ruin-s1e1",
+      "series": "Forge & Ruin",
+      "title": "Episode One",
+      "season": 1,
+      "episode": 1,
+      "year": "2026",
+      "synopsis": "REPLACE ME — one or two sentences. This is what people read before deciding to tap.",
+      "poster": "https://teqvault.online/originals/forge-s1e1-poster.jpg",
+      "still": "https://teqvault.online/originals/forge-s1e1-still.jpg",
+      "url": null,
+      "durationLabel": "22 min",
+      "status": "soon"
+    }
+  ]
+}
