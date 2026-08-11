@@ -1,0 +1,17 @@
+.play-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 9999px;
+            background: #4f9eff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .track-toggle:hover .play-btn {
+            transform: scale(1.08);
+        }
+        .track-toggle.is-playing .play-btn {
+            background: #ff9d4f;
+        }

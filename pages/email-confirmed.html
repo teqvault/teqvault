@@ -24,19 +24,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../styles/style.css">
 
-  <style>
-    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
-    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #050810; color: #e2e8f0; }
-    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
-    .glass-panel {
-      background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85);
-      backdrop-filter: blur(18px);
-    }
-    .gradient-text {
-      background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/pages-common.css">
 </head>
 <body class="antialiased overflow-x-hidden min-h-screen flex flex-col">
 
@@ -129,16 +117,6 @@
   </div>
 </footer>
 
-<script>
-  if (window.lucide) lucide.createIcons();
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  if (mobileBtn && mobileMenu) {
-    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-  }
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+<script src="../js/pages-common.js"></script>
 </body>
 </html>

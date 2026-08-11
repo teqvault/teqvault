@@ -23,30 +23,16 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="../styles/style.css">
 
+  <link rel="stylesheet" href="../styles/pages-common.css">
   <style>
-    :root { --circuit-blue: #00a3ff; --voltage-orange: #ff7a1a; }
-    body { font-family: 'Space Grotesk', system-ui, sans-serif; background: #050810; color: #e2e8f0; }
-    .font-space { font-family: 'Space Grotesk', system-ui, sans-serif; }
-    .glass-panel {
-      background: radial-gradient(circle at top left, rgba(148,163,184,0.12), transparent 55%), rgba(15,23,42,0.85);
-      backdrop-filter: blur(18px);
-    }
-    .gradient-text {
-      background: linear-gradient(120deg, var(--circuit-blue), var(--voltage-orange));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .card-hover { transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease; }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,0,0,0.6); border-color: rgba(148,163,184,0.35); }
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 600ms ease, transform 600ms ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
     .card-outline {
-      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.15), 0 20px 40px rgba(0,0,0,0.35);
-      transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
-    }
-    .card-outline:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 0 1px rgba(0,163,255,0.3), 0 24px 60px rgba(0,0,0,0.55);
-    }
+          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.15), 0 20px 40px rgba(0,0,0,0.35);
+          transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
+        }
+        .card-outline:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 0 0 1px rgba(0,163,255,0.3), 0 24px 60px rgba(0,0,0,0.55);
+        }
   </style>
 
 </head>
@@ -120,7 +106,7 @@
       <article class="reveal glass-panel card-outline p-8 rounded-3xl border-t-2 border-[var(--circuit-blue)] group flex flex-col">
         <div class="space-y-6 flex-grow">
           <div class="aspect-[3/4] overflow-hidden rounded-xl shadow-2xl relative">
-            <img src="../imgs/book-cover-02.png"
+            <img src="../games/eyu-falls/assets/Book_Cover_01.png"
                  class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                  alt="For Land and Kin">
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80"></div>
@@ -385,21 +371,7 @@
   </div>
 </footer>
 
-<script>
-  if (window.lucide) lucide.createIcons();
-  const mobileBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  if (mobileBtn && mobileMenu) {
-    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-    mobileLinks.forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-  }
-  const obs = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('active');
-  }), { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-</script>
+<script src="../js/pages-common.js"></script>
+<script src="../js/reveal.js"></script>
 </body>
 </html>

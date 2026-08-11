@@ -1,0 +1,517 @@
+:root{
+    --void:#0B0614; --panel:#171028; --panel2:#1F1636; --edge:#4A3D6B;
+    --violet:#A855F7; --violet-dim:#6D4E9E;
+    --text:#E8E2F5; --dim:#8B80A8;
+    --blue:#4FA8FF; --red:#FF6B35; --yellow:#FFD23F; --purple:#B15EFF; --green:#8FDB4A;
+    --hp:#E8434A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:radial-gradient(ellipse at 50% -20%, #1E0F3D 0%, var(--void) 55%);
+    color:var(--text);
+    font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+    display:flex; align-items:center; justify-content:center;
+    height:100vh; width:100vw;
+    overflow:hidden;
+    user-select:none; -webkit-user-select:none;
+    touch-action:manipulation;
+  }
+  .stage{
+    display:grid;
+    grid-template-columns: 200px auto 216px;
+    gap:14px;
+    align-items:stretch;
+  }
+  .col{display:flex; flex-direction:column; gap:12px;}
+
+  /* Portrait reflow — the board itself is already taller than wide, so
+     only the surrounding 3-column layout needs to change. Columns stack
+     top-to-bottom instead of sitting side by side; scale-to-fit still
+     handles final sizing, but now it's scaling a layout that actually
+     matches a tall viewport instead of a wide one shrunk down tiny. */
+  body.portrait-mode .stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:min(94vw, 460px);
+    gap:12px;
+  }
+  body.portrait-mode .col{ width:100%; }
+  body.portrait-mode .col.left,
+  body.portrait-mode .col.right{
+    flex-direction:column;
+    gap:10px;
+  }
+  body.portrait-mode .col.left .panel,
+  body.portrait-mode .col.right .panel{ width:100%; }
+  body.portrait-mode .abilities{ flex-wrap:wrap; justify-content:center; }
+  body.portrait-mode .ab{ min-width:58px; min-height:58px; }
+  /* Controls panel is keyboard-key hints — meaningless on a touch device
+     that already has on-screen buttons. Hint text is redundant once
+     you're actually playing. Both just ate vertical space that should
+     go to the board instead. */
+  body.portrait-mode #controlsPanel,
+  body.portrait-mode #gameplayHint{ display:none; }
+  /* Compact remaining panels — smaller padding/font so more of the
+     screen goes to the board itself instead of panel chrome. A real
+     phone's usable viewport is smaller than a resized desktop browser
+     (Safari's address bar and toolbar eat into it), so the same "fit
+     everything, no scroll" math shrinks harder there — freeing space
+     from non-essential text is what lets the board/chips scale back up. */
+  body.portrait-mode .panel{ padding:6px 9px; }
+  body.portrait-mode .label{ font-size:8.5px; margin-bottom:2px; }
+  body.portrait-mode .body-txt{ font-size:10.5px; line-height:1.25; }
+  body.portrait-mode .bar{ height:9px; }
+  body.portrait-mode .bar-num{ font-size:8.5px; margin-top:1px; }
+  body.portrait-mode .song-wrap{ gap:5px; }
+  body.portrait-mode .ring{ width:38px; height:38px; }
+  body.portrait-mode .ring svg{ width:38px; height:38px; }
+  body.portrait-mode .ring .pct{ font-size:10px; }
+  /* Pure flavor text — useful once, not on every single mission replay. */
+  body.portrait-mode #songDesc{ display:none; }
+  /* Mission text is still important (tells you the actual objective) so
+     it stays, but at 2 lines max instead of wrapping freely. */
+  body.portrait-mode #missionDesc{
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  body.portrait-mode .col{ gap:7px; }
+  body.portrait-mode .previews .mini{ width:56px; height:56px; }
+  body.portrait-mode .pname{ font-size:9px; }
+  /* The canvas has fixed width/height attributes (its internal drawing
+     resolution — all the game's cell math depends on that staying put).
+     .board-wrap was sizing to that fixed 286px regardless of how wide the
+     panels around it were, which is exactly the mismatch here. Stretch
+     the wrapper and let the canvas's CSS size (not its attributes) fill
+     it — the browser scales the rendered bitmap, same as it would an img. */
+  body.portrait-mode .board-wrap{ align-self:stretch; width:100%; }
+  body.portrait-mode #board{ width:100%; height:auto; }
+
+  .panel{
+    background:linear-gradient(160deg, var(--panel2), var(--panel));
+    border:1px solid var(--edge);
+    border-radius:10px;
+    padding:12px;
+    box-shadow:0 0 0 1px #0006, inset 0 1px 0 #ffffff12;
+  }
+  .label{
+    font-size:10px; letter-spacing:2.5px; color:var(--violet);
+    text-transform:uppercase; font-weight:700; margin-bottom:6px;
+  }
+  .label.dim{color:var(--dim);}
+  .body-txt{font-size:12.5px; line-height:1.45; color:var(--text);}
+
+  /* Song ring */
+  .song-wrap{display:flex; align-items:center; gap:10px;}
+  .ring{position:relative; width:64px; height:64px; flex:none;}
+  .ring svg{transform:rotate(-90deg);}
+  .ring .pct{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; letter-spacing:.5px;
+  }
+
+  /* bars */
+  .bar{
+    height:14px; border-radius:7px; background:#0008;
+    border:1px solid var(--edge); overflow:hidden; position:relative;
+  }
+  .bar > i{
+    display:block; height:100%; border-radius:6px;
+    transition:width .25s ease;
+  }
+  .bar.hp > i{background:linear-gradient(90deg,#7ED957,#3FA34D);}
+  .bar.enemy > i{background:linear-gradient(90deg,#FF5A5F,#B3121B);}
+  .bar-num{font-size:11px; color:var(--dim); margin-top:4px; text-align:right; font-variant-numeric:tabular-nums;}
+
+  /* Board */
+  .board-wrap{position:relative; align-self:start;}
+  canvas#board{
+    display:block;
+    background:
+      linear-gradient(#0D072066, #0A051880),
+      url("assets/GameBoard_BG.png");
+    background-size: cover, cover;
+    background-position: center, center;
+    border:1px solid var(--edge);
+    border-radius:8px;
+    box-shadow:0 0 24px #A855F71c, inset 0 0 40px #0009;
+  }
+  .overlay{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center; gap:10px;
+    background:#0B0614E6; border-radius:8px; text-align:center; padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .combo-banner{
+    position:absolute; top:38%; left:50%; transform:translate(-50%,-50%) scale(.6);
+    opacity:0; pointer-events:none; text-align:center; white-space:nowrap;
+    font-weight:800; font-size:16px; letter-spacing:1px; color:#FFD23F;
+    text-shadow:0 0 10px #000, 0 0 22px #FFD23F99;
+    z-index:5;
+  }
+  .combo-banner.show{ animation:comboPop 1.1s ease forwards; }
+  @keyframes comboPop{
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.6);}
+    15%{opacity:1; transform:translate(-50%,-50%) scale(1.18);}
+    30%{transform:translate(-50%,-50%) scale(1);}
+    78%{opacity:1;}
+    100%{opacity:0; transform:translate(-50%,-62%) scale(1);}
+  }
+  .overlay h2{font-size:22px; letter-spacing:3px; text-transform:uppercase;}
+  .overlay h2.win{color:var(--green);}
+  .overlay h2.lose{color:var(--hp);}
+  .overlay p{color:var(--dim); font-size:13px; max-width:280px; line-height:1.5;}
+  .btn{
+    margin-top:6px;
+    background:linear-gradient(180deg,#8B5CF6,#6D28D9);
+    color:#fff; border:1px solid #C4B5FD55; border-radius:8px;
+    padding:10px 26px; font-size:13px; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; cursor:pointer;
+  }
+  .btn:active{transform:translateY(1px);}
+
+  /* Ability bar */
+  .abilities{display:flex; gap:8px; margin-top:12px; justify-content:center;}
+  .ab{
+    width:64px; padding:7px 4px 6px;
+    background:linear-gradient(160deg,var(--panel2),var(--panel));
+    border:1px solid var(--edge); border-radius:9px;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    cursor:pointer; opacity:.45; transition:opacity .2s, box-shadow .2s, transform .1s;
+  }
+  .ab .ic{font-size:19px; line-height:1;}
+  .ab .nm{font-size:8px; letter-spacing:.6px; text-transform:uppercase; color:var(--dim); text-align:center; line-height:1.2;}
+  .ab .cost{font-size:11px; font-weight:800; font-variant-numeric:tabular-nums;}
+  .ab.ready{opacity:1; box-shadow:0 0 12px var(--glow), inset 0 0 8px var(--glow);}
+  .ab.ready:active{transform:scale(.94);}
+  .ab.locked{ opacity:.3; filter:grayscale(1); position:relative; }
+  .ab.locked::after{ content:"🔒"; position:absolute; top:-6px; right:-4px; font-size:11px; }
+  .ab[data-el="blue"]{--glow:#4FA8FF55;} .ab[data-el="blue"] .cost{color:var(--blue);}
+  .ab[data-el="red"]{--glow:#FF6B3555;} .ab[data-el="red"] .cost{color:var(--red);}
+  .ab[data-el="yellow"]{--glow:#FFD23F55;} .ab[data-el="yellow"] .cost{color:var(--yellow);}
+  .ab[data-el="purple"]{--glow:#B15EFF55;} .ab[data-el="purple"] .cost{color:var(--purple);}
+  .ab[data-el="green"]{--glow:#8FDB4A55;} .ab[data-el="green"] .cost{color:var(--green);}
+
+  /* Element counters */
+  .elems{display:flex; gap:8px; justify-content:center; margin-top:10px;}
+  .chip{
+    width:44px; height:44px; border-radius:9px;
+    border:1px solid var(--edge);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:#0007; gap:1px;
+  }
+  .chip .dot{width:10px; height:10px; border-radius:50%;}
+  .chip .n{font-size:13px; font-weight:800; font-variant-numeric:tabular-nums;}
+  .chip.pulse{animation:pulse .35s ease;}
+  @keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.22);}100%{transform:scale(1);}}
+
+  /* Enemy */
+  .enemy-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+  .drone{
+    width:52px; height:52px; border-radius:10px; flex:none;
+    background:radial-gradient(circle at 35% 30%, #3A2A55, #14092A);
+    border:1px solid var(--edge);
+    display:flex; align-items:center; justify-content:center; font-size:26px;
+    box-shadow:0 0 14px #FF3B3B22;
+  }
+  .drone.stunned{filter:grayscale(.8) brightness(.7);}
+  .drone svg{ width:32px; height:32px; }
+  .telegraph{
+    margin-top:8px; padding:8px 10px; border-radius:8px;
+    background:#2A0F1A; border:1px solid #7A2334;
+    font-size:11.5px; line-height:1.4;
+  }
+  .telegraph b{color:#FF8A8A; letter-spacing:1px; text-transform:uppercase; font-size:10px; display:block; margin-bottom:2px;}
+  .telegraph.frozen{background:#0F1E2A; border-color:#23567A;}
+  .telegraph.frozen b{color:#7FC8FF;}
+
+  /* preview boxes */
+  .previews{display:flex; gap:10px;}
+  .pv{flex:1;}
+  canvas.mini{
+    display:block; width:100%;
+    background:#0D0720; border:1px solid var(--edge); border-radius:8px;
+  }
+  .stats{display:flex; flex-direction:column; gap:6px;}
+  .pname{
+    font-size:9.5px; text-align:center; margin-top:5px; letter-spacing:.3px;
+    color:var(--dim); line-height:1.3; min-height:24px;
+  }
+  .stat{display:flex; justify-content:space-between; font-size:12px;}
+  .stat b{font-variant-numeric:tabular-nums;}
+
+  /* touch controls */
+  .touch{display:flex; gap:8px; justify-content:center; margin-top:10px;}
+  .touch-group{display:flex; gap:8px;}
+  .pv.used-hold{ opacity:.5; }
+  .pv.used-hold .pname::after{ content:" (used)"; opacity:.7; }
+
+  .settings-toggle{
+    width:48px; height:26px; border-radius:13px; cursor:pointer; flex:none;
+    background:#3A2F55; border:1px solid var(--edge); position:relative; transition:background .15s;
+  }
+  .settings-toggle.on{ background:linear-gradient(90deg,#8B5CF6,#6D28D9); }
+  .settings-toggle-knob{
+    position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%;
+    background:#fff; transition:left .15s;
+  }
+  .settings-toggle.on .settings-toggle-knob{ left:24px; }
+  .hint{font-size:10.5px; color:var(--dim); text-align:center; margin-top:8px; letter-spacing:.4px;}
+
+  .flash{animation:dmgflash .3s ease;}
+  @keyframes dmgflash{0%{box-shadow:0 0 0 3px #FF4A4A;}100%{box-shadow:0 0 0 0 transparent;}}
+
+  #scaleWrap{transform-origin: center center;}
+  .fit-shell{ transform-origin: center center; }
+
+  /* ---------- Screen router ---------- */
+  .screen{ display:none; }
+  .screen.active{ display:flex; }
+  #screen-menu.active, #screen-map.active{ display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100%; }
+
+  /* ---------- MainMenu ---------- */
+  .menu-shell{
+    width:960px; height:600px; border-radius:16px; position:relative; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 30% 20%, #3a2a6644 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 70%, #7a2a9a33 0%, transparent 50%),
+      linear-gradient(160deg, #150b2c, #0a0518 70%);
+    border:1px solid var(--edge);
+    box-shadow:0 0 40px #A855F71a, inset 0 0 60px #0009;
+    display:flex; flex-direction:column;
+  }
+  .menu-logo{ text-align:center; margin-top:56px; }
+  .menu-logo .word{ font-size:13px; letter-spacing:6px; color:var(--violet); text-transform:uppercase; font-weight:700; }
+  .menu-logo .title{
+    font-size:64px; font-weight:800; letter-spacing:4px; margin-top:6px;
+    background:linear-gradient(180deg,#F3EAFF,#B79CFF);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 0 30px #A855F755;
+  }
+  .menu-logo .subtitle{ font-size:14px; letter-spacing:3px; color:#D8B65C; margin-top:4px; text-transform:uppercase; font-weight:700; }
+  .menu-buttons{
+    position:absolute; right:90px; top:290px; width:280px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .menu-btn{
+    padding:14px 20px; border-radius:9px; text-align:center;
+    font-size:13px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+    cursor:pointer; border:1px solid var(--edge); transition:transform .1s;
+    background:linear-gradient(160deg,var(--panel2),var(--panel)); color:var(--text);
+  }
+  .menu-btn:active{ transform:scale(.97); }
+  .menu-btn.primary{
+    background:linear-gradient(180deg,#8B5CF6,#6D28D9); border-color:#C4B5FD55; color:#fff;
+    box-shadow:0 0 18px #8B5CF655;
+  }
+  .menu-btn.disabled{ opacity:.35; cursor:not-allowed; }
+  .menu-navbar{
+    position:absolute; left:60px; bottom:40px; display:flex; gap:20px;
+  }
+  .menu-navicon{
+    display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; opacity:.55;
+  }
+  .menu-navicon .circle{
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:#1F1636; border:1px solid var(--edge); font-size:18px;
+  }
+  .menu-navicon span{ font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--dim); }
+  .menu-savenote{
+    position:absolute; left:60px; top:56px; font-size:10.5px; color:var(--dim); letter-spacing:.5px;
+  }
+
+  /* Portrait reflow — same principle as the Battle stage: the menu-shell
+     was hand-positioned for a 960x600 landscape card (buttons pinned
+     right, nav pinned bottom-left). On a tall viewport that just shrinks
+     to a tiny centered rectangle with wasted space above and below. In
+     portrait, let the shell grow tall and narrow instead, and switch the
+     absolutely-positioned pieces to normal flex flow — DOM order is
+     already save-note → logo → buttons → nav, which reads top-to-bottom
+     exactly right once they're not pinned to fixed pixel coordinates. */
+  body.portrait-mode .menu-shell{
+    width:min(92vw, 420px); height:auto; min-height:560px;
+    padding-bottom:36px;
+  }
+  body.portrait-mode .menu-logo{ margin-top:44px; }
+  body.portrait-mode .menu-buttons{
+    position:static; right:auto; top:auto;
+    width:82%; margin:56px auto 0;
+  }
+  body.portrait-mode .menu-navbar{
+    position:static; left:auto; bottom:auto;
+    justify-content:center; width:100%; margin:48px auto 0;
+  }
+  body.portrait-mode .menu-savenote{
+    position:static; left:auto; top:auto;
+    text-align:center; margin-top:14px;
+  }
+
+  /* ---------- AdventureMap ---------- */
+  .map-shell{
+    width:960px; height:600px; border-radius:16px; position:relative; overflow:hidden;
+    background:
+      radial-gradient(ellipse at 60% 30%, #2a1f4a55 0%, transparent 55%),
+      linear-gradient(160deg, #120a26, #0a0518 75%);
+    border:1px solid var(--edge); box-shadow:0 0 40px #A855F71a, inset 0 0 60px #0009;
+  }
+  .map-back{
+    position:absolute; left:20px; top:20px; z-index:3; cursor:pointer;
+    width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    background:#1F1636; border:1px solid var(--edge); color:var(--violet); font-size:16px;
+  }
+  .map-node{
+    position:absolute; width:64px; height:64px; margin-left:-32px; margin-top:-32px;
+    border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column;
+    cursor:pointer; transition:transform .15s;
+  }
+  .map-node:active{ transform:scale(.94); }
+  .map-node .badge{
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:22px; border:2px solid var(--edge); background:#1a1230; position:relative;
+  }
+  .map-node .badge svg{ width:28px; height:28px; }
+  .badge-check{
+    position:absolute; bottom:-2px; right:-2px; width:20px; height:20px; border-radius:50%;
+    background:#5FCB6C; border:2px solid var(--void); color:#0A0518;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800;
+  }
+  .map-node .nlabel{
+    position:absolute; top:66px; font-size:9.5px; letter-spacing:.5px; text-transform:uppercase;
+    color:var(--dim); white-space:nowrap; text-align:center; width:110px; left:-23px;
+  }
+  .map-node.available .badge{ border-color:var(--violet); box-shadow:0 0 16px #A855F799; background:#2a1a4a; }
+  .map-node.available{ animation:nodepulse 2s ease-in-out infinite; }
+  @keyframes nodepulse{ 0%,100%{filter:brightness(1);} 50%{filter:brightness(1.25);} }
+  .map-node.cleared .badge{ border-color:#5FCB6C; background:#16321c; }
+
+  /* World Map nodes are bigger and react to interaction — scoped to this
+     screen specifically so Azure Heights/Sky Sanctuary's carefully-tuned
+     node spacing isn't disturbed by a global size change. */
+  #screen-worldmap .map-node{ width:88px; height:88px; margin-left:-44px; margin-top:-44px; }
+  #screen-worldmap .map-node .badge{ width:76px; height:76px; }
+  #screen-worldmap .map-node .badge img{ width:100%; height:100%; }
+  #screen-worldmap .map-node .nlabel{ top:82px; font-size:11px; width:130px; left:-27px; }
+  #screen-worldmap .map-node.available,
+  #screen-worldmap .map-node.cleared{
+    transition: transform .15s, filter .15s;
+  }
+  #screen-worldmap .map-node.available:hover,
+  #screen-worldmap .map-node.cleared:hover{
+    transform: scale(1.12);
+    filter: brightness(1.3);
+  }
+  #screen-worldmap .map-node.available:hover .badge,
+  #screen-worldmap .map-node.cleared:hover .badge{
+    box-shadow: 0 0 28px #A855F7cc, 0 0 10px #fff6;
+  }
+  #screen-worldmap .map-node.available:active,
+  #screen-worldmap .map-node.cleared:active{
+    transform: scale(0.98);
+  }
+  .map-node.locked .badge{ opacity:.35; filter:grayscale(1); }
+  .map-node.locked .nlabel{ opacity:.35; }
+  .map-connector{
+    position:absolute; height:2px; background:repeating-linear-gradient(90deg, var(--edge) 0 6px, transparent 6px 12px);
+    transform-origin:left center; z-index:1;
+  }
+  .chapter-panel{
+    position:absolute; left:24px; bottom:24px; width:280px; padding:14px;
+    background:linear-gradient(160deg,var(--panel2),var(--panel)); border:1px solid var(--edge); border-radius:10px;
+  }
+  .map-relics{
+    position:absolute; right:24px; bottom:24px; font-size:12px; color:var(--dim);
+    display:flex; align-items:center; gap:6px;
+  }
+
+  /* Portrait: previously kept aspect-ratio:960/600, which forces the
+     shell to stay landscape-shaped no matter what — just a smaller
+     landscape rectangle floating in a tall viewport. That was the bug.
+     Real fix: let it actually become tall. Node positions are percentages
+     so they adapt automatically; renderMap()'s connector-line math now
+     reads the shell's real runtime size instead of assuming 960x600. */
+  body.portrait-mode .map-shell{
+    width:min(92vw, 420px); height:min(78vh, 640px);
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  /* Nodes stay position:absolute (removed from flow, unaffected by the
+     flex layout below). The spacer is the only flexible flow child, so it
+     grows to fill whatever vertical space isn't used by the panel/relics
+     — which pushes them reliably to the bottom of the FIXED-height shell,
+     no matter how tall the objective text wraps to. This also avoids a
+     circular dependency: node percentages are computed against a known
+     fixed shell height, not one that depends on the panel's own size. */
+  body.portrait-mode .map-spacer{ flex:1 1 auto; width:100%; }
+  body.portrait-mode .chapter-panel,
+  body.portrait-mode .map-relics{
+    position:static; width:100%; margin-top:6px; flex:none;
+  }
+  body.portrait-mode .map-relics{ justify-content:center; font-size:10.5px; }
+  body.portrait-mode .map-node .nlabel{ font-size:8.5px; width:90px; left:-13px; top:60px; }
+
+  /* ---------- confirm popup ---------- */
+  .confirm-overlay{
+    position:fixed; inset:0; background:#0B0614CC; display:none; align-items:center; justify-content:center; z-index:50;
+  }
+  .confirm-overlay.show{ display:flex; }
+  .confirm-card{
+    width:340px; padding:22px; border-radius:12px; text-align:center;
+    background:linear-gradient(160deg,var(--panel2),var(--panel)); border:1px solid var(--edge);
+  }
+  .confirm-card h3{ font-size:16px; margin-bottom:8px; color:var(--text); }
+  .confirm-card p{ font-size:12.5px; color:var(--dim); line-height:1.5; margin-bottom:16px; }
+  .confirm-row{ display:flex; gap:10px; justify-content:center; }
+  .confirm-row .btn{ margin:0; }
+  .btn.ghost{ background:transparent; border:1px solid var(--edge); color:var(--dim); }
+
+  #sfxToggle{
+    position:fixed; top:16px; right:16px; z-index:100; cursor:pointer;
+    width:38px; height:38px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    background:#1F1636cc; border:1px solid var(--edge); font-size:16px;
+  }
+  #sfxToggle.muted img{ opacity:.3; filter:grayscale(1); }
+  #pauseBtn{
+    position:fixed; top:16px; left:16px; z-index:100; cursor:pointer;
+    width:38px; height:38px; border-radius:9px; display:none; align-items:center; justify-content:center;
+    background:#1F1636cc; border:1px solid var(--edge); font-size:16px; color:var(--violet);
+  }
+  #pauseBtn.visible{ display:flex; }
+  #toast{
+    position:fixed; left:50%; bottom:36px; transform:translate(-50%,20px);
+    background:#1F1636ee; border:1px solid var(--edge); border-radius:9px;
+    padding:10px 18px; font-size:12.5px; color:var(--text); letter-spacing:.3px;
+    opacity:0; pointer-events:none; z-index:200; transition:opacity .2s, transform .2s;
+    white-space:nowrap;
+  }
+  #toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  /* ---------- StoryScene ---------- */
+  .story-shell{
+    width:960px; height:600px; border-radius:16px; position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#150b2c,#0a0518 75%);
+    border:1px solid var(--edge); box-shadow:0 0 40px #A855F71a, inset 0 0 60px #0009;
+    cursor:pointer; user-select:none;
+  }
+  .story-bg{
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at 60% 25%, #3a2a6655 0%, transparent 55%), radial-gradient(ellipse at 20% 80%, #1a2a4a55 0%, transparent 50%);
+  }
+  .dialogue-box{
+    position:absolute; left:24px; right:24px; bottom:24px; min-height:120px;
+    background:linear-gradient(160deg,var(--panel2),var(--panel)); border:1px solid var(--edge); border-radius:12px;
+    display:flex; align-items:center; gap:16px; padding:18px 20px;
+  }
+  .dialogue-portrait{
+    width:72px; height:72px; border-radius:10px; flex:none; overflow:hidden;
+    background:radial-gradient(circle at 35% 30%,#3A2A55,#14092A); border:1px solid var(--edge);
+    display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; color:var(--violet);
+  }
+  .dialogue-text{ flex:1; }
+  .dialogue-speaker{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--violet); font-weight:700; margin-bottom:5px; }
+  .dialogue-body{ font-size:14px; line-height:1.55; color:var(--text); }
+  .dialogue-advance{ font-size:16px; color:var(--dim); animation:advBlink 1.2s ease-in-out infinite; }
+  @keyframes advBlink{ 0%,100%{opacity:.3;} 50%{opacity:1;} }
+
+  body.portrait-mode .story-shell{
+    width:min(92vw, 460px); height:auto; min-height:640px;
+  }
