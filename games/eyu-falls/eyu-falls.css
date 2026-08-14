@@ -480,6 +480,19 @@
     background:#1F1636cc; border:1px solid var(--edge); font-size:16px;
   }
   #sfxToggle.muted img{ opacity:.3; filter:grayscale(1); }
+  #updateBanner{
+    display:none; position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+    z-index:200; align-items:center; gap:12px;
+    background:linear-gradient(180deg,#2A1F4A,#1a1230); border:1px solid var(--violet);
+    box-shadow:0 0 24px #A855F766; border-radius:12px; padding:10px 14px;
+    font-size:13px; color:var(--text); white-space:nowrap;
+  }
+  #updateBanner.show{ display:flex; }
+  #updateBanner button{
+    background:linear-gradient(180deg,#8B5CF6,#6D28D9); border:none; color:#fff;
+    font-weight:700; font-size:12px; padding:7px 14px; border-radius:7px; cursor:pointer;
+    letter-spacing:.3px;
+  }
   #pauseBtn{
     position:fixed; top:16px; left:16px; z-index:100; cursor:pointer;
     width:38px; height:38px; border-radius:9px; display:none; align-items:center; justify-content:center;

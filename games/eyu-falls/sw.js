@@ -2,7 +2,7 @@
 // Cache-first: once installed, the game and its art load from cache even
 // with no connection. Bump CACHE_VERSION whenever the HTML or any asset
 // changes, so returning players get the update instead of a stale copy.
-const CACHE_VERSION = "eyu-falls-v2";
+const CACHE_VERSION = "eyu-falls-v3";
 
 const CORE_ASSETS = [
   "./",

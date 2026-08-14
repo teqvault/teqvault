@@ -2542,8 +2542,43 @@ fitToWindow();
 // support rather than error.
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").catch((err) => {
+    navigator.serviceWorker.register("sw.js").then((registration) => {
+      // Browsers only re-check sw.js for changes in the background on
+      // their own schedule (Chrome: at most once every 24h) unless asked
+      // directly — without this, a player could sit on a stale version
+      // for a full day even though a new one's already been shipped.
+      registration.update().catch(() => {});
+
+      // If a new service worker starts installing (meaning sw.js content
+      // changed — which happens whenever CACHE_VERSION gets bumped for a
+      // new build), watch it and surface the update banner once it's
+      // actually ready to take over.
+      registration.addEventListener("updatefound", () => {
+        const installing = registration.installing;
+        if(!installing) return;
+        installing.addEventListener("statechange", () => {
+          // "installed" + an existing controller means this is a genuine
+          // update to an already-running copy, not the very first install
+          // (a first-time install has no controller yet, and doesn't need
+          // an update prompt — the current tab is already the new version).
+          if(installing.state==="installed" && navigator.serviceWorker.controller){
+            const banner=document.getElementById("updateBanner");
+            if(banner) banner.classList.add("show");
+          }
+        });
+      });
+    }).catch((err) => {
       console.warn("Service worker registration failed:", err);
     });
+  });
+
+  // Reload only happens here, on an explicit click — never automatically.
+  // The new service worker takes control (skipWaiting + clients.claim in
+  // sw.js) well before this button exists to be clicked, so by the time
+  // someone does click it, the reload is guaranteed to pull fresh files
+  // rather than a half-updated mix. But an update should never interrupt
+  // someone mid-battle without them choosing it.
+  document.getElementById("updateBannerBtn")?.addEventListener("click", () => {
+    location.reload();
   });
 }
