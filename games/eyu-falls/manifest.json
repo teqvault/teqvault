@@ -2,7 +2,7 @@
   "name": "Eyu Falls: The Fight for Eyuforyia",
   "short_name": "Eyu Falls",
   "description": "A story-driven puzzle adventure where falling elemental pieces fight enemies, restore corrupted lands, and reunite Eyuforyia.",
-  "start_url": "./eyu-falls-full.html",
+  "start_url": "./eyu-falls.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

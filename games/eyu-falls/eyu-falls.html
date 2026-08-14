@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eyu Falls: The Fight for Eyuforyia</title>
+<!--
+  Eyu Falls: The Fight for Eyuforyia
+  © 2026 Jude / Teq Vault LLC. All rights reserved.
+  This work, including its code, story, characters, and design, is an
+  original creation and may not be reproduced, distributed, or used to
+  create derivative works without permission.
+-->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5B3FA0">
+<link rel="icon" type="image/png" href="icon-192.png">
+<!-- iOS doesn't read the manifest for "Add to Home Screen" — these do the
+     same job Safari-side. Harmless no-ops on other browsers. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Eyu Falls">
+<link rel="apple-touch-icon" href="icon-192.png">
+<!-- Cloud save sync — see CLOUD_SAVE section in the script for setup
+     instructions. Loading this here is harmless even before it's
+     configured; every cloud call is wrapped to fail silently offline
+     or if the project isn't set up yet, so local saves always work
+     regardless of this. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link rel="stylesheet" href="eyu-falls.css">
+</head>
+<body>
+<div id="sfxToggle" onclick="toggleSfx()" title="Toggle sound"><img src="assets/Music.png" alt="Sound" style="width:22px;height:22px;object-fit:contain;"></div>
+<div id="pauseBtn" onclick="openPause()" title="Pause">⏸</div>
+<div id="toast"></div>
+
+<!-- ================= MAIN MENU ================= -->
+<div class="screen active" id="screen-menu">
+  <div class="menu-shell fit-shell">
+    <div class="menu-savenote" id="saveNote"></div>
+    <div class="menu-logo">
+      <img src="assets/Eyuforiya.png" alt="Eyuforyia" style="height:28px; object-fit:contain; margin-bottom:4px;">
+      <div class="title">EYU FALLS</div>
+      <div class="subtitle">The Fight for Eyuforyia</div>
+    </div>
+    <div class="menu-buttons">
+      <div class="menu-btn primary" id="btnContinue">Continue</div>
+      <div class="menu-btn" id="btnNewGame">New Game</div>
+      <div class="menu-btn disabled" title="Coming soon">Expeditions</div>
+      <div class="menu-btn" id="btnSettings">Settings</div>
+    </div>
+    <div class="menu-navbar">
+      <div class="menu-navicon" id="navPack"><div class="circle">🐾</div><span>Pack</span></div>
+      <div class="menu-navicon" id="navMap"><div class="circle">🗺️</div><span>Map</span></div>
+      <div class="menu-navicon" id="navJournal"><div class="circle">📖</div><span>Journal</span></div>
+      <div class="menu-navicon" id="navRelics"><div class="circle">💎</div><span>Relics</span></div>
+      <div class="menu-navicon" id="navSong"><div class="circle">🎵</div><span>Song</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SETTINGS ================= -->
+<div class="screen" id="screen-settings">
+  <div class="menu-shell fit-shell" style="display:flex; flex-direction:column; align-items:center; padding-top:56px;">
+    <div class="menu-logo" style="margin-top:0;">
+      <div class="word">Options</div>
+      <div class="title" style="font-size:40px;">SETTINGS</div>
+    </div>
+    <div style="width:100%; max-width:420px; margin-top:28px; display:flex; flex-direction:column; gap:14px;">
+
+      <div class="panel" style="display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <div class="label" style="margin-bottom:2px;">Sound Effects</div>
+          <div class="body-txt" style="color:var(--dim); font-size:11px;">Piece locks, combos, victory/defeat cues</div>
+        </div>
+        <div class="settings-toggle" id="settingsSfxToggle"><div class="settings-toggle-knob"></div></div>
+      </div>
+
+      <div class="panel" style="display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <div class="label" style="margin-bottom:2px;">Music</div>
+          <div class="body-txt" style="color:var(--dim); font-size:11px;">Background music, separate from sound effects</div>
+        </div>
+        <div class="settings-toggle" id="settingsMusicToggle"><div class="settings-toggle-knob"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="label" style="margin-bottom:6px;">Save Data</div>
+        <div class="body-txt" style="color:var(--dim); font-size:11px; margin-bottom:10px;">
+          <span id="settingsSaveInfo">No progress yet.</span>
+        </div>
+        <div class="menu-btn" id="btnResetSave" style="position:static; width:100%; background:linear-gradient(180deg,#5A2A3A,#3A1620); border-color:#7A3A4A;">Reset Save Data</div>
+        <div class="menu-btn" id="btnUnlockAll" style="position:static; width:100%; margin-top:8px; background:linear-gradient(180deg,#2A4A3A,#16321c); border-color:#3A7A4A;">Dev: Unlock Everything</div>
+      </div>
+
+      <div class="panel">
+        <div class="label" style="margin-bottom:6px;">Cloud Save</div>
+        <div class="body-txt" style="color:var(--dim); font-size:11px; margin-bottom:10px;">
+          This code links your progress to this device. Enter it on another device to continue there.
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:10px;">
+          <div id="recoveryCodeDisplay" style="flex:1; font-family:monospace; font-size:15px; letter-spacing:3px; text-align:center; padding:8px; background:#0007; border-radius:6px; border:1px solid var(--edge); color:var(--violet); font-weight:700;">— — — — — — — —</div>
+          <div class="menu-btn" id="btnCopyCode" style="position:static; width:auto; padding:8px 14px; font-size:10px;">Copy</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <input id="restoreCodeInput" type="text" maxlength="8" placeholder="ENTER CODE" style="flex:1; font-family:monospace; letter-spacing:2px; text-transform:uppercase; padding:8px; background:#0007; border-radius:6px; border:1px solid var(--edge); color:var(--text); font-size:12px;">
+          <div class="menu-btn" id="btnRestoreCode" style="position:static; width:auto; padding:8px 14px; font-size:10px;">Restore</div>
+        </div>
+        <div class="body-txt" id="cloudSyncStatus" style="color:var(--dim); font-size:10px; margin-top:8px;"></div>
+      </div>
+
+      <div class="panel">
+        <div class="label" style="margin-bottom:6px;">Credits</div>
+        <div class="body-txt" style="color:var(--dim); font-size:11px; line-height:1.7;">
+          Eyu Falls: The Fight for Eyuforyia<br>
+          Average Jude Games — Teq Vault LLC<br>
+          A story of Ice Heart, Frosty, and the Pack
+        </div>
+      </div>
+
+    </div>
+    <div class="menu-btn primary" id="btnSettingsBack" style="position:static; width:220px; margin-top:24px;">Back to Menu</div>
+  </div>
+</div>
+
+<!-- ================= WORLD MAP ================= -->
+<div class="screen" id="screen-worldmap">
+  <div class="map-shell fit-shell" id="worldMapShell">
+    <div class="map-back" id="btnWorldMapBack">←</div>
+    <!-- region nodes and connectors injected by JS -->
+  </div>
+</div>
+
+<!-- ================= ADVENTURE MAP ================= -->
+<div class="screen" id="screen-map">
+  <div class="map-shell fit-shell" id="mapShell">
+    <div class="map-back" id="btnMapBack">←</div>
+    <!-- nodes and connectors injected by JS -->
+    <div class="map-spacer" id="mapSpacer"></div>
+    <div class="chapter-panel" id="chapterPanel">
+      <div class="label" style="margin-bottom:4px;" id="chapterTitle">Chapter 1: Azure Heights</div>
+      <div class="body-txt" style="color:var(--dim); font-size:11.5px;" id="chapterObjective">Drive back the first Collector machines before they finish anchoring.</div>
+    </div>
+    <div class="map-relics">⭐ <span id="relicsCleared">0</span> / <span id="relicsTotal">2</span> missions cleared</div>
+  </div>
+</div>
+
+<!-- ================= CHAPTER COMPLETE ================= -->
+<div class="screen" id="screen-chapter-complete">
+  <div class="menu-shell fit-shell" style="align-items:center; justify-content:center;">
+    <div style="text-align:center; max-width:520px; padding:0 40px;">
+      <div class="menu-logo" style="margin-top:0;">
+        <div class="word" id="chapterCompleteLabel">Prologue Complete</div>
+        <div class="title" style="font-size:44px;" id="chapterCompleteTitle">AZURE HEIGHTS</div>
+        <div class="subtitle" style="color:var(--dim); text-transform:none; letter-spacing:.3px; font-weight:400; font-size:13px; margin-top:14px; line-height:1.6;" id="chapterCompleteText">
+          The Collector machines that anchored here are broken. Ice Heart, Hotly, and the beginnings of the Pack turn their eyes toward the horizon — Sky Sanctuary waits, and so does the rest of Eyuforyia.
+        </div>
+      </div>
+      <div class="menu-btn primary" id="btnChapterContinue" style="position:static; width:220px; margin:32px auto 0;">Return to Map</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= STORY SCENE ================= -->
+<div class="screen" id="screen-story">
+  <div class="story-shell fit-shell" id="storyShell">
+    <div class="story-bg" id="storyBg"></div>
+    <div class="dialogue-box">
+      <div class="dialogue-portrait" id="dialoguePortrait"></div>
+      <div class="dialogue-text">
+        <div class="dialogue-speaker" id="dialogueSpeaker"></div>
+        <div class="dialogue-body" id="dialogueBody"></div>
+      </div>
+      <div class="dialogue-advance">▶</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= CONFIRM POPUP ================= -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <h3 id="confirmTitle">Mission</h3>
+    <p id="confirmDesc">Description</p>
+    <div class="confirm-row">
+      <div class="btn ghost" id="confirmCancel">Cancel</div>
+      <div class="btn" id="confirmGo">Begin</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= BATTLE ================= -->
+<div class="screen" id="screen-battle">
+<div id="scaleWrap">
+<div class="stage">
+
+  <!-- LEFT -->
+  <div class="col left">
+    <div class="panel">
+      <div class="label">Mission</div>
+      <div class="body-txt" id="missionDesc">Destroy the Collector Drone before the Pack falls.</div>
+    </div>
+    <div class="panel">
+      <div class="label">Song of Eyuforyia</div>
+      <div class="song-wrap">
+        <div class="ring">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle cx="32" cy="32" r="27" fill="none" stroke="#2A1F45" stroke-width="6"/>
+            <circle id="songArc" cx="32" cy="32" r="27" fill="none" stroke="#A855F7" stroke-width="6"
+              stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+          </svg>
+          <div class="pct" id="songPct">0%</div>
+        </div>
+        <div class="body-txt" id="songDesc" style="color:var(--dim); font-size:11.5px;">Every line restores the world's song.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="label">Ice Heart</div>
+      <div class="bar hp"><i id="playerHpBar" style="width:100%"></i></div>
+      <div class="bar-num"><span id="playerHpTxt">100</span> / 100</div>
+    </div>
+    <div class="panel" id="heatPanel" style="display:none;">
+      <div class="label" style="color:#FF6B35;">Heat Pressure</div>
+      <div class="bar heat"><i id="heatBar" style="width:0%"></i></div>
+      <div class="bar-num"><span id="heatTxt">0%</span> — vent it by clearing lines</div>
+    </div>
+    <div class="panel" id="controlsPanel">
+      <div class="label dim">Controls</div>
+      <div class="body-txt" style="color:var(--dim); font-size:11px; line-height:1.7;">
+        ← → move · ↑ / X rotate CW · Z rotate CCW<br>↓ soft drop · Space hard drop<br>C hold piece
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="col">
+    <div class="board-wrap" id="boardWrap">
+      <canvas id="board" width="286" height="416"></canvas>
+      <div class="combo-banner" id="comboBanner"></div>
+      <div class="overlay" id="overlay">
+        <h2 id="ovTitle"></h2>
+        <p id="ovText"></p>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button class="btn" onclick="resetGame()">Fight Again</button>
+          <button class="btn ghost" onclick="returnToMap()">Return to Map</button>
+        </div>
+      </div>
+      <div class="overlay" id="firstBattleTip" style="text-align:left; align-items:flex-start; padding:22px;">
+        <h2 style="font-size:16px; letter-spacing:2px; align-self:center;">HOW THIS WORKS</h2>
+        <p style="font-size:12.5px; line-height:1.6;">
+          <b style="color:var(--yellow)">On the board:</b> tap to rotate · swipe left/right to move · swipe down to drop (a short swipe soft-drops, a long fast swipe hard-drops) · swipe up to hold.<br><br>
+          <b style="color:var(--blue)">Clear lines</b> to fill your elemental pools (top row) — the color of the blocks you clear decides which pool fills.<br><br>
+          Once you've banked enough of a color, its matching <b style="color:var(--violet)">Pack ability</b> (bottom row) lights up. Tap it to spend the pool and trigger the effect.<br><br>
+          Different missions can change what each ability does — check the tooltip on any ability for its current effect.
+        </p>
+        <button class="btn" style="align-self:center; margin-top:4px;" onclick="dismissFirstBattleTip()">Got it</button>
+      </div>
+      <div class="overlay" id="pauseOverlay">
+        <h2 style="font-size:20px; letter-spacing:2px;">PAUSED</h2>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button class="btn" onclick="closePause()">Resume</button>
+          <button class="btn ghost" onclick="quitToMapFromPause()">Return to Map</button>
+        </div>
+      </div>
+    </div>
+    <div class="elems" id="elems"></div>
+    <div class="abilities" id="abilities"></div>
+    <div class="hint" id="gameplayHint">Clear lines → gain elements → spend them on Pack abilities.</div>
+    <div class="hint" id="focusHint" style="color:var(--violet); font-weight:700;">Click anywhere on this game once to enable keyboard controls.</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="col right">
+    <div class="panel" id="enemyPanel">
+      <div class="enemy-head">
+        <div class="drone" id="droneIcon">🕷️</div>
+        <div style="flex:1">
+          <div class="label" style="margin-bottom:4px;" id="enemyName">Collector Drone</div>
+          <div class="bar enemy"><i id="enemyHpBar" style="width:100%"></i></div>
+          <div class="bar-num" id="enemyHpLabel"><span id="enemyHpTxt">800</span> / 800</div>
+        </div>
+      </div>
+      <div class="telegraph" id="telegraph">
+        <b id="telegraphLabel">Enemy action</b>
+        <span id="teleTxt">Harpoon Volley in 5 drops</span>
+      </div>
+    </div>
+    <div class="panel previews">
+      <div class="pv">
+        <div class="label dim">Next</div>
+        <canvas class="mini" id="nextCv" width="84" height="84"></canvas>
+        <div class="pname" id="nextName">—</div>
+      </div>
+      <div class="pv" id="holdPreview">
+        <div class="label dim">Hold</div>
+        <canvas class="mini" id="holdCv" width="84" height="84"></canvas>
+        <div class="pname" id="holdName">—</div>
+      </div>
+    </div>
+    <div class="panel stats">
+      <div class="stat"><span class="label dim" style="margin:0">Score</span><b id="score">0</b></div>
+      <div class="stat"><span class="label dim" style="margin:0">Lines</span><b id="lines">0</b></div>
+      <div class="stat"><span class="label dim" style="margin:0">Level</span><b id="level">1</b></div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<script src="eyu-falls.js"></script>
+</body>
+</html>
