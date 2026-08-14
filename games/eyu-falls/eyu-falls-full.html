@@ -1285,7 +1285,7 @@ function resetGame(){
     deadZoneDir = 1;
     deadZoneDriftCounter = currentMission.deadZoneDriftEvery||6;
   }
-  dropsUntilAttack=ATTACK_EVERY; stunDrops=0; over=false;
+  dropsUntilAttack=ATTACK_EVERY; stunDrops=0; over=false; inputLockedUntil=0;
   pendingBiasPartner=null;
   bondDiscount = {blue:0, red:0, yellow:0, purple:0, green:0};
   abilityBiasElement = null;
@@ -1957,8 +1957,26 @@ function move(dx){
   const realDx = inCrystalZone() ? -dx : dx;
   if(!collides(cur,realDx,0)){ cur.x+=realDx; drawAll(); updateTelegraph(); }
 }
-function softDrop(){ if(!over){ if(!collides(cur,0,1)){ cur.y++; drawAll(); } else lockPiece(); dropTimer=0; } }
-function hardDrop(){ if(over) return; while(!collides(cur,0,1)) cur.y++; lockPiece(); dropTimer=0; }
+function softDrop(){
+  if(over) return false;
+  if(!collides(cur,0,1)){ cur.y++; drawAll(); dropTimer=0; return false; }
+  lockPiece();
+  dropTimer=0;
+  return true; // signals to callers that cur is now a DIFFERENT piece
+}
+let inputLockedUntil=0;
+function hardDrop(){
+  if(over) return;
+  while(!collides(cur,0,1)) cur.y++;
+  lockPiece();
+  dropTimer=0;
+  // Hard drop locks instantly and the next piece becomes active in the
+  // same tick — without this, a quick follow-up touch (finger lifting
+  // and coming back down right after, or a continuous swipe motion)
+  // can land on the new piece before the player's actually registered
+  // it's there, and act on it by accident.
+  inputLockedUntil=performance.now()+220;
+}
 function doRotate(dir){
   if(over) return;
   const r = dir==="ccw" ? rotateCCW(cur.shape) : rotateCW(cur.shape);
@@ -2028,7 +2046,7 @@ const GESTURE = {
   }
 
   zone.addEventListener("touchstart", (e)=>{
-    if(e.touches.length!==1 || overlayIsShowing() || startedOnInteractive(e.target)){ tracking=false; return; }
+    if(e.touches.length!==1 || overlayIsShowing() || startedOnInteractive(e.target) || performance.now()<inputLockedUntil){ tracking=false; return; }
     const t=e.touches[0];
     startX=lastX=t.clientX; startY=lastY=t.clientY; startT=Date.now();
     tracking=true; movedDuringDrag=false; hardDropped=false;
@@ -2057,9 +2075,16 @@ const GESTURE = {
     }
     // Live soft drop, same progressive idea.
     if(!horizontal && dySinceStep>=GESTURE.SOFT_DROP_STEP_DIST){
-      softDrop();
+      const justLocked=softDrop();
       lastX=t.clientX; lastY=t.clientY;
       movedDuringDrag=true;
+      // The piece this touch was controlling just locked and got replaced
+      // by a new one (softDrop can auto-lock when the piece is already
+      // resting — happens often when a piece drops into a hole with little
+      // room left to fall). Checking the hard-drop distance below against
+      // the NEW piece using this touch's original start position would
+      // hard-drop something the player never actually swiped. Stop here.
+      if(justLocked){ hardDropped=true; inputLockedUntil=performance.now()+220; return; }
     }
     // Crossing the hard-drop distance mid-drag fires it immediately,
     // rather than waiting for release — the piece is locked at this
