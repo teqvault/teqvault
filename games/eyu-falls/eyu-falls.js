@@ -203,45 +203,20 @@ const FILLERS=[
 ];
 
 const ABILITIES=[
-  {id:"glacial", name:"Glacial Strike", el:"blue",   cost:5, ic:"❄️", desc:"Stun 3 drops +40 dmg", bridgeDesc:"Anchor: delay the next collapse", heatDesc:"Vent 35 heat"},
-  {id:"flare",   name:"Phoenix Flare",  el:"red",    cost:4, ic:"🔥", desc:"Clear 2 rows +60 dmg", bridgeDesc:"Clear 2 rows to make room", heatDesc:"Clear 2 rows +60 dmg, +8 heat"},
-  {id:"static",  name:"Static Overch.", el:"yellow", cost:6, ic:"⚡", desc:"120 dmg", bridgeDesc:"Overcharge: clear all garbage", heatDesc:"120 dmg"},
-  {id:"shadow",  name:"Shadow Step",    el:"purple", cost:5, ic:"🌀", desc:"Purge corruption +30", bridgeDesc:"Trigger an early collapse sweep", heatDesc:"Purge corruption +30"},
-  {id:"photo",   name:"Photosynth.",    el:"green",  cost:6, ic:"🍃", desc:"Heal 30 HP", bridgeDesc:"Heal 30 HP", heatDesc:"Heal 30 HP"},
+  {id:"glacial", name:"Glacial Strike", el:"blue",   cost:5, ic:"❄️", desc:"Stun 3 drops +40 dmg", bridgeDesc:"Anchor: delay the next collapse"},
+  {id:"flare",   name:"Phoenix Flare",  el:"red",    cost:4, ic:"🔥", desc:"Clear 2 rows +60 dmg", bridgeDesc:"Clear 2 rows to make room"},
+  {id:"static",  name:"Static Overch.", el:"yellow", cost:6, ic:"⚡", desc:"120 dmg", bridgeDesc:"Overcharge: clear all garbage"},
+  {id:"shadow",  name:"Shadow Step",    el:"purple", cost:5, ic:"🌀", desc:"Purge corruption +30", bridgeDesc:"Trigger an early collapse sweep"},
+  {id:"photo",   name:"Photosynth.",    el:"green",  cost:6, ic:"🍃", desc:"Heal 30 HP", bridgeDesc:"Heal 30 HP"},
 ];
 let ENEMY_MAX=800; const PLAYER_MAX=100; let ATTACK_EVERY=5;
 let currentMission=null; // set by startMission() before resetGame() runs
-// Heat Pressure (Molten Core): missions that define heatRisePerLock opt
-// into this layer on top of standard combat — everything else (Azure
-// Heights, future non-heat combat missions) is untouched since this only
-// ever activates when those specific fields are present on the mission.
-let heatMeter=0;
-function isHeatMission(){ return currentMission && currentMission.heatRisePerLock!==undefined; }
-// Dead Water (Sunken Ruins): a column-range zone that drifts across the
-// board over time. Lines cleared through it still deal normal damage —
-// the water just doesn't empower anything, so cells in the zone yield no
-// elemental pool reward. Reuses the same column-range spatial check
-// pattern as Sky Sanctuary's crystalZone, just mutable/drifting instead
-// of fixed, which keeps this low-risk rather than needing a whole
-// separate overlay array to keep in sync with every grid mutation.
-let deadZoneStart=0, deadZoneWidth=0, deadZoneDir=1, deadZoneDriftCounter=0;
-function isDeadWaterMission(){ return currentMission && currentMission.deadZoneWidth!==undefined; }
-function isDeadWaterCol(x){
-  if(!isDeadWaterMission()) return false;
-  return x>=deadZoneStart && x<deadZoneStart+deadZoneWidth;
-}
 
 // ---------- state ----------
 let grid, cur, nextP, holdP, canHold, pools, score, lines, level;
 let enemyHp, playerHp, dropsUntilAttack, stunDrops, over;
 let dropTimer=0, dropInterval=850, last=0;
 let pendingBiasPartner=null; // set after a paired piece locks, favors its partner next
-// Bond ↔ Ability synergy: triggering a Bond discounts that element's ability
-// cost briefly; using an ability briefly biases the spawner toward that
-// element's pair pieces — a positive feedback loop between the two systems.
-let bondDiscount = {blue:0, red:0, yellow:0, purple:0, green:0};
-let abilityBiasElement = null;
-let abilityBiasDrops = 0;
 
 const cv=document.getElementById("board"), ctx=cv.getContext("2d");
 const nextCv=document.getElementById("nextCv"), nctx=nextCv.getContext("2d");
@@ -263,17 +238,9 @@ function findPartner(def){
 }
 function newPiece(){
   let def;
-  // Priority 1: strong partner bias right after locking one half of a pair
   if(pendingBiasPartner && Math.random()<0.6){
     def=pendingBiasPartner;
-  }
-  // Priority 2: mild bias toward pairs matching a recently-used ability's element
-  else if(abilityBiasElement && abilityBiasDrops>0 && Math.random()<0.45){
-    const matching = PIECE_POOL.filter(p=>p.pairId && p.element===abilityBiasElement);
-    def = matching.length ? matching[Math.floor(Math.random()*matching.length)]
-                          : PIECE_POOL[Math.floor(Math.random()*PIECE_POOL.length)];
-  }
-  else {
+  } else {
     def=PIECE_POOL[Math.floor(Math.random()*PIECE_POOL.length)];
   }
   pendingBiasPartner=null;
@@ -432,7 +399,7 @@ function resetGame(){
     } else {
       ENEMY_MAX=currentMission.hp;
       ATTACK_EVERY=currentMission.attackEvery||5;
-      ABILITIES.forEach(a=>{ if(a.btn) a.btn.title = isHeatMission() ? a.heatDesc : a.desc; });
+      ABILITIES.forEach(a=>{ if(a.btn) a.btn.title=a.desc; });
     }
   }
   grid=Array.from({length:ROWS},()=>Array(COLS).fill(null));
@@ -442,18 +409,8 @@ function resetGame(){
   pools={blue:0,red:0,yellow:0,purple:0,green:0};
   score=0; lines=0; level=1; dropInterval=850;
   enemyHp=ENEMY_MAX; playerHp=PLAYER_MAX;
-  heatMeter = isHeatMission() ? (currentMission.heatStart||0) : 0;
-  if(isDeadWaterMission()){
-    deadZoneWidth = currentMission.deadZoneWidth;
-    deadZoneStart = currentMission.deadZoneStart!==undefined ? currentMission.deadZoneStart : 0;
-    deadZoneDir = 1;
-    deadZoneDriftCounter = currentMission.deadZoneDriftEvery||6;
-  }
-  dropsUntilAttack=ATTACK_EVERY; stunDrops=0; over=false; inputLockedUntil=0;
+  dropsUntilAttack=ATTACK_EVERY; stunDrops=0; over=false;
   pendingBiasPartner=null;
-  bondDiscount = {blue:0, red:0, yellow:0, purple:0, green:0};
-  abilityBiasElement = null;
-  abilityBiasDrops = 0;
   suppressedAbilityId=null; suppressCycles=0;
   cur=newPiece(); nextP=newPiece(); holdP=null; canHold=true;
   gameActive=true;
@@ -468,42 +425,9 @@ function lockPiece(){
   sfx("lock");
   breakCloudCellsUnderHeavyPiece(cur);
   if(cur.pairId){ pendingBiasPartner=findPartner(cur); }
-
-  // Tick synergy timers once per locked piece
-  if(abilityBiasDrops>0){
-    abilityBiasDrops--;
-    if(abilityBiasDrops<=0) abilityBiasElement=null;
-  }
-  ELEMENTS.forEach(el=>{ if(bondDiscount[el]>0) bondDiscount[el]--; });
-  if(isDeadWaterMission()){
-    deadZoneDriftCounter--;
-    if(deadZoneDriftCounter<=0){
-      deadZoneStart+=deadZoneDir;
-      // Bounce off the board edges instead of wrapping — reads as a
-      // current sloshing back and forth rather than teleporting.
-      if(deadZoneStart<=0){ deadZoneStart=0; deadZoneDir=1; }
-      else if(deadZoneStart+deadZoneWidth>=COLS){ deadZoneStart=COLS-deadZoneWidth; deadZoneDir=-1; }
-      deadZoneDriftCounter=currentMission.deadZoneDriftEvery||6;
-    }
-  }
-
   const isBridge = currentMission && currentMission.type==="bridge";
-  // Bonds work on bridge missions too now — they reinforce instead of
-  // dealing damage. checkPairCombos runs its own cascade clearLines(true)
-  // internally when it triggers, so only call clearLines() directly when
-  // no Bond fired this lock.
-  const bondResult = checkPairCombos(isBridge);
-  const clearedCount = bondResult.triggered
-    ? 1 + bondResult.cascadeCleared // the Bond itself counts as progress, plus any cascade lines
-    : clearLines();
-  if(isHeatMission() && !over){
-    if(clearedCount===0){
-      heatMeter = Math.min(100, heatMeter + currentMission.heatRisePerLock);
-    } else {
-      heatMeter = Math.max(0, heatMeter - currentMission.heatVentPerLine * clearedCount);
-    }
-    if(heatMeter>=100) triggerEruption();
-  }
+  if(!isBridge) checkPairCombos();
+  clearLines();
   if(isBridge){
     checkBridgeWin();
     if(!over) tickBridge();
@@ -514,23 +438,6 @@ function lockPiece(){
   cur=nextP; nextP=newPiece(); canHold=true;
   if(collides(cur)) lose("The board overflowed. The Collectors advance…");
   updateUI(); drawAll();
-}
-// Heat maxing out slams the board with garbage and hurts the player, same
-// vocabulary as a normal enemy attack (reuses pushGarbageRow/damagePlayer)
-// rather than a bespoke penalty — then resets to a stubborn baseline
-// instead of zero, so repeated failures to vent genuinely compound.
-function triggerEruption(){
-  sfx("hit");
-  const banner=document.getElementById("comboBanner");
-  if(banner){
-    banner.textContent="ERUPTION!";
-    banner.classList.remove("show"); void banner.offsetWidth; banner.classList.add("show");
-  }
-  damagePlayer(currentMission.eruptionDamage||20);
-  if(over) return;
-  pushGarbageRow(currentMission.eruptionGarbageRows||2);
-  heatMeter = currentMission.eruptionBaseline!==undefined ? currentMission.eruptionBaseline : 40;
-  if(cur && collides(cur)) cur.y=Math.max(cur.y-1,-1);
 }
 // Cloud cells are fragile pre-placed terrain. If a heavy piece (5+ cells)
 // comes to rest with weight directly on one, it breaks — cleared, no
@@ -558,24 +465,13 @@ function breakCloudCellsUnderHeavyPiece(piece){
 // Scans the board for any fully-filled rectangle, in either orientation,
 // matching one of the 8 pair definitions' dimensions and composed of
 // exactly that pair's two elements. Triggers a Bond Combo on the first hit.
-// Scans the board for fully-filled rectangles matching pair definitions.
-// Supports multiple Bonds in a single lock (with mild diminishing returns).
-// On normal missions: deals damage + cascades into a follow-up line check.
-// On bridge missions: reinforces (delays collapse) instead of dealing damage.
-// Returns {triggered:false} or {triggered:true, cascadeCleared:N} — the
-// cascade count lets callers (Heat Pressure) treat a Bond as real progress
-// even though it isn't a plain line clear.
-function checkPairCombos(isBridge){
-  const found = []; // collect all valid Bonds before mutating the grid
+function checkPairCombos(){
   for(const pd of PAIR_DEFS){
     const orientations=[[pd.w,pd.h]];
     if(pd.w!==pd.h) orientations.push([pd.h,pd.w]);
     for(const [W,H] of orientations){
       for(let ty=0; ty<=ROWS-H; ty++){
         for(let tx=0; tx<=COLS-W; tx++){
-          // skip if this region overlaps a previously found Bond
-          const overlaps = found.some(f => !(tx+W<=f.tx || f.tx+f.W<=tx || ty+H<=f.ty || f.ty+f.H<=ty));
-          if(overlaps) continue;
           let full=true; const seen=new Set();
           scan:
           for(let yy=0; yy<H; yy++){
@@ -586,75 +482,25 @@ function checkPairCombos(isBridge){
             }
           }
           if(full && seen.size===2 && pd.elements.every(e=>seen.has(e))){
-            found.push({pd, tx, ty, W, H});
+            let cellsCleared=0;
+            for(let yy=0; yy<H; yy++) for(let xx=0; xx<W; xx++){ grid[ty+yy][tx+xx]=null; cellsCleared++; }
+            // Rectangle clears (unlike full-row clears) don't span the whole
+            // board width, so nothing shifts down automatically — anything
+            // that was resting on top would be left floating. Settle each
+            // affected column so the stack falls to close the gap.
+            collapseColumns(tx, W);
+            const dmg=cellsCleared*15;
+            damageEnemy(dmg);
+            pd.elements.forEach(e=>{ pools[e]=Math.min(9,pools[e]+2); pulseChip(e); });
+            score+=dmg*3;
+            showComboBanner(pd.combo, dmg);
+            sfx("combo");
+            return;
           }
         }
       }
     }
   }
-  if(found.length===0) return {triggered:false};
-
-  // Mild diminishing returns for multi-Bond: 1×, ~1.7× total for 2, ~2.2× for 3+
-  const multiScale = found.length===1 ? 1 : (found.length===2 ? 0.85 : 0.73);
-
-  let totalDmg=0;
-  const comboNames=[];
-  const affectedCols=new Set();
-
-  for(const {pd, tx, ty, W, H} of found){
-    let cellsCleared=0;
-    for(let yy=0; yy<H; yy++) for(let xx=0; xx<W; xx++){
-      if(grid[ty+yy][tx+xx]){ grid[ty+yy][tx+xx]=null; cellsCleared++; }
-    }
-    for(let x=tx; x<tx+W; x++) affectedCols.add(x);
-    const dmg=Math.round(cellsCleared*15*multiScale);
-    totalDmg+=dmg;
-    pd.elements.forEach(e=>{
-      pools[e]=Math.min(9,pools[e]+2);
-      pulseChip(e);
-      // Bond → Ability synergy: matching-element abilities cost 1 less briefly
-      bondDiscount[e]=Math.max(bondDiscount[e],4);
-    });
-    score+=dmg*3;
-    comboNames.push(pd.combo);
-  }
-
-  // Collapse only the columns that were actually touched
-  const colList=[...affectedCols].sort((a,b)=>a-b);
-  if(colList.length){
-    const startX=colList[0];
-    const width=colList[colList.length-1]-startX+1;
-    collapseColumns(startX, width);
-  }
-
-  if(isBridge){
-    // Bridge: Bonds reinforce instead of dealing damage — each one delays
-    // the next collapse and gives a small score pop.
-    if(typeof bridgeCollapseCounter!=="undefined"){
-      bridgeCollapseCounter=Math.min(
-        (currentMission && currentMission.collapseEvery) || 8,
-        bridgeCollapseCounter+2+found.length
-      );
-    }
-    showComboBanner(comboNames.join(" + ")+"  ·  BRIDGE REINFORCED", 0);
-  } else {
-    damageEnemy(totalDmg);
-    showComboBanner(comboNames.join(" + "), totalDmg);
-  }
-  sfx("combo");
-
-  // Bond juice: brief full-board flash
-  const boardWrap=document.querySelector(".board-wrap");
-  if(boardWrap){
-    boardWrap.classList.remove("bond-flash");
-    void boardWrap.offsetWidth;
-    boardWrap.classList.add("bond-flash");
-  }
-
-  // Cascade: after Bond clears + gravity, check for full lines the collapse
-  // created — rewarded with a damage/score bonus for the skilled setup.
-  const cascadeCleared=clearLines(true);
-  return {triggered:true, cascadeCleared};
 }
 // Per-column gravity: every filled cell in the given column range falls
 // until it rests on the floor or another filled cell — closes any gap
@@ -671,43 +517,33 @@ function collapseColumns(startX, width){
 function showComboBanner(name, dmg){
   const el=document.getElementById("comboBanner");
   if(!el) return;
-  el.textContent = dmg>0 ? `${name.toUpperCase()}  +${dmg}` : name.toUpperCase();
+  el.textContent=`${name.toUpperCase()}  +${dmg}`;
   el.classList.remove("show"); void el.offsetWidth; el.classList.add("show");
 }
-function clearLines(fromBondCascade){
-  let cleared=0; const gained={}; let totalCells=0;
+function clearLines(){
+  let cleared=0; const gained={};
   for(let y=ROWS-1;y>=0;y--){
     if(grid[y].every(c=>c!==null)){
-      grid[y].forEach((c,x)=>{
-        if(c==="garbage") return;
-        totalCells++; // counts toward damage regardless of Dead Water
-        // Dead Water cells still clear normally and deal full damage —
-        // the water just doesn't empower anything, so they're excluded
-        // from pool reward specifically, not from the clear itself.
-        if(!isDeadWaterCol(x)){ gained[c]=(gained[c]||0)+1; }
-      });
+      grid[y].forEach(c=>{ if(c!=="garbage"){ gained[c]=(gained[c]||0)+1; } });
       grid.splice(y,1);
       grid.unshift(Array(COLS).fill(null));
       cleared++; y++;
     }
   }
-  if(!cleared) return 0;
+  if(!cleared) return;
   sfx("clear");
   lines+=cleared;
+  let cells=0;
   for(const el in gained){
     pools[el]=Math.min(9,pools[el]+Math.ceil(gained[el]/2));
+    cells+=gained[el];
     pulseChip(el);
   }
-  // Bond cascades get a damage/score multiplier to reward skilled setups —
-  // clearing a line as a side effect of a Bond you already built is worth
-  // more than clearing it on its own.
-  const cascadeBonus = fromBondCascade ? 1.5 : 1;
-  const dmg = Math.round((totalCells*8 + (cleared>1 ? cleared*cleared*10 : 0)) * cascadeBonus);
+  const dmg=cells*8 + (cleared>1 ? cleared*cleared*10 : 0);
   damageEnemy(dmg);
-  score += Math.round(cleared*cleared*100 * cascadeBonus);
+  score+=cleared*cleared*100;
   level=1+Math.floor(lines/8);
   dropInterval=Math.max(300, 850-(level-1)*70);
-  return cleared;
 }
 function tickEnemy(){
   if(over) return;
@@ -800,19 +636,10 @@ function showOverlay(title,cls,text){
 }
 
 // ---------- abilities ----------
-function effectiveCost(a){
-  // Bond discount: matching-element abilities cost 1 less while the buff lasts
-  const discount = bondDiscount[a.el]>0 ? 1 : 0;
-  return Math.max(1, a.cost-discount);
-}
 function useAbility(a){
-  const cost = effectiveCost(a);
-  if(over || pools[a.el]<cost) return;
+  if(over || pools[a.el]<a.cost) return;
   if(a.id===suppressedAbilityId) return;
-  pools[a.el]-=cost;
-  // Ability → Pair bias: briefly favor pairs that use this element
-  abilityBiasElement=a.el;
-  abilityBiasDrops=5;
+  pools[a.el]-=a.cost;
   sfxAbility(a.el);
   const isBridge = currentMission && currentMission.type==="bridge";
   if(isBridge){
@@ -829,14 +656,10 @@ function useAbility(a){
     updateTelegraph(); updateUI(); drawAll();
     return;
   }
-  if(a.id==="glacial"){
-    if(isHeatMission()){ heatMeter=Math.max(0,heatMeter-35); }
-    else { stunDrops=3; damageEnemy(40); }
-  }
+  if(a.id==="glacial"){ stunDrops=3; damageEnemy(40); }
   if(a.id==="flare"){
     for(let i=0;i<2;i++){ grid.splice(ROWS-1,1); grid.unshift(Array(COLS).fill(null)); }
     damageEnemy(60);
-    if(isHeatMission()){ heatMeter=Math.min(100,heatMeter+8); }
   }
   if(a.id==="static"){ damageEnemy(120); }
   if(a.id==="shadow"){
@@ -900,23 +723,14 @@ function updateTelegraph(){
     s.textContent=`Frozen solid — ${stunDrops} drop${stunDrops>1?"s":""} remaining`;
   }else{
     t.classList.remove("frozen"); icon.classList.remove("stunned");
-    let msg=`${currentMission?currentMission.attackName:"Attack"} in ${dropsUntilAttack} drop${dropsUntilAttack>1?"s":""}`;
-    if(isDeadWaterMission()) msg=`🌊 Dead Water at cols ${deadZoneStart+1}-${deadZoneStart+deadZoneWidth} — no pool reward there.  ${msg}`;
-    s.textContent=msg;
+    s.textContent=`${currentMission?currentMission.attackName:"Attack"} in ${dropsUntilAttack} drop${dropsUntilAttack>1?"s":""}`;
   }
 }
 function updateUI(){
   ELEMENTS.forEach(el=>{ chipEls[el].querySelector(".n").textContent=pools[el]; });
   ABILITIES.forEach(a=>{
-    const cost = effectiveCost(a);
-    a.btn.classList.toggle("ready", pools[a.el]>=cost && !over && a.id!==suppressedAbilityId);
+    a.btn.classList.toggle("ready", pools[a.el]>=a.cost && !over && a.id!==suppressedAbilityId);
     a.btn.classList.toggle("locked", a.id===suppressedAbilityId);
-    // Show the discounted cost (green) when a Bond discount is active
-    const costEl = a.btn.querySelector(".cost");
-    if(costEl){
-      costEl.textContent = cost;
-      costEl.style.color = (cost<a.cost) ? "#8FDB4A" : "";
-    }
   });
   document.getElementById("score").textContent=score.toLocaleString();
   document.getElementById("lines").textContent=lines;
@@ -934,16 +748,6 @@ function updateUI(){
   const song=Math.min(100,Math.round(lines/40*100));
   document.getElementById("songPct").textContent=song+"%";
   document.getElementById("songArc").style.strokeDashoffset=169.6*(1-song/100);
-  const heatPanel=document.getElementById("heatPanel");
-  if(heatPanel){
-    if(isHeatMission()){
-      heatPanel.style.display="";
-      document.getElementById("heatBar").style.width=heatMeter+"%";
-      document.getElementById("heatTxt").textContent=Math.round(heatMeter)+"%";
-    } else {
-      heatPanel.style.display="none";
-    }
-  }
   updateTelegraph();
 }
 
@@ -1002,91 +806,11 @@ function drawAll(){
     ctx.fillStyle = inCrystalZone() ? "#B15EFF33" : "#B15EFF18";
     ctx.fillRect(startCol*CELL, 0, (endCol-startCol+1)*CELL, ROWS*CELL);
   }
-  if(isDeadWaterMission()){
-    ctx.fillStyle = "#5A6B5522"; // sickly grey-green — "sterile" rather than dangerous
-    ctx.fillRect(deadZoneStart*CELL, 0, deadZoneWidth*CELL, ROWS*CELL);
-    ctx.strokeStyle = "#8A9B7A55"; ctx.lineWidth=1.5;
-    ctx.strokeRect(deadZoneStart*CELL, 0, deadZoneWidth*CELL, ROWS*CELL);
-  }
   ctx.strokeStyle="#221740"; ctx.lineWidth=1;
   for(let x=1;x<COLS;x++){ ctx.beginPath(); ctx.moveTo(x*CELL,0); ctx.lineTo(x*CELL,ROWS*CELL); ctx.stroke(); }
   for(let y=1;y<ROWS;y++){ ctx.beginPath(); ctx.moveTo(0,y*CELL); ctx.lineTo(COLS*CELL,y*CELL); ctx.stroke(); }
   for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)
     if(grid[y][x]) drawCell(ctx,x,y,grid[y][x],CELL);
-
-  // Almost-Bond pulse: scan for near-complete pair rectangles on the board.
-  // If a region has mostly the right two elements and only a few empty cells,
-  // draw a soft pulsing highlight so the player can see the opportunity.
-  if(!over){
-    const t = performance.now()/1000;
-    const pulse = 0.12 + 0.10*Math.sin(t*4.2); // gentle breathing alpha
-    for(const pd of PAIR_DEFS){
-      const orientations=[[pd.w,pd.h]];
-      if(pd.w!==pd.h) orientations.push([pd.h,pd.w]);
-      for(const [W,H] of orientations){
-        for(let ty=0; ty<=ROWS-H; ty++){
-          for(let tx=0; tx<=COLS-W; tx++){
-            let filled=0, empty=0, wrong=0;
-            const seen=new Set();
-            for(let yy=0; yy<H; yy++){
-              for(let xx=0; xx<W; xx++){
-                const cell=grid[ty+yy][tx+xx];
-                if(!cell || cell==="garbage"){ empty++; }
-                else if(pd.elements.includes(cell)){ filled++; seen.add(cell); }
-                else { wrong++; }
-              }
-            }
-            // "Almost" = at least one of each required element present, no
-            // foreign colors, and only 1-3 empty cells left.
-            if(wrong===0 && seen.size===2 && empty>=1 && empty<=3 && filled>=(W*H-3)){
-              ctx.save();
-              ctx.globalAlpha=pulse;
-              ctx.strokeStyle="#E9D5FF";
-              ctx.lineWidth=2;
-              ctx.strokeRect(tx*CELL+1.5, ty*CELL+1.5, W*CELL-3, H*CELL-3);
-              ctx.fillStyle="#C4B5FD";
-              ctx.globalAlpha=pulse*0.35;
-              for(let yy=0; yy<H; yy++){
-                for(let xx=0; xx<W; xx++){
-                  if(!grid[ty+yy][tx+xx]){
-                    ctx.fillRect((tx+xx)*CELL+3, (ty+yy)*CELL+3, CELL-6, CELL-6);
-                  }
-                }
-              }
-              ctx.restore();
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Partner ghost: if the current piece has a pair and the partner is
-  // sitting in Next or Hold, draw a faint outline of the completed
-  // rectangle at the landing position — makes Bond opportunities readable.
-  if(cur && cur.pairId && !over){
-    const partner = (nextP && nextP.pairId===cur.pairId && nextP.role!==cur.role) ? nextP
-                  : (holdP && holdP.pairId===cur.pairId && holdP.role!==cur.role) ? holdP
-                  : null;
-    if(partner){
-      const pd = PAIR_DEFS.find(p=>p.id===cur.pairId);
-      if(pd){
-        let gy=0; while(!collides(cur,0,gy+1)) gy++;
-        const hintW=Math.max(cur.shape[0].length, partner.shape[0].length, pd.w);
-        const hintH=Math.max(cur.shape.length, partner.shape.length, pd.h);
-        const hx=cur.x, hy=cur.y+gy;
-        ctx.save();
-        ctx.globalAlpha=0.22;
-        ctx.strokeStyle="#C4B5FD";
-        ctx.lineWidth=2;
-        ctx.setLineDash([4,3]);
-        ctx.strokeRect(hx*CELL+2, hy*CELL+2, hintW*CELL-4, hintH*CELL-4);
-        ctx.setLineDash([]);
-        ctx.restore();
-      }
-    }
-  }
-
   if(cur && !over){
     // ghost
     let gy=0; while(!collides(cur,0,gy+1)) gy++;
@@ -1121,26 +845,8 @@ function move(dx){
   const realDx = inCrystalZone() ? -dx : dx;
   if(!collides(cur,realDx,0)){ cur.x+=realDx; drawAll(); updateTelegraph(); }
 }
-function softDrop(){
-  if(over) return false;
-  if(!collides(cur,0,1)){ cur.y++; drawAll(); dropTimer=0; return false; }
-  lockPiece();
-  dropTimer=0;
-  return true; // signals to callers that cur is now a DIFFERENT piece
-}
-let inputLockedUntil=0;
-function hardDrop(){
-  if(over) return;
-  while(!collides(cur,0,1)) cur.y++;
-  lockPiece();
-  dropTimer=0;
-  // Hard drop locks instantly and the next piece becomes active in the
-  // same tick — without this, a quick follow-up touch (finger lifting
-  // and coming back down right after, or a continuous swipe motion)
-  // can land on the new piece before the player's actually registered
-  // it's there, and act on it by accident.
-  inputLockedUntil=performance.now()+220;
-}
+function softDrop(){ if(!over){ if(!collides(cur,0,1)){ cur.y++; drawAll(); } else lockPiece(); dropTimer=0; } }
+function hardDrop(){ if(over) return; while(!collides(cur,0,1)) cur.y++; lockPiece(); dropTimer=0; }
 function doRotate(dir){
   if(over) return;
   const r = dir==="ccw" ? rotateCCW(cur.shape) : rotateCW(cur.shape);
@@ -1184,8 +890,8 @@ const GESTURE = {
   TAP_MAX_MS: 300,
   MOVE_STEP_DIST: 26,        // px of live drag before triggering another column move
   SOFT_DROP_STEP_DIST: 22,   // px of live downward drag before another soft-drop step
-  HARD_DROP_DIST: 190,       // px — crossing this total downward distance mid-drag hard-drops immediately
-  HARD_DROP_VELOCITY: 1.4,   // px/ms — a genuinely fast short downward flick at release also hard-drops
+  HARD_DROP_DIST: 130,       // px — crossing this total downward distance mid-drag hard-drops immediately
+  HARD_DROP_VELOCITY: 0.8,   // px/ms — a fast short downward flick at release also hard-drops
   HOLD_SWIPE_DIST: 28,       // px of upward drag at release to trigger hold
 };
 (function setupGestureControls(){
@@ -1210,7 +916,7 @@ const GESTURE = {
   }
 
   zone.addEventListener("touchstart", (e)=>{
-    if(e.touches.length!==1 || overlayIsShowing() || startedOnInteractive(e.target) || performance.now()<inputLockedUntil){ tracking=false; return; }
+    if(e.touches.length!==1 || overlayIsShowing() || startedOnInteractive(e.target)){ tracking=false; return; }
     const t=e.touches[0];
     startX=lastX=t.clientX; startY=lastY=t.clientY; startT=Date.now();
     tracking=true; movedDuringDrag=false; hardDropped=false;
@@ -1239,16 +945,9 @@ const GESTURE = {
     }
     // Live soft drop, same progressive idea.
     if(!horizontal && dySinceStep>=GESTURE.SOFT_DROP_STEP_DIST){
-      const justLocked=softDrop();
+      softDrop();
       lastX=t.clientX; lastY=t.clientY;
       movedDuringDrag=true;
-      // The piece this touch was controlling just locked and got replaced
-      // by a new one (softDrop can auto-lock when the piece is already
-      // resting — happens often when a piece drops into a hole with little
-      // room left to fall). Checking the hard-drop distance below against
-      // the NEW piece using this touch's original start position would
-      // hard-drop something the player never actually swiped. Stop here.
-      if(justLocked){ hardDropped=true; inputLockedUntil=performance.now()+220; return; }
     }
     // Crossing the hard-drop distance mid-drag fires it immediately,
     // rather than waiting for release — the piece is locked at this
@@ -1332,59 +1031,6 @@ const STORY_SCENES = {
         text:"Welcome to the Pack. Try not to short out Ice Heart's ice powers on your first day." },
     ],
   },
-  forge_trial: {
-    bg: null,
-    lines: [
-      { speaker:"Forge-Guard", portraitKey:"portrait_forge_guard",
-        text:"The Law of the Forge recognizes no argument but strength. Your ice broke my armor. That is answer enough." },
-      { speaker:"Ice Heart", portraitKey:"portrait_ice_heart",
-        text:"Then Molten Core stands with us too?" },
-      { speaker:"Forge-Guard", portraitKey:"portrait_forge_guard",
-        text:"The Magma-Pangolins do not kneel easily. But the invaders burn our heat as fuel. That is not a surface problem. That is a fire in our own house." },
-      { speaker:"Slink", portraitKey:"portrait_slink",
-        text:"...You talk a lot for someone made of rock. Mind if I tag along? I've been dodging patrols since the first raid — could use people who actually hit back." },
-      { speaker:"Ice Heart", portraitKey:"portrait_ice_heart",
-        text:"You survived the first raid alone?" },
-      { speaker:"Slink", portraitKey:"portrait_slink",
-        text:"Survived. Didn't say I liked it. Name's Slink. I don't do fights I can't win — I do smoke, timing, and knowing when not to be where the light's pointing." },
-      { speaker:"Hotly", portraitKey:"portrait_hotly",
-        text:"Welcome to the Pack, Slink. Try to keep up." },
-    ],
-  },
-  hydro_lens_gift: {
-    bg: null,
-    lines: [
-      { speaker:"Aquos", portraitKey:"portrait_aquos",
-        text:"A passing tide, I called this. I have lived a thousand of those. I was wrong about this one." },
-      { speaker:"Ice Heart", portraitKey:"portrait_ice_heart",
-        text:"Then you'll help us?" },
-      { speaker:"Aquos", portraitKey:"portrait_aquos",
-        text:"I will do more than that. Sunken Ruins remembers what the surface forgets — light doesn't travel far down here. You'll need to see a different way." },
-      { speaker:"Aquos", portraitKey:"portrait_aquos",
-        text:"Take the Hydro-Lens. It was mine before the water went quiet. Let it show you what's still worth saving." },
-      { speaker:"Hotly", portraitKey:"portrait_hotly",
-        text:"Not gonna lie, wolf-boy — I did not expect a fish to out-talk me today." },
-      { speaker:"Ice Heart", portraitKey:"portrait_ice_heart",
-        text:"He's not a fish, Hotly." },
-      { speaker:"Aquos", portraitKey:"portrait_aquos",
-        text:"...I am, actually. Go. Glacia Peaks won't wait as patiently as I did." },
-    ],
-  },
-  grand_tusk_wakes: {
-    bg: null,
-    lines: [
-      { speaker:"Grand Tusk", portraitKey:"portrait_grand_tusk",
-        text:"...You did not do this to us." },
-      { speaker:"Ice Heart", portraitKey:"portrait_ice_heart",
-        text:"No. We're trying to stop the ones who did." },
-      { speaker:"Grand Tusk", portraitKey:"portrait_grand_tusk",
-        text:"Then I have slept through the wrong war to be blamed for it, and the right one to still be useful in. Go. Finish what you came here to finish." },
-      { speaker:"Hotly", portraitKey:"portrait_hotly",
-        text:"That's not a no." },
-      { speaker:"Grand Tusk", portraitKey:"portrait_grand_tusk",
-        text:"It is not. When the invaders make their final stand, look for me. I will not sleep through that one." },
-    ],
-  },
 };
 let storyLineIndex=0, storyOnComplete=null, activeStoryKey=null;
 function portraitFallback(speakerName){
@@ -1441,7 +1087,7 @@ const ASSETS = {
     bg_map_world_overview: "assets/map_world_overview.jpg",
     thumb_sky_sanctuary: null,
     thumb_molten_core: null,
-    thumb_sunken_ruins: "assets/thumb_sunken_ruins.png",
+    thumb_sunken_ruins: null,
     thumb_glacia_peaks: null,
     thumb_rotten_marsh: null,
     thumb_whispering_woods: null,
@@ -1472,61 +1118,7 @@ const ASSETS = {
     bg_battle_wind_ridge: null,
     bg_battle_arch_solar_queen: null,
     portrait_nyaqueen: "assets/portrait_nyaqueen.png",
-    portrait_volt: "assets/portrait_volt.png",
-    enemy_magma_siphon: "assets/enemy_magma_siphon.png",
-    enemy_cinder_wolf: "assets/enemy_cinder_wolf.png",
-    enemy_forge_guard: "assets/enemy_forge_guard.png",
-    bg_battle_magma_siphon: null,
-    bg_battle_cinder_wolf: null,
-    bg_battle_forge_guard: null,
-    portrait_slink: null,
-    enemy_tide_drone: "assets/enemy_tide_drone.png",
-    enemy_h2imp: "assets/enemy_h2imp.png",
-    enemy_abyssal_whale: "assets/enemy_abyssal_whale.png",
-    enemy_ruin_warden: "assets/enemy_ruin_warden.png",
-    enemy_undertow_fox: "assets/enemy_undertow_fox.png",
-    enemy_ruin_leviathan: "assets/enemy_ruin_leviathan.png",
-    enemy_tide_wing: "assets/enemy_tide_wing.png",
-    enemy_aquos: "assets/enemy_aquos.png",
-    bg_battle_tide_drone: null,
-    bg_battle_h2imp: null,
-    bg_battle_abyssal_whale: null,
-    bg_battle_ruin_warden: null,
-    bg_battle_undertow_fox: null,
-    bg_battle_ruin_leviathan: null,
-    bg_battle_tide_wing: null,
-    bg_battle_aquos: null,
-    portrait_aquos: "assets/portrait_aquos.png",
-    mapicon_water_archway: "assets/mapicon_water_archway.png",
-    mapicon_water_coral: "assets/mapicon_water_coral.png",
-    mapicon_water_bridge: "assets/mapicon_water_bridge.png",
-    mapicon_water_lightshaft: "assets/mapicon_water_lightshaft.png",
-    mapicon_water_spirit: "assets/mapicon_water_spirit.png",
-    mapicon_water_crystals: "assets/mapicon_water_crystals.png",
-    enemy_frost_drone: "assets/enemy_frost_drone.png",
-    enemy_frostsnout: "assets/enemy_frostsnout.png",
-    enemy_ice_stryder: "assets/enemy_ice_stryder.png",
-    enemy_icenix: "assets/enemy_icenix.png",
-    enemy_grand_tusk: "assets/enemy_grand_tusk.png",
-    bg_battle_frost_drone: null,
-    bg_battle_frostsnout: null,
-    bg_battle_ice_stryder: null,
-    bg_battle_icenix: null,
-    bg_battle_grand_tusk: null,
-    mapicon_ice_ice_tunnel: "assets/mapicon_ice_ice_tunnel.png",
-    mapicon_ice_ice_crystals: "assets/mapicon_ice_ice_crystals.png",
-    mapicon_ice_snowy_bridge: "assets/mapicon_ice_snowy_bridge.png",
-    mapicon_ice_ice_waterfall: "assets/mapicon_ice_ice_waterfall.png",
-    mapicon_ice_ice_wolf_mask: "assets/mapicon_ice_ice_wolf_mask.png",
-    mapicon_ice_crystal_shrine: "assets/mapicon_ice_crystal_shrine.png",
-    mapicon_light_light_falls: "assets/mapicon_light_light_falls.png",
-    mapicon_light_golden_archway: "assets/mapicon_light_golden_archway.png",
-    mapicon_light_crystal_bloom: "assets/mapicon_light_crystal_bloom.png",
-    mapicon_light_stone_bridge: "assets/mapicon_light_stone_bridge.png",
-    mapicon_light_crystal_throne: "assets/mapicon_light_crystal_throne.png",
-    mapicon_light_light_altar: "assets/mapicon_light_light_altar.png",
-    thumb_glacia_peaks: "assets/enemy_grand_tusk.png",
-    portrait_grand_tusk: "assets/portrait_grand_tusk.png",
+    portrait_volt: null,
   },
   audio: {
     // If a path is provided here, sfx() plays this file instead of the
@@ -1596,38 +1188,6 @@ const ENEMY_SVG = {
     <path d="M20 4 L20 36 M6 20 L34 20" stroke="#B15EFF" stroke-width="1" opacity=".6"/></svg>`,
   sunwatch_trial: `<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="#2a1a4a" stroke="#FFD23F" stroke-width="1.5"/>
     <path d="M20 4 L20 9 M20 31 L20 36 M4 20 L9 20 M31 20 L36 20 M9 9 L12.5 12.5 M27.5 27.5 L31 31 M9 31 L12.5 27.5 M27.5 12.5 L31 9" stroke="#FFD23F" stroke-width="1.3" stroke-linecap="round"/></svg>`,
-  magma_siphon: `<svg viewBox="0 0 40 40"><path d="M20 8 L28 18 L20 32 L12 18 Z" fill="#2a1a4a" stroke="#FF6B35" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M6 18 L12 18 M28 18 L34 18" stroke="#FF6B35" stroke-width="1.6" stroke-linecap="round"/><circle cx="20" cy="18" r="3" fill="#FFD23F"/></svg>`,
-  cinder_wolf: `<svg viewBox="0 0 40 40"><path d="M8 30 L12 12 L20 6 L28 12 L32 30 L24 24 L20 30 L16 24 Z" fill="#2a1a4a" stroke="#FF6B35" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="16" cy="16" r="2" fill="#FFD23F"/><circle cx="24" cy="16" r="2" fill="#FFD23F"/></svg>`,
-  forge_guard: `<svg viewBox="0 0 40 40"><path d="M20 4 L25 14 L35 16 L27 23 L29 34 L20 28 L11 34 L13 23 L5 16 L15 14 Z" fill="#2a1a4a" stroke="#FF6B35" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="20" cy="20" r="3.5" fill="#FFD23F"/></svg>`,
-  tide_drone: `<svg viewBox="0 0 40 40"><ellipse cx="20" cy="20" rx="12" ry="7" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5"/>
-    <path d="M8 20 Q4 16 4 12 M32 20 Q36 16 36 12" stroke="#4FA8FF" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="20" cy="20" r="2.5" fill="#4FA8FF"/></svg>`,
-  h2imp: `<svg viewBox="0 0 40 40"><path d="M20 6 L27 14 L24 24 L16 24 L13 14 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="16" cy="16" r="1.8" fill="#4FA8FF"/><circle cx="24" cy="16" r="1.8" fill="#4FA8FF"/></svg>`,
-  abyssal_whale: `<svg viewBox="0 0 40 40"><path d="M6 20 Q14 10 28 14 Q36 16 34 22 Q26 26 14 24 Q8 24 6 20 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5"/>
-    <circle cx="28" cy="17" r="1.5" fill="#4FA8FF"/></svg>`,
-  ruin_warden: `<svg viewBox="0 0 40 40"><path d="M20 4 L30 14 L26 30 L14 30 L10 14 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M20 4 L8 16 M20 4 L32 16" stroke="#4FA8FF" stroke-width="1.3" fill="none"/></svg>`,
-  undertow_fox: `<svg viewBox="0 0 40 40"><path d="M8 30 L12 12 L20 6 L28 12 L32 30 L24 24 L20 30 L16 24 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="16" cy="16" r="2" fill="#FF3B3B"/><circle cx="24" cy="16" r="2" fill="#FF3B3B"/></svg>`,
-  ruin_leviathan: `<svg viewBox="0 0 40 40"><path d="M20 4 L32 14 L28 32 L12 32 L8 14 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="20" cy="18" r="3" fill="#FFD23F"/></svg>`,
-  tide_wing: `<svg viewBox="0 0 40 40"><path d="M20 8 L6 18 L20 16 L34 18 Z" fill="#2a1a4a" stroke="#4FA8FF" stroke-width="1.4" stroke-linejoin="round"/>
-    <path d="M20 16 L20 34" stroke="#4FA8FF" stroke-width="1.6"/><circle cx="20" cy="16" r="2.5" fill="#4FA8FF"/></svg>`,
-  aquos: `<svg viewBox="0 0 40 40"><ellipse cx="20" cy="22" rx="14" ry="9" fill="#2a1a4a" stroke="#FFD23F" stroke-width="1.5"/>
-    <path d="M28 20 L36 14" stroke="#FFD23F" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="20" r="1.8" fill="#FFD23F"/></svg>`,
-  frost_drone: `<svg viewBox="0 0 40 40"><ellipse cx="20" cy="20" rx="12" ry="7" fill="#2a1a4a" stroke="#B8E8FF" stroke-width="1.5"/>
-    <path d="M8 20 Q4 16 4 12 M32 20 Q36 16 36 12" stroke="#B8E8FF" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="20" cy="20" r="2.5" fill="#B8E8FF"/></svg>`,
-  frostsnout: `<svg viewBox="0 0 40 40"><path d="M8 30 L12 12 L20 6 L28 12 L32 30 L24 24 L20 30 L16 24 Z" fill="#2a1a4a" stroke="#B8E8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M14 22 L8 26 M26 22 L32 26" stroke="#B8E8FF" stroke-width="1.4" stroke-linecap="round"/></svg>`,
-  ice_stryder: `<svg viewBox="0 0 40 40"><path d="M20 4 L28 14 L24 30 L16 30 L12 14 Z" fill="#2a1a4a" stroke="#B8E8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="20" cy="14" r="2" fill="#FFD23F"/></svg>`,
-  icenix: `<svg viewBox="0 0 40 40"><path d="M20 6 L32 16 L26 34 L14 34 L8 16 Z" fill="#2a1a4a" stroke="#B8E8FF" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M20 6 L20 20" stroke="#B8E8FF" stroke-width="1.3"/><circle cx="20" cy="16" r="2.5" fill="#4FA8FF"/></svg>`,
-  grand_tusk: `<svg viewBox="0 0 40 40"><path d="M10 32 L10 18 Q10 8 20 6 Q30 8 30 18 L30 32 Z" fill="#2a1a4a" stroke="#8FDB4A" stroke-width="1.5"/>
-    <circle cx="16" cy="16" r="1.8" fill="#8FDB4A"/><circle cx="24" cy="16" r="1.8" fill="#8FDB4A"/></svg>`,
 };
 
 const REGIONS = {
@@ -1639,43 +1199,43 @@ const REGIONS = {
     completeText:"The Collector machines that anchored here are broken. Ice Heart, Hotly, and the beginnings of the Pack turn their eyes toward the horizon — Sky Sanctuary waits, and so does the rest of Eyuforyia.",
     nextRegion:"sky_sanctuary",
     missions: [
-      { id:"collector_drone", name:"Collector Drone", type:"combat", icon:enemyIcon("collector_drone", ENEMY_SVG.collector_drone), mapIcon:ASSETS.images.mapicon_light_golden_archway, hp:800, attackEvery:5,
+      { id:"collector_drone", name:"Collector Drone", type:"combat", icon:enemyIcon("collector_drone", ENEMY_SVG.collector_drone), hp:800, attackEvery:5,
         attackName:"Harpoon Volley", attackType:"garbage",
         desc:"Destroy the Collector Drone before the Pack falls.",
         winText:"The Collector Drone shatters. One machine down — Frosty is one step closer.",
         mapPos:{ x:12, y:25 }, mapPosPortrait:{ x:30, y:6 }, requires:[] },
 
-      { id:"scout_swarm", name:"Scout Swarm", type:"combat", icon:enemyIcon("scout_swarm", ENEMY_SVG.scout_swarm), mapIcon:ASSETS.images.mapicon_light_crystal_bloom, hp:500, attackEvery:6,
+      { id:"scout_swarm", name:"Scout Swarm", type:"combat", icon:enemyIcon("scout_swarm", ENEMY_SVG.scout_swarm), hp:500, attackEvery:6,
         attackName:"Swarm Strike", attackType:"garbage",
         desc:"A cluster of scout drones is mapping the valley for the next wave. Scatter them before they report back.",
         winText:"The scouts fall silent. The valley stays hidden a little longer.",
         mapPos:{ x:12, y:75 }, mapPosPortrait:{ x:70, y:6 }, requires:[] },
 
-      { id:"harvester_node", name:"Harvester Node", type:"combat", icon:enemyIcon("harvester_node", ENEMY_SVG.harvester_node), mapIcon:ASSETS.images.mapicon_light_light_altar, hp:650, attackEvery:5,
+      { id:"harvester_node", name:"Harvester Node", type:"combat", icon:enemyIcon("harvester_node", ENEMY_SVG.harvester_node), hp:650, attackEvery:5,
         attackName:"Resource Drain", attackType:"drain",
         desc:"A siphon is draining the last of Azure Heights' living crystal. Shut it down before it drains your elemental reserves dry.",
         winText:"The Harvester Node goes dark. The crystal veins stop bleeding light.",
         mapPos:{ x:38, y:12 }, mapPosPortrait:{ x:22, y:22 }, requires:["collector_drone"] },
 
-      { id:"sentry_turret", name:"Sentry Turret", type:"combat", icon:enemyIcon("sentry_turret", ENEMY_SVG.sentry_turret), mapIcon:ASSETS.images.mapicon_light_stone_bridge, hp:750, attackEvery:4,
+      { id:"sentry_turret", name:"Sentry Turret", type:"combat", icon:enemyIcon("sentry_turret", ENEMY_SVG.sentry_turret), hp:750, attackEvery:4,
         attackName:"Suppression Fire", attackType:"suppress",
         desc:"An automated turret is locking down the eastern ridge — and jamming one of your abilities each time it fires. Break its targeting array.",
         winText:"The turret's targeting array shatters. The ridge is clear.",
         mapPos:{ x:38, y:38 }, mapPosPortrait:{ x:22, y:38 }, requires:["collector_drone"] },
 
-      { id:"rescue_convoy", name:"Rescue Convoy", type:"combat", icon:enemyIcon("rescue_convoy", ENEMY_SVG.rescue_convoy), mapIcon:ASSETS.images.mapicon_light_light_falls, hp:600, attackEvery:3,
+      { id:"rescue_convoy", name:"Rescue Convoy", type:"combat", icon:enemyIcon("rescue_convoy", ENEMY_SVG.rescue_convoy), hp:600, attackEvery:3,
         attackName:"Capture Beam", attackType:"capture",
         desc:"A convoy is dragging captured Quetimals toward Tech-Shack City. It moves fast — stop it before the board fills.",
         winText:"The convoy is stopped. The captured Quetimals scatter to safety.",
         mapPos:{ x:38, y:62 }, mapPosPortrait:{ x:78, y:22 }, requires:["scout_swarm"] },
 
-      { id:"ambush_ridge", name:"Ambush Ridge", type:"combat", icon:enemyIcon("ambush_ridge", ENEMY_SVG.ambush_ridge), mapIcon:ASSETS.images.mapicon_light_crystal_bloom, hp:700, attackEvery:5,
+      { id:"ambush_ridge", name:"Ambush Ridge", type:"combat", icon:enemyIcon("ambush_ridge", ENEMY_SVG.ambush_ridge), hp:700, attackEvery:5,
         attackName:"Sap Strike", attackType:"drain",
         desc:"Corrupted terrain along the ridge is sapping the Pack's strength before a fight even starts. Clear the ambush point.",
         winText:"The ambush point goes still. The ridge is safe to pass.",
         mapPos:{ x:38, y:88 }, mapPosPortrait:{ x:78, y:38 }, requires:["scout_swarm"] },
 
-      { id:"cyber_wolf", name:"Cyber-Wolf", type:"combat", icon:enemyIcon("cyber_wolf", ENEMY_SVG.cyber_wolf), mapIcon:ASSETS.images.mapicon_light_crystal_throne, hp:1400, attackEvery:4,
+      { id:"cyber_wolf", name:"Cyber-Wolf", type:"combat", icon:enemyIcon("cyber_wolf", ENEMY_SVG.cyber_wolf), hp:1400, attackEvery:4,
         attackName:"Tail Whip", attackType:"garbage_hard",
         desc:"Survive the Cyber-Wolf. You cannot defeat it yet — outlast it until Hotly arrives.",
         winText:"Hotly arrives just in time. Ice Heart lives to fight another day.",
@@ -1717,143 +1277,6 @@ const REGIONS = {
         desc:"The Guardian's trial: hold a Light Bridge together while the wind pushes you and the crystal band in the center reverses your controls. This is a test of balance, not force.",
         winText:"The Arch-Solar Queen lowers her gaze. \"You did not force the light. You listened to it.\" NyAqueen agrees to support the resistance.",
         mapPos:{ x:70, y:50 }, mapPosPortrait:{ x:50, y:50 }, requires:["prism_walk","sunwatch_trial"] },
-    ],
-  },
-
-  molten_core: {
-    name:"Molten Core", chapterLabel:"Chapter 2",
-    objectiveIncomplete:"Descend into the Molten Core and prove the Pack's strength to the Forge-Guard.",
-    objectiveComplete:"The Forge-Guard has granted passage. Slink joins the Pack — Sunken Ruins waits below the waves.",
-    completeLabel:"Chapter 2 Complete", completeTitle:"MOLTEN CORE",
-    completeText:"The Forge-Guard's obsidian armor shatters under frost and resolve. \"You did not force the fire. You endured it.\" A shape steps out of the tunnel shadows — Slink, a survivor of the first raid, finally among people who hit back. Sunken Ruins waits below, where Aquos rules over water gone still and dead.",
-    nextRegion:"sunken_ruins",
-    missions: [
-      { id:"magma_siphon", name:"Magma Siphon", type:"combat", icon:enemyIcon("magma_siphon", ENEMY_SVG.magma_siphon), hp:700, attackEvery:5,
-        attackName:"Thermal Lash", attackType:"garbage",
-        heatRisePerLock:10, heatVentPerLine:20, eruptionBaseline:35, eruptionGarbageRows:1, eruptionDamage:15,
-        desc:"Siphon pipes are already draining Molten Core's heat into the invaders' machines. Shut this one down before the pressure chamber overloads — and don't let your own heat get away from you either.",
-        winText:"The siphon collapses in on itself. One less pipe feeding the invaders' furnace.",
-        mapPos:{ x:15, y:50 }, mapPosPortrait:{ x:50, y:8 }, requires:[] },
-
-      { id:"cinder_wolf", name:"Cinder Wolf", type:"combat", icon:enemyIcon("cinder_wolf", ENEMY_SVG.cinder_wolf), hp:1000, attackEvery:5,
-        attackName:"Obsidian Fang", attackType:"drain",
-        heatRisePerLock:12, heatVentPerLine:20, eruptionBaseline:40, eruptionGarbageRows:2, eruptionDamage:20,
-        desc:"Something that used to be a wolf now runs on cracked obsidian and rage, bred from the same corruption feeding the pressure chamber. It won't tire. Neither can you.",
-        winText:"The cinder wolf collapses into ash and cooling rock. Whatever it used to be, it isn't suffering anymore.",
-        mapPos:{ x:42, y:25 }, mapPosPortrait:{ x:25, y:28 }, requires:["magma_siphon"] },
-
-      { id:"forge_guard", name:"Forge-Guard", type:"combat", isGuardian:true, icon:enemyIcon("forge_guard", ENEMY_SVG.forge_guard), hp:1600, attackEvery:4,
-        attackName:"Hearth Judgment", attackType:"garbage_hard",
-        heatRisePerLock:14, heatVentPerLine:18, eruptionBaseline:45, eruptionGarbageRows:2, eruptionDamage:25,
-        desc:"The Trial of the Hearth: the Law of the Forge recognizes no argument but strength. Shatter the Forge-Guard's obsidian armor, or be judged unworthy of passage.",
-        winText:"The obsidian cracks, then breaks. The Forge-Guard lowers his staff. \"The Law is satisfied.\"",
-        mapPos:{ x:70, y:50 }, mapPosPortrait:{ x:50, y:50 }, requires:["cinder_wolf"] },
-    ],
-  },
-
-  sunken_ruins: {
-    name:"Sunken Ruins", chapterLabel:"Chapter 3",
-    objectiveIncomplete:"Descend into the deep-sea graveyard and break the suction pipe before the last of Sunken Ruins' water turns sterile.",
-    objectiveComplete:"The suction pipe is broken. Aquos gifts the Hydro-Lens — Glacia Peaks waits above the waterline.",
-    completeLabel:"Chapter 3 Complete", completeTitle:"SUNKEN RUINS",
-    completeText:"Aquos lowers his ancient head. \"A passing tide, I called you. I was wrong.\" The Leviathan presses the Hydro-Lens into Ice Heart's hands — a piece of Sunken Ruins itself, given freely. Glacia Peaks waits above, where the Behemoths sleep in air kept artificially dry.",
-    nextRegion:"glacia_peaks",
-    missions: [
-      { id:"tide_drone", name:"Tide Drone", type:"combat", icon:enemyIcon("tide_drone", ENEMY_SVG.tide_drone), mapIcon:ASSETS.images.mapicon_water_coral, hp:650, attackEvery:5,
-        attackName:"Pressure Pulse", attackType:"garbage",
-        deadZoneWidth:2, deadZoneStart:0, deadZoneDriftEvery:8,
-        desc:"A scout drone patrols the shallows above the graveyard, mapping what's left worth draining. The Dead Water it trails behind doesn't hurt you — it just won't reward you either.",
-        winText:"The drone sinks, trailing bubbles instead of orders. One less eye watching the ruins.",
-        mapPos:{ x:10, y:20 }, mapPosPortrait:{ x:30, y:6 }, requires:[] },
-
-      { id:"h2imp", name:"H2Imp", type:"combat", icon:enemyIcon("h2imp", ENEMY_SVG.h2imp), mapIcon:ASSETS.images.mapicon_water_archway, hp:600, attackEvery:5,
-        attackName:"Riptide Snap", attackType:"drain",
-        deadZoneWidth:2, deadZoneStart:6, deadZoneDriftEvery:8,
-        desc:"Something small, fast, and furious guards the outer stones — territorial, not intelligent. It won't chase far. It won't stop attacking either.",
-        winText:"The imp retreats into a crack too small to follow. Smart, for something so angry.",
-        mapPos:{ x:10, y:75 }, mapPosPortrait:{ x:70, y:6 }, requires:[] },
-
-      { id:"abyssal_whale", name:"Abyssal Whale", type:"combat", icon:enemyIcon("abyssal_whale", ENEMY_SVG.abyssal_whale), mapIcon:ASSETS.images.mapicon_water_lightshaft, hp:1000, attackEvery:5,
-        attackName:"Depth Charge", attackType:"garbage",
-        deadZoneWidth:3, deadZoneStart:2, deadZoneDriftEvery:6,
-        desc:"It isn't hostile. It's dying — the last of the graveyard's old life, choking slowly on water that no longer feeds anything. Ending its suffering is the only mercy left to give.",
-        winText:"The old whale stops fighting the current. Whatever it was protecting, it can rest now.",
-        mapPos:{ x:32, y:12 }, mapPosPortrait:{ x:22, y:20 }, requires:["tide_drone"] },
-
-      { id:"ruin_warden", name:"Ruin Warden", type:"combat", icon:enemyIcon("ruin_warden", ENEMY_SVG.ruin_warden), mapIcon:ASSETS.images.mapicon_water_bridge, hp:1050, attackEvery:5,
-        attackName:"Tide Barrier", attackType:"suppress",
-        deadZoneWidth:3, deadZoneStart:5, deadZoneDriftEvery:6,
-        desc:"An armored sentinel still standing guard over ruins that stopped needing guarding centuries ago. It doesn't know the war it was built for is already lost.",
-        winText:"The Warden's rune-circle dims. Whatever oath bound it here is finally released.",
-        mapPos:{ x:32, y:35 }, mapPosPortrait:{ x:78, y:20 }, requires:["tide_drone"] },
-
-      { id:"undertow_fox", name:"Undertow Fox", type:"combat", icon:enemyIcon("undertow_fox", ENEMY_SVG.undertow_fox), mapIcon:ASSETS.images.mapicon_water_coral, hp:1100, attackEvery:4,
-        attackName:"Whirlpool Fang", attackType:"drain",
-        deadZoneWidth:3, deadZoneStart:1, deadZoneDriftEvery:5,
-        desc:"A predator born from the current itself — fast, vicious, and drawn straight to whatever's still trying to survive down here. That's you.",
-        winText:"The current stills. The fox dissolves back into the water it came from.",
-        mapPos:{ x:32, y:60 }, mapPosPortrait:{ x:22, y:36 }, requires:["h2imp"] },
-
-      { id:"ruin_leviathan", name:"Ruin Leviathan", type:"combat", icon:enemyIcon("ruin_leviathan", ENEMY_SVG.ruin_leviathan), mapIcon:ASSETS.images.mapicon_water_crystals, hp:1150, attackEvery:4,
-        attackName:"Ancient Ward", attackType:"suppress",
-        deadZoneWidth:3, deadZoneStart:4, deadZoneDriftEvery:5,
-        desc:"Rune-armored and older than the ruins themselves, this one remembers when the water was alive. It blames you for what happened here — wrongly, but that won't stop it fighting.",
-        winText:"The runes along its shell go dark, one by one. It sinks, finally, without a fight left in it.",
-        mapPos:{ x:32, y:85 }, mapPosPortrait:{ x:78, y:36 }, requires:["h2imp"] },
-
-      { id:"tide_wing", name:"Tide Wing", type:"combat", icon:enemyIcon("tide_wing", ENEMY_SVG.tide_wing), mapIcon:ASSETS.images.mapicon_water_spirit, hp:1400, attackEvery:4,
-        attackName:"Squall Line", attackType:"garbage_hard",
-        deadZoneWidth:4, deadZoneStart:3, deadZoneDriftEvery:4,
-        desc:"A guardian spirit of the deep, summoned by the suction pipe's alarm — the graveyard's last real defense before whatever's doing the draining notices you directly.",
-        winText:"The guardian spirit dips its head and parts the current. The way to the suction pipe is clear.",
-        mapPos:{ x:58, y:48 }, mapPosPortrait:{ x:50, y:52 }, requires:["abyssal_whale","ruin_warden","undertow_fox","ruin_leviathan"] },
-
-      { id:"aquos", name:"Aquos", type:"combat", isGuardian:true, icon:enemyIcon("aquos", ENEMY_SVG.aquos), mapIcon:ASSETS.images.mapicon_water_archway, hp:1800, attackEvery:4,
-        attackName:"Leviathan's Judgment", attackType:"garbage_hard",
-        deadZoneWidth:4, deadZoneStart:0, deadZoneDriftEvery:3,
-        desc:"Aquos himself, ancient ruler of the Sunken Ruins, still convinced this is a passing tide. Break the suction pipe in front of him, or convince him some other way — but he isn't moving until one of those happens.",
-        winText:"The suction pipe shatters. Aquos watches it die in silence, then finally understands this was never just a tide.",
-        mapPos:{ x:82, y:48 }, mapPosPortrait:{ x:50, y:70 }, requires:["tide_wing"] },
-    ],
-  },
-
-  glacia_peaks: {
-    name:"Glacia Peaks", chapterLabel:"Chapter 4",
-    objectiveIncomplete:"Destroy the stabilizers drying out Glacia Peaks' air before the Behemoths suffocate in their own home.",
-    objectiveComplete:"The stabilizers are down. Grand Tusk wakes — and Glacia Peaks stands with the Pack.",
-    completeLabel:"Chapter 4 Complete", completeTitle:"GLACIA PEAKS",
-    completeText:"The last stabilizer falls, and the mountain itself seems to exhale. Grand Tusk rises from the Long Stillness — not an enemy after all, just a guardian who slept through the wrong century. Rotten Marsh waits ahead, where artificial daylight has never once let the dark back in.",
-    nextRegion:"rotten_marsh",
-    missions: [
-      { id:"frost_drone", name:"Frost Drone", type:"combat", icon:enemyIcon("frost_drone", ENEMY_SVG.frost_drone), mapIcon:ASSETS.images.mapicon_ice_ice_tunnel, hp:700, attackEvery:5,
-        attackName:"Chill Pulse", attackType:"garbage",
-        desc:"A stabilizer drone patrols the outer slopes, bleeding moisture out of air that used to hold snow. Ground it before it reports your position.",
-        winText:"The drone spirals down into the snow, dark. The air already feels a little less dry.",
-        mapPos:{ x:15, y:50 }, mapPosPortrait:{ x:50, y:8 }, requires:[] },
-
-      { id:"frostsnout", name:"Frostsnout", type:"combat", icon:enemyIcon("frostsnout", ENEMY_SVG.frostsnout), mapIcon:ASSETS.images.mapicon_ice_snowy_bridge, hp:1050, attackEvery:5,
-        attackName:"Tusk Charge", attackType:"garbage",
-        desc:"A boar the size of a landslide, armored in ice that never melts anymore because nothing here gets warm enough to melt it. It charges. It doesn't stop to check what's in the way.",
-        winText:"Frostsnout skids to a halt, ice cracking off its flanks. It huffs once and lumbers back into the white.",
-        mapPos:{ x:38, y:25 }, mapPosPortrait:{ x:25, y:24 }, requires:["frost_drone"] },
-
-      { id:"ice_stryder", name:"Ice Stryder", type:"combat", icon:enemyIcon("ice_stryder", ENEMY_SVG.ice_stryder), mapIcon:ASSETS.images.mapicon_ice_ice_crystals, hp:1100, attackEvery:4,
-        attackName:"Talon Rake", attackType:"drain",
-        desc:"Low, fast, and built for hunting in air too thin for anything else to breathe comfortably. It's been circling since you arrived. It was waiting for you to be alone.",
-        winText:"The Stryder breaks off the hunt mid-stride, feathers scattering like frost. Something about you wasn't worth it after all.",
-        mapPos:{ x:38, y:75 }, mapPosPortrait:{ x:75, y:24 }, requires:["frost_drone"] },
-
-      { id:"icenix", name:"IceNix", type:"combat", icon:enemyIcon("icenix", ENEMY_SVG.icenix), mapIcon:ASSETS.images.mapicon_ice_ice_waterfall, hp:1350, attackEvery:4,
-        attackName:"Rune Feather Storm", attackType:"suppress",
-        desc:"A phoenix that died the way this whole range is dying — quietly, from the inside — and came back wrong, rune-marked and furious. It remembers what warmth felt like. It resents you for still having it.",
-        winText:"IceNix's rune-feathers scatter and dim mid-fall. For a moment, just a moment, it almost looks at peace.",
-        mapPos:{ x:62, y:50 }, mapPosPortrait:{ x:50, y:42 }, requires:["frostsnout","ice_stryder"] },
-
-      { id:"grand_tusk", name:"Grand Tusk", type:"combat", isGuardian:true, icon:enemyIcon("grand_tusk", ENEMY_SVG.grand_tusk), mapIcon:ASSETS.images.mapicon_ice_crystal_shrine, hp:1750, attackEvery:4,
-        attackName:"Long Stillness", attackType:"garbage_hard",
-        desc:"The Elder Behemoth of Glacia Peaks, moss-grown and mountain-backed, roused from a sleep centuries deep. He doesn't know you yet. He only knows the air is wrong, and you're the nearest thing that might be why.",
-        winText:"Grand Tusk stops mid-charge, ancient eyes narrowing — not at an enemy anymore, just at something worth understanding. \"...You did not do this to us.\"",
-        mapPos:{ x:85, y:50 }, mapPosPortrait:{ x:50, y:58 }, requires:["icenix"] },
     ],
   },
 };
@@ -2080,19 +1503,7 @@ function renderMap(){
     node.className=`map-node ${state}`;
     const pos=posOf(m);
     node.style.left=pos.x+"%"; node.style.top=pos.y+"%";
-    // mapIcon is the atmospheric location badge (where this mission takes
-    // place) — a different asset than m.icon, which is the character/enemy
-    // art shown in battle. When present, it fills the node like the World
-    // Map's region thumbnails do, with the same corner-checkmark overlay
-    // pattern instead of replacing the whole badge with just a checkmark.
-    let badgeHTML;
-    if(m.mapIcon){
-      badgeHTML = `<img src="${m.mapIcon}" alt="${m.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-      if(cleared) badgeHTML += `<div class="badge-check">✓</div>`;
-    } else {
-      badgeHTML = cleared ? "✓" : m.icon;
-    }
-    node.innerHTML=`<div class="badge">${badgeHTML}</div><div class="nlabel">${m.name}</div>`;
+    node.innerHTML=`<div class="badge">${cleared?"✓":m.icon}</div><div class="nlabel">${m.name}</div>`;
     if(state!=="locked"){
       node.addEventListener("click",()=>{ sfx("click"); openConfirm(m); });
     }
@@ -2319,9 +1730,6 @@ document.addEventListener("keydown", e=>{
 const MISSION_STORY_SCENES = {
   cyber_wolf: "cyber_wolf_rescue",
   arch_solar_queen: "volt_recruit",
-  forge_guard: "forge_trial",
-  aquos: "hydro_lens_gift",
-  grand_tusk: "grand_tusk_wakes",
 };
 document.getElementById("btnSettings").addEventListener("click",()=>{
   sfx("click");
@@ -2367,26 +1775,6 @@ document.getElementById("btnResetSave").addEventListener("click",()=>{
       showToast("Save data reset");
     },
     "Reset"
-  );
-});
-
-document.getElementById("btnUnlockAll").addEventListener("click",()=>{
-  sfx("click");
-  openConfirmDialog(
-    "Unlock Everything",
-    "Marks every mission in every built region as cleared, so you can jump straight to any region to test it — including ones you haven't actually played yet. This is a testing shortcut, not real progress.",
-    ()=>{
-      const allIds=[];
-      Object.values(REGIONS).forEach(region=>{
-        region.missions.forEach(m=>allIds.push(m.id));
-      });
-      save.cleared=[...new Set(allIds)];
-      writeSave(save);
-      refreshSettingsScreen();
-      refreshMenu();
-      showToast("Everything unlocked");
-    },
-    "Unlock"
   );
 });
 
@@ -2542,43 +1930,8 @@ fitToWindow();
 // support rather than error.
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js").then((registration) => {
-      // Browsers only re-check sw.js for changes in the background on
-      // their own schedule (Chrome: at most once every 24h) unless asked
-      // directly — without this, a player could sit on a stale version
-      // for a full day even though a new one's already been shipped.
-      registration.update().catch(() => {});
-
-      // If a new service worker starts installing (meaning sw.js content
-      // changed — which happens whenever CACHE_VERSION gets bumped for a
-      // new build), watch it and surface the update banner once it's
-      // actually ready to take over.
-      registration.addEventListener("updatefound", () => {
-        const installing = registration.installing;
-        if(!installing) return;
-        installing.addEventListener("statechange", () => {
-          // "installed" + an existing controller means this is a genuine
-          // update to an already-running copy, not the very first install
-          // (a first-time install has no controller yet, and doesn't need
-          // an update prompt — the current tab is already the new version).
-          if(installing.state==="installed" && navigator.serviceWorker.controller){
-            const banner=document.getElementById("updateBanner");
-            if(banner) banner.classList.add("show");
-          }
-        });
-      });
-    }).catch((err) => {
+    navigator.serviceWorker.register("sw.js").catch((err) => {
       console.warn("Service worker registration failed:", err);
     });
-  });
-
-  // Reload only happens here, on an explicit click — never automatically.
-  // The new service worker takes control (skipWaiting + clients.claim in
-  // sw.js) well before this button exists to be clicked, so by the time
-  // someone does click it, the reload is guaranteed to pull fresh files
-  // rather than a half-updated mix. But an update should never interrupt
-  // someone mid-battle without them choosing it.
-  document.getElementById("updateBannerBtn")?.addEventListener("click", () => {
-    location.reload();
   });
 }

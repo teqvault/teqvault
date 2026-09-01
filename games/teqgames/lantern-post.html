@@ -15,7 +15,7 @@
 <div class="sub">Plan the route · mind the oil · deliver the letter</div>
 
 <div class="hud">
-  <span class="lvl">DELIVERY <b id="lvlNum">1</b>/8 — <b id="lvlName">…</b></span>
+  <span class="lvl">DELIVERY <b id="lvlNum">1</b>/<b id="lvlTotal">8</b> — <b id="lvlName">…</b></span>
   <div class="oil" id="oilBox">
     <span class="flame">🏮</span>
     <div class="oilbar"><i id="oilFill"></i></div>
@@ -38,8 +38,11 @@
 </div>
 
 <div class="veil" id="letterVeil">
-  <div class="paper">
-    <div class="from" id="pFrom"></div>
+  <div class="paper" id="paperBox">
+    <div class="sender">
+      <img id="pAvatar" class="avatar" alt="">
+      <div class="from" id="pFrom"></div>
+    </div>
     <div id="pBody"></div>
     <div class="sig" id="pSig"></div>
     <div class="meta"><span id="pMeta"></span><span class="star" id="pStar"></span></div>

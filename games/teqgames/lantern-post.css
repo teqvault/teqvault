@@ -29,13 +29,14 @@
   .oilbar i{display:block; height:100%; background:linear-gradient(90deg,var(--amber-dim),var(--amber)); width:100%; transition:width .25s}
 
   .mapwrap{position:relative; width:min(96vw,720px)}
-  #map{width:100%; display:block; background:#0e0f18; border:1px solid var(--line); border-radius:10px; cursor:pointer}
+  #map{width:100%; display:block; background:#0e0f18; border:1px solid var(--line); border-radius:10px; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent}
 
   .controls{width:min(96vw,720px); display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
   button{
     font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;
     border-radius:8px; padding:11px 18px; cursor:pointer; letter-spacing:.05em;
     border:1px solid var(--line); background:var(--panel-2); color:var(--ink);
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   }
   button:active{transform:translateY(1px)}
   button.primary{background:var(--amber); border-color:var(--amber); color:#151006}
@@ -58,10 +59,29 @@
     position:relative;
   }
   .paper .from{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#8a7a5a; font-family:'IBM Plex Mono',monospace; margin-bottom:12px}
+  .paper .sender{display:flex; align-items:center; gap:12px; margin-bottom:4px}
+  .paper .sender .from{margin-bottom:0}
+  .paper .avatar{
+    width:48px; height:48px; border-radius:50%; object-fit:cover; flex-shrink:0;
+    border:2px solid #b08a2a; box-shadow:0 0 10px rgba(176,138,42,.5);
+  }
+  .paper.holo .avatar{border-color:#5ec8f2; box-shadow:0 0 14px rgba(94,200,242,.6)}
   .paper .sig{margin-top:14px; font-style:italic; text-align:right}
   .paper .meta{margin-top:18px; padding-top:12px; border-top:1px dashed #c9bb98; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8a7a5a; display:flex; justify-content:space-between; align-items:center}
   .paper .star{color:#b08a2a}
   .paper button{margin-top:16px; width:100%; background:#2c2418; color:#efe6cf; border-color:#2c2418}
+
+  .paper.holo{
+    background:#05070c url('assets/images/lantern/frame-hologram.png') center/100% 100% no-repeat;
+    color:#cfe9ff; padding:44px 46px 38px;
+    font-family:'IBM Plex Mono',monospace; font-size:14px; line-height:1.7;
+    box-shadow:0 0 60px rgba(80,160,255,.25), 0 20px 60px rgba(0,0,0,.7);
+  }
+  .paper.holo .from{color:#f5b83d; letter-spacing:.16em}
+  .paper.holo .sig{color:#7fc8ff}
+  .paper.holo .meta{border-top:1px dashed rgba(127,200,255,.3); color:#7fa0c0}
+  .paper.holo .star{color:#f5b83d}
+  .paper.holo button{background:#0d1a2b; color:#cfe9ff; border-color:#3a5a7a}
 
   /* archive */
   .arch{

@@ -30,10 +30,6 @@
 </head>
 <body>
 <div id="sfxToggle" onclick="toggleSfx()" title="Toggle sound"><img src="assets/Music.png" alt="Sound" style="width:22px;height:22px;object-fit:contain;"></div>
-<div id="updateBanner">
-  <span>A new version is ready.</span>
-  <button id="updateBannerBtn">Update Now</button>
-</div>
 <div id="pauseBtn" onclick="openPause()" title="Pause">⏸</div>
 <div id="toast"></div>
 
@@ -93,7 +89,6 @@
           <span id="settingsSaveInfo">No progress yet.</span>
         </div>
         <div class="menu-btn" id="btnResetSave" style="position:static; width:100%; background:linear-gradient(180deg,#5A2A3A,#3A1620); border-color:#7A3A4A;">Reset Save Data</div>
-        <div class="menu-btn" id="btnUnlockAll" style="position:static; width:100%; margin-top:8px; background:linear-gradient(180deg,#2A4A3A,#16321c); border-color:#3A7A4A;">Dev: Unlock Everything</div>
       </div>
 
       <div class="panel">
@@ -220,11 +215,6 @@
       <div class="label">Ice Heart</div>
       <div class="bar hp"><i id="playerHpBar" style="width:100%"></i></div>
       <div class="bar-num"><span id="playerHpTxt">100</span> / 100</div>
-    </div>
-    <div class="panel" id="heatPanel" style="display:none;">
-      <div class="label" style="color:#FF6B35;">Heat Pressure</div>
-      <div class="bar heat"><i id="heatBar" style="width:0%"></i></div>
-      <div class="bar-num"><span id="heatTxt">0%</span> — vent it by clearing lines</div>
     </div>
     <div class="panel" id="controlsPanel">
       <div class="label dim">Controls</div>

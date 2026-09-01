@@ -1,4 +1,4 @@
-  :root{
+:root{
     --void:#0B0614; --panel:#171028; --panel2:#1F1636; --edge:#4A3D6B;
     --violet:#A855F7; --violet-dim:#6D4E9E;
     --text:#E8E2F5; --dim:#8B80A8;
@@ -121,7 +121,6 @@
   }
   .bar.hp > i{background:linear-gradient(90deg,#7ED957,#3FA34D);}
   .bar.enemy > i{background:linear-gradient(90deg,#FF5A5F,#B3121B);}
-  .bar.heat > i{background:linear-gradient(90deg,#FFB627,#FF3B1A);}
   .bar-num{font-size:11px; color:var(--dim); margin-top:4px; text-align:right; font-variant-numeric:tabular-nums;}
 
   /* Board */
@@ -146,26 +145,17 @@
   .combo-banner{
     position:absolute; top:38%; left:50%; transform:translate(-50%,-50%) scale(.6);
     opacity:0; pointer-events:none; text-align:center; white-space:nowrap;
-    font-weight:800; font-size:17px; letter-spacing:1.2px; color:#FFD23F;
-    text-shadow:0 0 12px #000, 0 0 28px #FFD23Fcc, 0 0 40px #A855F799;
+    font-weight:800; font-size:16px; letter-spacing:1px; color:#FFD23F;
+    text-shadow:0 0 10px #000, 0 0 22px #FFD23F99;
     z-index:5;
   }
-  .combo-banner.show{ animation:comboPop 1.25s ease forwards; }
+  .combo-banner.show{ animation:comboPop 1.1s ease forwards; }
   @keyframes comboPop{
-    0%{opacity:0; transform:translate(-50%,-50%) scale(.55);}
-    12%{opacity:1; transform:translate(-50%,-50%) scale(1.22);}
-    28%{transform:translate(-50%,-50%) scale(1.02);}
-    75%{opacity:1;}
-    100%{opacity:0; transform:translate(-50%,-68%) scale(1);}
-  }
-  /* Brief full-board flash when a Bond Combo triggers */
-  .board-wrap.bond-flash{
-    animation: bondFlash 0.45s ease;
-  }
-  @keyframes bondFlash{
-    0%{ box-shadow: 0 0 0 0 #C4B5FD00; filter:brightness(1); }
-    30%{ box-shadow: 0 0 28px 6px #C4B5FD99; filter:brightness(1.35); }
-    100%{ box-shadow: 0 0 0 0 #C4B5FD00; filter:brightness(1); }
+    0%{opacity:0; transform:translate(-50%,-50%) scale(.6);}
+    15%{opacity:1; transform:translate(-50%,-50%) scale(1.18);}
+    30%{transform:translate(-50%,-50%) scale(1);}
+    78%{opacity:1;}
+    100%{opacity:0; transform:translate(-50%,-62%) scale(1);}
   }
   .overlay h2{font-size:22px; letter-spacing:3px; text-transform:uppercase;}
   .overlay h2.win{color:var(--green);}
@@ -480,19 +470,6 @@
     background:#1F1636cc; border:1px solid var(--edge); font-size:16px;
   }
   #sfxToggle.muted img{ opacity:.3; filter:grayscale(1); }
-  #updateBanner{
-    display:none; position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
-    z-index:200; align-items:center; gap:12px;
-    background:linear-gradient(180deg,#2A1F4A,#1a1230); border:1px solid var(--violet);
-    box-shadow:0 0 24px #A855F766; border-radius:12px; padding:10px 14px;
-    font-size:13px; color:var(--text); white-space:nowrap;
-  }
-  #updateBanner.show{ display:flex; }
-  #updateBanner button{
-    background:linear-gradient(180deg,#8B5CF6,#6D28D9); border:none; color:#fff;
-    font-weight:700; font-size:12px; padding:7px 14px; border-radius:7px; cursor:pointer;
-    letter-spacing:.3px;
-  }
   #pauseBtn{
     position:fixed; top:16px; left:16px; z-index:100; cursor:pointer;
     width:38px; height:38px; border-radius:9px; display:none; align-items:center; justify-content:center;
